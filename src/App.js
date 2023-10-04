@@ -4,6 +4,7 @@ import NavbarComponent from "./component/NavbarComponent";
 import AdminTeamComponent from "./component/AdminTeamComponent";
 import FooterComponent from "./component/FooterComponent";
 import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
+import Register from "./login-register/register";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
 import AddHouse from "./components/AddHouse";
 import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
@@ -14,6 +15,7 @@ function App() {
         <div className="App">
             <NavbarComponent/>
             <Routes>
+                <Route path={"/register"} element={<Register/>}/>
                 <Route path={"/"} element={<HouseByIdUser/>}>
                     <Route path={"/"} element={<ByOwnerId/>}/>
                     <Route path={"/search/:search"} element={<ByNameAndStatus/>}/>
