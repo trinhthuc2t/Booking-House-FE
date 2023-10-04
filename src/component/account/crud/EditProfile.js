@@ -76,8 +76,8 @@ const EditProfile = () => {
         setAccount({...account, [name]: value});
     }
     return (
-        <div className="container">
-            <div className="container rounded bg-white mt-5 mb-5">
+        <div className="container-fluid">
+            <div className=" rounded bg-white mb-5">
                 {!_.isEmpty(account) &&
                     <Formik initialValues={{
                         firstname: account.firstname,
@@ -92,6 +92,136 @@ const EditProfile = () => {
                                 handleProfile(values);
                             }}>
                         <Form className="row">
+                            <div className="col-2 border-right">
+                                <aside className="left-sidebar">
+
+                                    <div>
+                                        <div className="brand-logo d-flex align-items-center justify-content-between">
+                                            <a className="text-nowrap logo-img">
+                                                <img src="../assetsHieu/images/logos/dark-logo.svg" width="180" alt=""/>
+                                            </a>
+                                            <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
+                                                 id="sidebarCollapse">
+                                                <i className="ti ti-x fs-8"></i>
+                                            </div>
+                                        </div>
+
+                                        <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
+                                            <ul id="sidebarnav">
+                                                <li className="nav-small-cap">
+                                                    <Link to={"/"}>
+                                                        <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                                        <span className="hide-menu">Home</span>
+                                                    </Link>
+
+                                                </li>
+                                                <li className="sidebar-item">
+
+                                                    <Link to={"/"} className="sidebar-link">
+                                                         <span>
+                                                             <i className="fa-solid fa-user"></i>
+                                                            </span>
+                                                        <span className="hide-menu">Thông tin cá nhân</span>
+                                                    </Link>
+                                                </li>
+
+                                                <li className="sidebar-item">
+                                                    <Link to={`/editProfile/${id}`} className="sidebar-link"
+                                                       aria-expanded="false">
+                                                        <span>
+                                                          <i className="fa-solid fa-pen-to-square"></i>
+                                                        </span>
+                                                        <span className="hide-menu">Sửa thông tin cá nhân</span>
+                                                    </Link>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <Link to={`/changePassword/${id}`} className="sidebar-link"
+                                                       aria-expanded="false">
+                                                            <span>
+                                                              <i className="fa-solid fa-rotate"></i>
+                                                            </span>
+                                                        <span className="hide-menu">Đổi mật khẩu</span>
+                                                    </Link>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                        <span>
+                                                          <i className="ti ti-cards"></i>
+                                                        </span>
+                                                        <span className="hide-menu">Card</span>
+                                                    </a>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                        <span>
+                                                          <i className="ti ti-file-description"></i>
+                                                        </span>
+                                                        <span className="hide-menu">Forms</span>
+                                                    </a>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                        <span>
+                                                          <i className="ti ti-typography"></i>
+                                                        </span>
+                                                        <span className="hide-menu">Typography</span>
+                                                    </a>
+                                                </li>
+                                                <li className="nav-small-cap">
+                                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                                    <span className="hide-menu">AUTH</span>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                        <span>
+                                                          <i className="ti ti-login"></i>
+                                                        </span>
+                                                        <span className="hide-menu">Login</span>
+                                                    </a>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                    <span>
+                                                      <i className="ti ti-user-plus"></i>
+                                                    </span>
+                                                        <span className="hide-menu">Register</span>
+                                                    </a>
+                                                </li>
+                                                <li className="nav-small-cap">
+                                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
+                                                    <span className="hide-menu">EXTRA</span>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                    <span>
+                                                      <i className="ti ti-mood-happy"></i>
+                                                    </span>
+                                                        <span className="hide-menu">Icons</span>
+                                                    </a>
+                                                </li>
+                                                <li className="sidebar-item">
+                                                    <a className="sidebar-link"
+                                                       aria-expanded="false">
+                                                            <span>
+                                                              <i className="ti ti-aperture"></i>
+                                                            </span>
+                                                        <span className="hide-menu">Sample Page</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                        </nav>
+
+                                    </div>
+
+                                </aside>
+                            </div>
                             <div className="col-md-3 border-right">
                                 <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                     <img className="rounded-circle mt-5" width="250px" height="300px"
