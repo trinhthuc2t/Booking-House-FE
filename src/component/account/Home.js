@@ -10,9 +10,6 @@ const Home = () => {
             <Routes>
                 <Route path={"/editProfile/:id"} element={<EditProfile/>}/>
             </Routes>
-            <Link to={"/editProfile/1"}>
-                <button>Sửa thông tin cá nhân</button>
-            </Link>
         </div>
     );
 };
