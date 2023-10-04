@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import propertyService from "../service/HouseService";
+import houseByIdService from "../service/HouseByIdService";
 import {useParams} from "react-router-dom";
 
 const HouseByIdUser = () => {
@@ -8,7 +8,7 @@ const HouseByIdUser = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const getHousesByOwnerId = (id) => {
-        propertyService.getHousesByOwnerId(id)
+        houseByIdService.getHousesByOwnerId(id)
             .then((houses) => {
                 setHouses(houses);
                 console.log(houses)
@@ -19,7 +19,7 @@ const HouseByIdUser = () => {
     };
 
     const findByOwnerIdAndStatus = (id, status) => {
-        propertyService.getHousesByOwnerId(id, status)
+        houseByIdService.getHousesByOwnerId(id, status)
             .then((houses) => {
                 setHouses(houses);
                 console.log(houses)
@@ -29,7 +29,7 @@ const HouseByIdUser = () => {
             });
     };
     const findByOwnerIdAndNameContains = (id, name) => {
-        propertyService.findByOwnerIdAndNameContains(id, name)
+        houseByIdService.findByOwnerIdAndNameContains(id, name)
             .then((houses) => {
                 setHouses(houses);
                 console.log(houses)
@@ -64,7 +64,8 @@ const HouseByIdUser = () => {
                             <div className="row g-2">
 
                                 <div className="col-md-4">
-                                    <select className="form-select border-0" onChange={(e) => findByOwnerIdAndStatus(e.target.value)}>
+                                    <select className="form-select border-0"
+                                            onChange={(e) => findByOwnerIdAndStatus(e.target.value)}>
                                         <option onChange={getHousesByOwnerId} selected>Tất cả</option>
 
                                         <option value="available">Đang trống</option>
@@ -75,7 +76,7 @@ const HouseByIdUser = () => {
                                 </div>
 
                                 <div className="col-md-8">
-                                    <input type="text" className="form-control border-0"  placeholder="Search"/>
+                                    <input type="text" className="form-control border-0" placeholder="Search"/>
                                 </div>
                             </div>
                         </div>
@@ -101,13 +102,12 @@ const HouseByIdUser = () => {
 
                                     <div
                                         className="col-sm-12 col-md-2 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                         <h5>Doanh thu</h5>
+                                        <h5>Doanh thu</h5>
                                     </div>
                                     <div
-                                        className="col-sm-12 col-md-3 d-flex flex-column align-items-start align-items-md-end justify-content-center" >
+                                        className="col-sm-12 col-md-3 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                         <h4 style={{paddingLeft: 110}}>Action</h4>
                                     </div>
-
 
 
                                 </div>
@@ -137,21 +137,14 @@ const HouseByIdUser = () => {
                                                 <b>{house.revenue} - VNĐ</b>
                                             </div>
                                             <div
-                                                className="col-sm-12 col-md-2 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                                className="col-sm-12 col-md-3 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                                 <div className="d-flex mb-3">
                                                     <a className="btn"
                                                        style={{backgroundColor: "rgb(0,185,142)", textcolor: "white"}}
                                                        href="">Edit</a>
                                                 </div>
                                             </div>
-                                            <div
-                                                className="col-sm-12 col-md-2 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                <div className="d-flex mb-3">
-                                                    <a className="btn"
-                                                       style={{backgroundColor: "rgb(0,185,142)", textcolor: "white"}}
-                                                       href="">Delete</a>
-                                                </div>
-                                            </div>
+                                            
 
 
                                         </div>
@@ -184,8 +177,6 @@ const HouseByIdUser = () => {
                     </div>
                 </div>
             </div>
-
-
         </div>
 
     )

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HouseComponent = () => {
+const houseComponent = () => {
 
 
 
@@ -125,4 +125,4 @@ const HouseComponent = () => {
     );
 };
 
-export default HouseComponent;
+export default houseComponent;

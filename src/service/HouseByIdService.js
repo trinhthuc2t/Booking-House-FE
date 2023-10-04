@@ -1,7 +1,5 @@
-import axios from "axios";
-
+import axios from 'axios';
 const HouseByIdService = {
-
 
     getHousesByOwnerId: (ownerId) => {
         return new Promise((resolve, reject) => {
@@ -28,6 +26,7 @@ const HouseByIdService = {
                 });
         })
     },
+
     findByOwnerIdAndStatus: (ownerId, status) => {
         return new Promise((resolve, reject) => {
             axios
@@ -41,8 +40,10 @@ const HouseByIdService = {
         })
     },
 
-
-
 };
-export default HouseService;
 
+
+
+
+
+export default HouseByIdService;
