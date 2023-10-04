@@ -222,7 +222,7 @@ const EditProfile = () => {
 
                                 </aside>
                             </div>
-                            <div className="col-md-3 border-right">
+                            <div className="col-md-3 mt-5 border-right">
                                 <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                     <img className="rounded-circle mt-5" width="250px" height="300px"
                                          src={account.avatar} alt="avatar" id="image" name="avatar"
@@ -232,7 +232,7 @@ const EditProfile = () => {
                                 </div>
                             </div>
 
-                            <div className="col-md-7 border-right">
+                            <div className="col-md-7 mt-5 border-right">
                                 <div className="p-3 py-5">
                                     <div className="d-flex justify-content-between align-items-center mb-3">
                                         <h4 className="text-right">Thông tin cá nhân</h4>
