@@ -3,7 +3,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import _ from 'lodash';
-import {storage} from "./firebase";
+import {storage} from "../../../firebase/firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid" ;
 import accountService from "../AccountService";
