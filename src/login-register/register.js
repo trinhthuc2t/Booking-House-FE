@@ -70,7 +70,7 @@ function Register() {
                                                        className="form-control form-control-lg"/>
                                                 <label className="form-label" htmlFor="form3Example1cg">Your
                                                     Username</label>
-                                                <ErrorMessage name="username" component="div"/>
+                                                <ErrorMessage name="username" className="text-danger" component="div"/>
                                             </div>
 
                                             <div className="form-outline mb-4">
@@ -78,14 +78,14 @@ function Register() {
                                                        className="form-control form-control-lg"/>
                                                 <label className="form-label" htmlFor="form3Example3cg">Your
                                                     Email</label>
-                                                <ErrorMessage name="email" component="div"/>
+                                                <ErrorMessage name="email" className="text-danger" component="div"/>
                                             </div>
 
                                             <div className="form-outline mb-4">
                                                 <Field type="password" id="password" name="password"
                                                        className="form-control form-control-lg"/>
                                                 <label className="form-label" htmlFor="form3Example4cg">Password</label>
-                                                <ErrorMessage name="password" component="div"/>
+                                                <ErrorMessage name="password" className="text-danger" component="div"/>
                                             </div>
 
                                             <div className="form-outline mb-4">
@@ -93,7 +93,7 @@ function Register() {
                                                        className="form-control form-control-lg"/>
                                                 <label className="form-label" htmlFor="form3Example4cdg">Repeat your
                                                     password</label>
-                                                <ErrorMessage name="confirmPassword" component="div"/>
+                                                <ErrorMessage name="confirmPassword" className="text-danger" component="div"/>
                                             </div>
 
                                             <div className="form-check d-flex justify-content-center mb-5">
