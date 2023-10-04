@@ -9,7 +9,7 @@ const HouseByIdService = {
                     resolve(response.data.content);
                 })
                 .catch(function (err) {
-                    reject(err)
+                    reject(err)``
                 });
         })
     },
@@ -17,7 +17,7 @@ const HouseByIdService = {
     findByOwnerIdAndNameContains: (ownerId, name) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId)
+                .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId + "?name=" + name)
                 .then(response => {
                     resolve(response.data.content);
                 })
@@ -27,10 +27,11 @@ const HouseByIdService = {
         })
     },
 
+
     findByOwnerIdAndStatus: (ownerId, status) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId)
+                .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId + "?status=" + status)
                 .then(response => {
                     resolve(response.data.content);
                 })
