@@ -55,11 +55,7 @@ const EditProfile = () => {
     }
     const selectImage = (event) => {
 
-        var output = document.getElementById('image');
-        output.src = URL.createObjectURL(event.target.files[0]);
-        output.onload = function () {
-            URL.revokeObjectURL(output.src) // free memory
-        }
+
         if (event.target.files[0] == null) return;
         const imageRef = ref(storage, `images/${event.target.files[0].name + v4()}`);
         toast.info("Uploading Image", {position: "top-center", autoClose: 500,});
@@ -67,6 +63,11 @@ const EditProfile = () => {
             getDownloadURL(snapshot.ref).then((url) => {
                 setAccount({...account, avatar: url});
                 toast.success("Upload Image success", {position: "top-center", autoClose: 2000,});
+                var output = document.getElementById('image');
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function () {
+                    URL.revokeObjectURL(output.src) // free memory
+                }
             });
         })
     }
