@@ -18,8 +18,18 @@ const HouseByIdUser = () => {
             });
     };
 
-    const findByOwnerIdAndStatus = (id) => {
-        propertyService.getHousesByOwnerId(id)
+    const findByOwnerIdAndStatus = (id, status) => {
+        propertyService.getHousesByOwnerId(id, status)
+            .then((houses) => {
+                setHouses(houses);
+                console.log(houses)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
+    const findByOwnerIdAndNameContains = (id, name) => {
+        propertyService.findByOwnerIdAndNameContains(id, name)
             .then((houses) => {
                 setHouses(houses);
                 console.log(houses)
@@ -54,23 +64,18 @@ const HouseByIdUser = () => {
                             <div className="row g-2">
 
                                 <div className="col-md-4">
-                                    <select className="form-select border-0">
-                                        <option selected>Trạng Thái</option>
-                                        <option value="available">Available</option>
-                                        <option value="booked">Booked</option>
-                                        <option value="repair">Repair</option>
+                                    <select className="form-select border-0" onChange={(e) => findByOwnerIdAndStatus(e.target.value)}>
+                                        <option onChange={getHousesByOwnerId} selected>Tất cả</option>
+
+                                        <option value="available">Đang trống</option>
+                                        <option value="booked">Đang cho thuê</option>
+                                        <option value="repair">Đang bảo trì</option>
                                     </select>
+
                                 </div>
-                                <div className="col-md-4">
-                                    <select className="form-select border-0">
-                                        <option selected>Location</option>
-                                        <option value="1">Location 1</option>
-                                        <option value="2">Location 2</option>
-                                        <option value="3">Location 3</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <input type="text" className="form-control border-0" placeholder="Keyword"/>
+
+                                <div className="col-md-8">
+                                    <input type="text" className="form-control border-0"  placeholder="Search"/>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +134,7 @@ const HouseByIdUser = () => {
 
                                             <div
                                                 className="col-sm-12 col-md-1 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                Doanh thu: {house.revenue}
+                                                <b>{house.revenue} - VNĐ</b>
                                             </div>
                                             <div
                                                 className="col-sm-12 col-md-2 d-flex flex-column align-items-start align-items-md-end justify-content-center">

@@ -16,7 +16,7 @@ const HouseService = {
         })
     },
 
-    findByOwnerIdAndNameContains: (ownerId) => {
+    findByOwnerIdAndNameContains: (ownerId, name) => {
         return new Promise((resolve, reject) => {
             axios
                 .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId)
@@ -28,7 +28,7 @@ const HouseService = {
                 });
         })
     },
-    findByOwnerIdAndStatus: (ownerId) => {
+    findByOwnerIdAndStatus: (ownerId, status) => {
         return new Promise((resolve, reject) => {
             axios
                 .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId)
