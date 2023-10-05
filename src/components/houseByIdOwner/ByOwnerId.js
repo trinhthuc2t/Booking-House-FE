@@ -97,20 +97,20 @@ const ByOwnerId = () => {
                             <nav aria-label="Page navigation">
                                 <ul className="pagination">
                                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#"
+                                        <a className="page-link"
                                            onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
                                     </li>
+                                    <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+                                        <a className="page-link" onClick={() => handlePageChange(0)}>1</a>
+                                    </li>
                                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(0)}>1</a>
+                                        <a className="page-link" onClick={() => handlePageChange(1)}>2</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(1)}>2</a>
+                                        <a className="page-link" onClick={() => handlePageChange(2)}>3</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(2)}>3</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#"
+                                        <a className="page-link"
                                            onClick={() => handlePageChange(currentPage + 1)}>Next</a>
                                     </li>
                                 </ul>

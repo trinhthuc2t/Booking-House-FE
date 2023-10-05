@@ -7,7 +7,7 @@ const HouseByIdService = {
         return new Promise((resolve, reject) => {
             console.log(currentPage)
             axios
-                .get('http://localhost:8080/api/houses/owner/' + ownerId + "?page=" + currentPage)
+                .get('http://localhost:8080/api/houses/owner/' + ownerId + "?page=" + currentPage + "&size="+ 2)
                 .then(response => {
                     resolve(response.data.content);
                 })
