@@ -9,6 +9,7 @@ import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
 import NavbarComponent from "./component/NavbarComponent";
 import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
 import HouseComponent from "./component/HouseComponent";
+import Footer from "./component/Footer";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                     {/*<Route path={"/edit/:id"} element={}/>*/}
                 </Route>
             </Routes>
+            <Footer/>
         </div>
     );
 }

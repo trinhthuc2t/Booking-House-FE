@@ -1,14 +1,30 @@
-import React from 'react';
+import React, {useState} from 'react';
+import './footer.scss';
 
-const FooterComponent = () => {
+const Footer = () => {
+    const [visible, setVisible] = useState(false)
+
+    const toggleVisible = () => {
+        const scrolled = document.documentElement.scrollTop;
+        setVisible(scrolled > window.innerHeight)
+    };
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    window.addEventListener('scroll', toggleVisible);
     return (
         <>
             {/*Footer Start*/}
-            <div className="container-fluid bg-dark text-white-50 footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+            <div className="container-fluid bg-dark text-white-50 pt-5 mt-5 footer">
                 <div className="container py-5">
                     <div className="row g-5">
                         <div className="col-lg-3 col-md-6">
-                            <h5 className="text-white mb-4">Get In Touch</h5>
+                            <h5 className="text-white mb-4">Về chúng tôi</h5>
                             <p className="mb-2"><i className="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
                             <p className="mb-2"><i className="fa fa-phone-alt me-3"></i>+012 345 67890</p>
                             <p className="mb-2"><i className="fa fa-envelope me-3"></i>info@example.com</p>
@@ -21,11 +37,11 @@ const FooterComponent = () => {
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <h5 className="text-white mb-4">Quick Links</h5>
-                            <a className="btn btn-link text-white-50" href="">About Us</a>
-                            <a className="btn btn-link text-white-50" href="">Contact Us</a>
-                            <a className="btn btn-link text-white-50" href="">Our Services</a>
-                            <a className="btn btn-link text-white-50" href="">Privacy Policy</a>
-                            <a className="btn btn-link text-white-50" href="">Terms & Condition</a>
+                            <a className="btn btn-link nav-link text-white-50" href="">About Us</a>
+                            <a className="btn btn-link nav-link text-white-50" href="">Contact Us</a>
+                            <a className="btn btn-link nav-link text-white-50" href="">Our Services</a>
+                            <a className="btn btn-link nav-link text-white-50" href="">Privacy Policy</a>
+                            <a className="btn btn-link nav-link text-white-50" href="">Terms & Condition</a>
                         </div>
                         <div className="col-lg-3 col-md-6">
                             <h5 className="text-white mb-4">Photo Gallery</h5>
@@ -63,18 +79,10 @@ const FooterComponent = () => {
                 <div className="container">
                     <div className="copyright">
                         <div className="row">
-                            <div className="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                                &copy; <a className="border-bottom" href="#">Your Site Name</a>, All Right Reserved.
+                            <div className="col-md-6 text-center text-md-start mb-3 mb-md-0 d-flex">
+                                &copy; 2023, All Right Reserved.
 
-                                Designed By <a className="border-bottom" href="https://htmlcodex.com">HTML Codex</a>
-                            </div>
-                            <div className="col-md-6 text-center text-md-end">
-                                <div className="footer-menu">
-                                    <a href="">Home</a>
-                                    <a href="">Cookies</a>
-                                    <a href="">Help</a>
-                                    <a href="">FQAs</a>
-                                </div>
+                                Designed By <a className="border-bottom nav-link ms-2" href="#">Nhóm 4</a>
                             </div>
                         </div>
                     </div>
@@ -82,11 +90,14 @@ const FooterComponent = () => {
             </div>
             {/*Footer End*/}
 
-
             {/*Back to Top*/}
-            <a href="#" className="btn btn-lg btn-primary btn-lg-square back-to-top"><i className="bi bi-arrow-up"></i></a>
+            <button className={`btn btn-primary rounded-circle back-to-top ${visible ? "d-block" : "d-none"}`}
+                    style={{position: 'fixed', bottom: '20px', right: '20px', padding: '8px 12px', fontSize: '18px'}}
+                    onClick={scrollToTop}>
+                <i className="bi bi-arrow-up"></i>
+            </button>
         </>
     );
 };
 
-export default FooterComponent;
+export default Footer;
