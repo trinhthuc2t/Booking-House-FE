@@ -4,10 +4,10 @@ import houseByIdService from "../../service/HouseByIdService";
 const ByOwnerId = () => {
 
     const [houses, setHouses] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     // const pageSize = 5;
-    const getHousesByOwnerId = (id) => {
-        houseByIdService.getHousesByOwnerId(id)
+    const getHousesByOwnerId = (id,currentPage) => {
+        houseByIdService.getHousesByOwnerId(id,currentPage)
             .then((houses) => {
                 setHouses(houses);
             })
@@ -18,16 +18,17 @@ const ByOwnerId = () => {
 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
-        getHousesByOwnerId(2, newPage);
+        getHousesByOwnerId(2, currentPage);
     };
 
     useEffect(() => {
         getHousesByOwnerId(2, currentPage);
+        console.log(currentPage)
     }, [currentPage]);
 
     useEffect(() => {
         const ownerId = 2;
-        getHousesByOwnerId(ownerId);
+        getHousesByOwnerId( ownerId,currentPage);
     }, [])
     return (
         <div>
@@ -100,13 +101,13 @@ const ByOwnerId = () => {
                                            onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(1)}>1</a>
+                                        <a className="page-link" href="#" onClick={() => handlePageChange(0)}>1</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(2)}>2</a>
+                                        <a className="page-link" href="#" onClick={() => handlePageChange(1)}>2</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(3)}>3</a>
+                                        <a className="page-link" href="#" onClick={() => handlePageChange(2)}>3</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
                                         <a className="page-link" href="#"

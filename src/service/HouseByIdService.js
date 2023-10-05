@@ -1,15 +1,18 @@
 import axios from 'axios';
+
 const HouseByIdService = {
 
-    getHousesByOwnerId: (ownerId) => {
+    getHousesByOwnerId: (ownerId, currentPage) => {
+        console.log(currentPage)
         return new Promise((resolve, reject) => {
+            console.log(currentPage)
             axios
-                .get('http://localhost:8080/api/houses/owner/' + ownerId)
+                .get('http://localhost:8080/api/houses/owner/' + ownerId + "?page=" + currentPage)
                 .then(response => {
                     resolve(response.data.content);
                 })
                 .catch(function (err) {
-                    reject(err)``
+                    reject(err=>console.log(err))
                 });
         })
     },
@@ -42,9 +45,6 @@ const HouseByIdService = {
     },
 
 };
-
-
-
 
 
 export default HouseByIdService;

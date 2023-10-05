@@ -8,16 +8,7 @@ const ByNameAndStatus = () => {
     const [houses, setHouses] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const search = useParams("");
-    // const pageSize = 5;
-    const getHousesByOwnerId = (id) => {
-        houseByIdService.getHousesByOwnerId(id)
-            .then((houses) => {
-                setHouses(houses);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+
     const checkSearchName = (id, search) => {
         const validStatusValues = ["available", "booked", "repair"];
 
@@ -61,7 +52,6 @@ const ByNameAndStatus = () => {
 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
-        getHousesByOwnerId(2, newPage);
     };
     return (
         <div>

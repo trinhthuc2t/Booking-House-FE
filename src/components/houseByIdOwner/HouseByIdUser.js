@@ -4,7 +4,6 @@ import {Outlet, useNavigate, useParams} from "react-router-dom";
 const HouseByIdUser = () => {
     const navigate = useNavigate();
     const {search} = useParams();
-
     const [selectedOption, setSelectedOption] = useState("");
     const [nameSearch, setNameSearch] = useState(search || "");
 
@@ -19,6 +18,7 @@ const HouseByIdUser = () => {
         setNameSearch(nameSearch);
         if (nameSearch.trim() !== "") {
             navigate(`/search/${nameSearch}`);
+            setSelectedOption("/")
         } else {
             navigate("/");
             setSelectedOption("/")
