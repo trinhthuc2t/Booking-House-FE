@@ -6,7 +6,7 @@ class AccountService extends Component {
 
      getAccountById = (id) => {
         return new Promise( (resolve, reject) => {
-            axios.get("http://localhost:8080/api/accounts/" + id).then((response) => {
+            axios.get("http://localhost:8080/api/accounts/getById/" + id).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 console.log(err);
@@ -19,6 +19,7 @@ class AccountService extends Component {
             axios.put("http://localhost:8080/api/accounts/" + id , account).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
+                reject(err);
                 console.log(err);
             })
         })
