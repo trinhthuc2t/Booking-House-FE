@@ -9,6 +9,7 @@ import {getHouseById} from "../../service/houseService";
 import {avgRatingByHouseId, getAllReviewsByHouseId} from "../../service/reviewService";
 import {getAllImagesByHouseId} from "../../service/imageService";
 import _ from 'lodash';
+import {useParams} from "react-router-dom";
 
 export const HouseDetailContext = createContext();
 
@@ -19,7 +20,7 @@ const HouseDetail = () => {
     const [images, setImages] = useState([]);
     const [avgRating, setAvgRating] = useState(0);
 
-    const houseId = 1;
+    const {houseId} = useParams();
 
     const sale = Math.round((house.oldPrice - house.newPrice) *100 / house.oldPrice);
 
@@ -101,7 +102,7 @@ const HouseDetail = () => {
                         </h3>
                         <div className="d-flex">
                             <p className="me-4"><i className="fa-solid fa-bed me-2"></i>{house.bedroom} phòng ngủ</p>
-                            <p><i className="fa-solid fa-bath me-3"></i>{house.bedroom} phòng tắm</p>
+                            <p><i className="fa-solid fa-bath me-3"></i>{house.bathroom} phòng tắm</p>
                         </div>
 
                         <p className="mb-2">Địa chỉ: {house.address}</p>

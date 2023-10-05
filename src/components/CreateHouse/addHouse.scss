@@ -1,0 +1,15 @@
+.image-thumnail {
+  .btn-delete{
+    right: 5px;
+    color: red;
+
+    &:hover{
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+
+  .brightness-50{
+    filter: brightness(50%);
+  }
+}

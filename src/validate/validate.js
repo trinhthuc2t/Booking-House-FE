@@ -5,9 +5,9 @@ const addHouseSchema = Yup.object().shape({
         .min(2, 'Tên tối thiểu phải 2 kí tự')
         .max(20, 'Tên quá dài')
         .required('Vui lòng không được để trống'),
-    bedRoom: Yup.string()
+    bedroom: Yup.string()
         .required('Vui lòng không được để trống'),
-    livingRoom: Yup.string()
+    bathroom: Yup.string()
         .required('Vui lòng không được để trống'),
     province: Yup.string()
         .required('Vui lòng không được để trống'),
@@ -15,8 +15,24 @@ const addHouseSchema = Yup.object().shape({
         .required('Vui lòng không được để trống'),
     ward: Yup.string()
         .required('Vui lòng không được để trống'),
-    address: Yup.string()
+    houseNumber: Yup.string()
         .required('Vui lòng không được để trống'),
+    newPrice: Yup.number()
+        .min(1, 'Giá tiền phải lớn hơn 0')
+        .required('Vui lòng không được để trống'),
+    oldPrice: Yup.number()
+        .min(1, 'Giá tiền phải lớn hơn 0')
+        .required('Vui lòng không được để trống'),
+    description: Yup.string()
+        .min(10, 'Mô tả tối thiểu phải 10 kí tự')
+        .required('Vui lòng không được để trống'),
+    facility: Yup.string()
+        .min(10, 'Mô tả tối thiểu phải 10 kí tự')
+        .required('Vui lòng không được để trống'),
+    thumbnail: Yup.string()
+        .required('Vui lòng không được để trống'),
+    images: Yup.string()
+        .required('Vui lòng không được để trống')
 })
 
 export {addHouseSchema};

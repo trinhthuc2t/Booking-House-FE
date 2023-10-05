@@ -1,0 +1,51 @@
+.footer {
+  $color-primary: rgb(0, 185, 142);
+  .btn.btn-social {
+    margin-right: 5px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 35px;
+    transition: .3s;
+
+    &:hover {
+      color: $color-primary;
+      border-color: #FFFFFF;
+    }
+  }
+
+  .btn.btn-link {
+    display: block;
+    margin-bottom: 5px;
+    padding: 0;
+    text-align: left;
+    font-size: 15px;
+    font-weight: normal;
+    text-transform: capitalize;
+    transition: .3s;
+  }
+
+
+  .btn.btn-link:hover {
+    letter-spacing: 1px;
+    box-shadow: none;
+  }
+
+  .form-control {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  .copyright {
+    padding: 25px 0;
+    font-size: 15px;
+    border-top: 1px solid rgba(256, 256, 256, .1);
+  }
+
+  .copyright a {
+    color: var(--light);
+  }
+}
