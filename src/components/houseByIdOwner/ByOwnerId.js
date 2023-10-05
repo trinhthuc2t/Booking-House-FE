@@ -5,7 +5,6 @@ const ByOwnerId = () => {
 
     const [houses, setHouses] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    // const pageSize = 5;
     const getHousesByOwnerId = (id,currentPage) => {
         houseByIdService.getHousesByOwnerId(id,currentPage)
             .then((houses) => {
@@ -23,7 +22,6 @@ const ByOwnerId = () => {
 
     useEffect(() => {
         getHousesByOwnerId(2, currentPage);
-        console.log(currentPage)
     }, [currentPage]);
 
     useEffect(() => {

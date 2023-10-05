@@ -6,20 +6,19 @@ const ByNameAndStatus = () => {
 
 
     const [houses, setHouses] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
     const search = useParams("");
 
-    const checkSearchName = (id, search) => {
+    const checkSearchName = (id, search, currentPage) => {
         const validStatusValues = ["available", "booked", "repair"];
-
         if (validStatusValues.includes(search)) {
-            findByOwnerIdAndStatus(id, search);
+            findByOwnerIdAndStatus(id, search,currentPage);
         }else  {
-            findByOwnerIdAndNameContains(id,search)
+            findByOwnerIdAndNameContains(id,search,currentPage)
         }
     }
-    const findByOwnerIdAndStatus = (id, search) => {
-        houseByIdService.findByOwnerIdAndStatus(id, search)
+    const findByOwnerIdAndStatus = (id, search,currentPage) => {
+        houseByIdService.findByOwnerIdAndStatus(id, search,currentPage)
             .then((houses) => {
                 setHouses(houses);
             })
@@ -30,8 +29,8 @@ const ByNameAndStatus = () => {
     };
 
 
-    const findByOwnerIdAndNameContains = (id, search) => {
-        houseByIdService.findByOwnerIdAndNameContains(id, search)
+    const findByOwnerIdAndNameContains = (id, search,currentPage) => {
+        houseByIdService.findByOwnerIdAndNameContains(id, search,currentPage)
             .then((houses) => {
                 setHouses(houses);
             })
@@ -45,13 +44,14 @@ const ByNameAndStatus = () => {
 
 
     useEffect(() => {
-        const id = 2;
-        checkSearchName(id, search.search);
-    }, [search])
+        checkSearchName(2, search.search,currentPage);
+    }, [search,currentPage])
 
 
     const handlePageChange = (newPage) => {
         setCurrentPage(newPage);
+        const ownerId = 2;
+        checkSearchName( ownerId,search.search,currentPage);
     };
     return (
         <div>
@@ -97,21 +97,21 @@ const ByNameAndStatus = () => {
                             </div>
                             <nav aria-label="Page navigation">
                                 <ul className="pagination">
-                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#"
+                                    <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+                                        <a className="page-link"
                                            onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
                                     </li>
+                                    <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
+                                        <a className="page-link" onClick={() => handlePageChange(0)}>1</a>
+                                    </li>
                                     <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(1)}>1</a>
+                                        <a className="page-link" onClick={() => handlePageChange(1)}>2</a>
                                     </li>
                                     <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(2)}>2</a>
+                                        <a className="page-link" onClick={() => handlePageChange(2)}>3</a>
                                     </li>
-                                    <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#" onClick={() => handlePageChange(3)}>3</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
-                                        <a className="page-link" href="#"
+                                    <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
+                                        <a className="page-link"
                                            onClick={() => handlePageChange(currentPage + 1)}>Next</a>
                                     </li>
                                 </ul>
