@@ -5,9 +5,7 @@ import React from "react";
 import {Route, Routes} from "react-router-dom";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
 import AddHouse from "./components/AddHouse";
-import EditProfile from "./component/account/crud/EditProfile";
-
-
+import EditProfile from "./account/crud/EditProfile";
 
 function App() {
   return (

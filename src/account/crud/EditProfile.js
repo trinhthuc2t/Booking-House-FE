@@ -3,7 +3,7 @@ import {Link, useNavigate, useParams} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import _ from 'lodash';
-import {storage} from "../../../firebase/firebase";
+import {storage} from "../../firebase/firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid" ;
 import accountService from "../AccountService";
@@ -92,29 +92,13 @@ const EditProfile = () => {
                                 handleProfile(values);
                             }}>
                         <Form className="row">
-                            <div className="col-2 border-right">
+                            <div className="col-2 border-right mt-5">
                                 <aside className="left-sidebar">
 
                                     <div>
-                                        <div className="brand-logo d-flex align-items-center justify-content-between">
-                                            <a className="text-nowrap logo-img">
-                                                <img src="../assetsHieu/images/logos/dark-logo.svg" width="180" alt=""/>
-                                            </a>
-                                            <div className="close-btn d-xl-none d-block sidebartoggler cursor-pointer"
-                                                 id="sidebarCollapse">
-                                                <i className="ti ti-x fs-8"></i>
-                                            </div>
-                                        </div>
-
-                                        <nav className="sidebar-nav scroll-sidebar" data-simplebar="">
+                                        <nav className="sidebar-nav " data-simplebar="">
                                             <ul id="sidebarnav">
-                                                <li className="nav-small-cap">
-                                                    <Link to={"/"}>
-                                                        <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                                                        <span className="hide-menu">Home</span>
-                                                    </Link>
 
-                                                </li>
                                                 <li className="sidebar-item">
 
                                                     <Link to={"/"} className="sidebar-link">
@@ -143,77 +127,7 @@ const EditProfile = () => {
                                                         <span className="hide-menu">Đổi mật khẩu</span>
                                                     </Link>
                                                 </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                        <span>
-                                                          <i className="ti ti-cards"></i>
-                                                        </span>
-                                                        <span className="hide-menu">Card</span>
-                                                    </a>
-                                                </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                        <span>
-                                                          <i className="ti ti-file-description"></i>
-                                                        </span>
-                                                        <span className="hide-menu">Forms</span>
-                                                    </a>
-                                                </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                        <span>
-                                                          <i className="ti ti-typography"></i>
-                                                        </span>
-                                                        <span className="hide-menu">Typography</span>
-                                                    </a>
-                                                </li>
-                                                <li className="nav-small-cap">
-                                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                                                    <span className="hide-menu">AUTH</span>
-                                                </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                        <span>
-                                                          <i className="ti ti-login"></i>
-                                                        </span>
-                                                        <span className="hide-menu">Login</span>
-                                                    </a>
-                                                </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                    <span>
-                                                      <i className="ti ti-user-plus"></i>
-                                                    </span>
-                                                        <span className="hide-menu">Register</span>
-                                                    </a>
-                                                </li>
-                                                <li className="nav-small-cap">
-                                                    <i className="ti ti-dots nav-small-cap-icon fs-4"></i>
-                                                    <span className="hide-menu">EXTRA</span>
-                                                </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                    <span>
-                                                      <i className="ti ti-mood-happy"></i>
-                                                    </span>
-                                                        <span className="hide-menu">Icons</span>
-                                                    </a>
-                                                </li>
-                                                <li className="sidebar-item">
-                                                    <a className="sidebar-link"
-                                                       aria-expanded="false">
-                                                            <span>
-                                                              <i className="ti ti-aperture"></i>
-                                                            </span>
-                                                        <span className="hide-menu">Sample Page</span>
-                                                    </a>
-                                                </li>
+
                                             </ul>
 
                                         </nav>
@@ -235,7 +149,7 @@ const EditProfile = () => {
                             <div className="col-md-7 mt-5 border-right">
                                 <div className="p-3 py-5">
                                     <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h4 className="text-right">Thông tin cá nhân</h4>
+                                        <h4 className="text-right">Sửa thông tin cá nhân</h4>
                                     </div>
                                     <div className="row mt-2">
                                         <div className="col-md-6">
