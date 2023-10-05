@@ -17,10 +17,10 @@ const HouseByIdUser = () => {
         const nameSearch = event.target.value;
         setNameSearch(nameSearch);
         if (nameSearch.trim() !== "") {
-            navigate(`/search/${nameSearch}`);
+            navigate(`/houses-owner/search/${nameSearch}`);
             setSelectedOption("/")
         } else {
-            navigate("/");
+            navigate("/houses-owner");
             setSelectedOption("/")
         }
     };
@@ -37,10 +37,10 @@ const HouseByIdUser = () => {
                                 <div className="col-md-4">
                                     <select name="" id="" className="form-select border-0" value={selectedOption}
                                             onChange={handleOptionChange}>
-                                        <option value="/">Tất cả</option>
-                                        <option value="/search/available">Đang trống</option>
-                                        <option value="/search/booked">Đang cho thuê</option>
-                                        <option value="/search/repair">Đang bảo trì</option>
+                                        <option value="/houses-owner">Tất cả</option>
+                                        <option value="/houses-owner/search/available">Đang trống</option>
+                                        <option value="/houses-owner/search/booked">Đang cho thuê</option>
+                                        <option value="/houses-owner/search/repair">Đang bảo trì</option>
                                     </select>
                                 </div>
 
