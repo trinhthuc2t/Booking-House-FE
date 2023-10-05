@@ -180,6 +180,7 @@ const EditProfile = () => {
                                        <ErrorMessage name={'address'}></ErrorMessage>
                                    </span>
                                         </div>
+
                                         <div className="col-md-12 mb-3">
                                             <label className="labels" htmlFor="email">Email</label>
                                             <Field type="text" className="form-control" id="email"
@@ -189,6 +190,29 @@ const EditProfile = () => {
                                        <ErrorMessage name={'email'}></ErrorMessage>
                                    </span>
                                         </div>
+
+                                        <div className="col-md-12 mb-3">
+                                           <div className="row">
+                                               <label className="labels" htmlFor="email">Email</label>
+                                               <div className="col-4">
+                                                   <select name="" id="">
+                                                       <option value="">city</option>
+                                                   </select>
+                                               </div>
+                                               <div className="col-4">
+                                                   <select name="" id="">
+                                                       <option value="">district</option>
+                                                   </select>
+                                               </div>
+                                               <div className="col-4">
+                                                   <select name="" id="">
+                                                       <option value="">ward</option>
+                                                   </select>
+                                               </div>
+                                           </div>
+                                        </div>
+
+
                                         <div className="col-md-12 mb-3">
                                             <label className="labels" htmlFor="phone">Số điện thoại</label>
                                             <Field type="text" className="form-control" id="phone"
