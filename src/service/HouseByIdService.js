@@ -3,9 +3,7 @@ import axios from 'axios';
 const HouseByIdService = {
 
     getHousesByOwnerId: (ownerId, currentPage) => {
-        console.log(currentPage)
         return new Promise((resolve, reject) => {
-            console.log(currentPage)
             axios
                 .get('http://localhost:8080/api/houses/owner/' + ownerId + "?page=" + currentPage + "&size="+ 2)
                 .then(response => {
@@ -17,10 +15,10 @@ const HouseByIdService = {
         })
     },
 
-    findByOwnerIdAndNameContains: (ownerId, name) => {
+    findByOwnerIdAndNameContains: (ownerId, name,currentPage) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId + "?name=" + name)
+                .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId + "?name=" + name + "&page=" + currentPage)
                 .then(response => {
                     resolve(response.data.content);
                 })
@@ -31,10 +29,10 @@ const HouseByIdService = {
     },
 
 
-    findByOwnerIdAndStatus: (ownerId, status) => {
+    findByOwnerIdAndStatus: (ownerId, status,currentPage) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId + "?status=" + status)
+                .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId + "?status=" + status + "&page=" + currentPage)
                 .then(response => {
                     resolve(response.data.content);
                 })
