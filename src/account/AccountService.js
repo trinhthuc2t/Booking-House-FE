@@ -25,6 +25,28 @@ class AccountService extends Component {
         })
     }
 
+    checkPassword = (account) => {
+        return new Promise( (resolve, reject) => {
+            axios.post("http://localhost:8080/api/accounts/checkPassword/" + account.id , account).then((response) => {
+                resolve(response.data);
+                console.log(response.data);
+            }).catch(function (err) {
+                console.log(err);
+            })
+        })
+    }
+
+    changePassWord = (account) => {
+        return new Promise( (resolve, reject) => {
+            axios.post("http://localhost:8080/api/accounts/changePassword/" + account.id , account).then((response) => {
+                resolve(response.data);
+            }).catch(function (err) {
+                console.log(err);
+            })
+        })
+    }
+
+
     render() {
         return (
             <div>
