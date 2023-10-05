@@ -10,5 +10,8 @@ class LoginRegisterService{
     static login(account){
         return axios.post("http://localhost:8080/api/login", account)
     }
+    static sendPassword(email){
+        return axios.post("http://localhost:8080/api/forgot", email)
+    }
 }
 export default LoginRegisterService

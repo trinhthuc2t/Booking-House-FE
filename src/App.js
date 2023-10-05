@@ -8,6 +8,7 @@ import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
 import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
 import NavbarComponent from "./component/NavbarComponent";
 import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
+import ForgotPassword from "./login-register/forgot-password";
 
 function App() {
     return (
@@ -16,6 +17,7 @@ function App() {
             <Routes>
                 <Route path={"/register"} element={<Register/>}/>
                 <Route path={"/login"} element={<Login/>}/>
+                <Route path={"/forgot"} element={<ForgotPassword/>}/>
                 <Route path="/" element={<HouseDetail/>}/>
                 <Route path={"/"} element={<HouseByIdUser/>}>
                     <Route path={"/"} element={<ByOwnerId/>}/>

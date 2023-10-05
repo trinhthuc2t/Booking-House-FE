@@ -71,7 +71,7 @@ function Login() {
                                     <div className="form-inline">
                                         <input type="checkbox" name="remember" id="remember"/>
                                         <label htmlFor="remember" className="text-muted">Remember me</label>
-                                        <a href="#" id="forgot" className="font-weight-bold"> Forgot password?</a>
+                                        <Link to={"/forgot"} style={{color: "#84fab0"}}> Forgot password?</Link>
                                     </div>
                                     <button type="submit"
                                             className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Login
