@@ -6,6 +6,8 @@ import AddHouse from "./components/AddHouse";
 import Login from "./login-register/login";
 import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
 import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
+import NavbarComponent from "./component/NavbarComponent";
+import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
 
 function App() {
     return (
