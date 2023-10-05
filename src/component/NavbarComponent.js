@@ -1,7 +1,7 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+
 import './house.scss';
 import icon_house from '../image/icons8-house-60.png';
+import {Link} from "react-router-dom";
 
 const Navbar = () => {
     return (

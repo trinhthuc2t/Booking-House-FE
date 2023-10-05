@@ -1,19 +1,37 @@
 import React, {useEffect, useState} from 'react';
-import {getAllProvinces} from "../service/addressService";
 import _ from 'lodash';
 import AdminTeam from "./AdminTeam";
 import './home.scss';
 import {Pagination} from "@mui/material";
+import {getAllProvinces} from "../service/addressService";
+import houseByIdService from "../service/HouseByIdService";
 
 const HouseComponent = () => {
     const [provinces, setProvinces] = useState([]);
+    const [houses, setHouses] = useState([]);
+    const [page, setPage] = useState(3);
 
+
+    const getAllHouse = (currentPage) => {
+        houseByIdService.getAllHouse(currentPage)
+            .then((houses) => {
+                setHouses(houses.content);
+                setPage(houses.totalPages);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
     useEffect(() => {
         getAllProvinces().then(response => {
             setProvinces(response.data.data);
         }).catch(error => {
             console.log(error)
         })
+    }, [])
+
+    useEffect(() => {
+       getAllHouse()
     }, [])
     return (
         <div className="container-home">
@@ -112,42 +130,51 @@ const HouseComponent = () => {
                 <div className="container">
                     <div className="row g-4">
                         {/*map house*/}
-                        <div className="col-lg-4 col-md-6">
-                            <div className="house-item border rounded overflow-hidden">
-                                <div className="position-relative overflow-hidden">
-                                    <div>
-                                        <img className="img-fluid" src="img/house/property-1.jpg" alt=""/>
+
+                        {
+                            houses.map(house=>{
+                                {console.log(houses)}
+                                return(
+                                    <div className="col-lg-4 col-md-6">
+                                        <div className="house-item border rounded overflow-hidden">
+                                            <div className="position-relative overflow-hidden">
+                                                <div>
+                                                    <img className="img-fluid" src={house.thumbnail} alt=""/>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 pb-0">
+                                                <h5 className="mb-2 text-center">{house.name}</h5>
+                                                <h5 className=" mb-3 color-primary text-center">{house.newPrice} <del
+                                                    className="text-secondary fs-6">{house.oldPrice}</del></h5>
+                                                <p>
+                                                    <i className="fa fa-map-marker-alt me-2 color-primary"></i>
+                                                    {house.address}
+                                                </p>
+                                            </div>
+                                            <div className="d-flex border-top p-2">
+                                                <small className="flex-fill text-center border-end py-2">
+                                                    <i className="fa fa-ruler-combined me-2 color-primary"></i>
+                                                    {house.area} m²
+                                                </small>
+                                                <small className="flex-fill text-center border-end py-2">
+                                                    <i className="fa fa-bed me-2 color-primary"></i>
+                                                    {house.bedroom} Ngủ
+                                                </small>
+                                                <small className="flex-fill text-center py-2">
+                                                    <i className="fa fa-bath  me-2 color-primary"></i>
+                                                    {house.bathroom} Tắm
+                                                </small>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="p-4 pb-0">
-                                    <h5 className="mb-2 text-center">Golden Urban House For Sell</h5>
-                                    <h5 className=" mb-3 color-primary text-center">$12,345 <del
-                                        className="text-secondary fs-6">123456</del></h5>
-                                    <p>
-                                        <i className="fa fa-map-marker-alt me-2 color-primary"></i>
-                                        123 Street, New York, USA
-                                    </p>
-                                </div>
-                                <div className="d-flex border-top p-2">
-                                    <small className="flex-fill text-center border-end py-2">
-                                        <i className="fa fa-ruler-combined me-2 color-primary"></i>
-                                        3000 m2
-                                    </small>
-                                    <small className="flex-fill text-center border-end py-2">
-                                        <i className="fa fa-bed me-2 color-primary"></i>
-                                        3 ngủ
-                                    </small>
-                                    <small className="flex-fill text-center py-2">
-                                        <i className="fa fa-bath  me-2 color-primary"></i>
-                                        2 tắm
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
+
+                                )
+                        })
+                        }
 
                         {/*map house*/}
                         <div className="col-12 mt-5 d-flex justify-content-center">
-                            <Pagination count={10} size="large" variant="outlined" shape="rounded" color="primary"/>
+                            <Pagination count={page} size="large" variant="outlined" shape="rounded" color="primary"/>
                         </div>
 
                         <AdminTeam/>
