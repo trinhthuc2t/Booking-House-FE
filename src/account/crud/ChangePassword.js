@@ -74,7 +74,7 @@ const ChangePassword = () => {
 
                                         <li className="sidebar-item">
 
-                                            <Link to={"/"} className="sidebar-link">
+                                            <Link to={`/profile/${id}`} className="sidebar-link">
                                                          <span>
                                                              <i className="fa-solid fa-user"></i>
                                                             </span>

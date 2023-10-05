@@ -100,7 +100,7 @@ const EditProfile = () => {
 
                                                 <li className="sidebar-item">
 
-                                                    <Link to={"/profile"} className="sidebar-link">
+                                                    <Link to={`/profile/${id}`} className="sidebar-link">
                                                          <span>
                                                              <i className="fa-solid fa-user"></i>
                                                             </span>
