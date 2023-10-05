@@ -2,7 +2,8 @@ import './register.css'
 import * as Yup from 'yup';
 import axios from "axios";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import LoginRegisterService from "../service/login-registerService";
 
 function Register() {
     let back = useNavigate();
@@ -16,7 +17,7 @@ function Register() {
         username: Yup.string().required('Vui lòng nhập tên đăng nhập')
             .matches(/^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$/, 'Tên đăng nhập không hợp lệ')
             .test('unique', 'Tên đăng nhập đã tồn tại', async (value) => {
-                let rps = await axios.get("http://localhost:8080/api/accounts/" + value)
+                let rps = await LoginRegisterService.getAccountByUsername(value)
                  if (rps.data === ""){
                      return true
                  }
@@ -36,7 +37,7 @@ function Register() {
     });
 
     const handleSubmit = (value) => {
-        axios.post("http://localhost:8080/api/register", value)
+        LoginRegisterService.register(value)
             .then(res => {
                 console.log(res.data)
                 localStorage.setItem("token", res.data.token)
@@ -112,9 +113,9 @@ function Register() {
                                                 </button>
                                             </div>
 
-                                            <p className="text-center text-muted mt-5 mb-0">Have already an account? <a
-                                                href="#!"
-                                                className="fw-bold text-body"><u>Login here</u></a></p>
+                                            <p className="text-center text-muted mt-5 mb-0">Have already an account? <Link
+                                                to={"/login"}
+                                                className="fw-bold text-body"><u>Login here</u></Link></p>
 
                                         </Form>
                                     </Formik>
