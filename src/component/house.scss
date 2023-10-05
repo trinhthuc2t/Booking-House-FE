@@ -1,0 +1,21 @@
+.dropdown-toggle::after {
+  display: none !important;
+}
+
+.nav-bar {
+  background-color: #f1f1f1;
+  .navbar-custom {
+    font-size: 18px;
+
+    .nav-item {
+      &:hover {
+        color: blue;
+      }
+    }
+      .nav-link {
+        &:hover {
+          color: blue;
+        }
+      }
+    }
+  }

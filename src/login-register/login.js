@@ -1,4 +1,4 @@
-import './login.css'
+import './login.scss'
 import * as Yup from 'yup';
 import {Link, useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
@@ -32,7 +32,7 @@ function Login() {
     }
 
     return (
-        <div className="container">
+        <div className="container login-container">
             <div className="row">
                 <div className="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
                     <div className="panel border bg-white">
