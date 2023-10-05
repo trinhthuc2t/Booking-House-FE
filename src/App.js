@@ -1,14 +1,14 @@
 import './App.css';
 import {Route, Routes} from "react-router-dom";
+import NavbarComponent from "./component/NavbarComponent";
+import HouseComponent from "./component/HouseComponent";
 import Register from "./login-register/register";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
-import AddHouse from "./components/CreateHouse/AddHouse";
 import Login from "./login-register/login";
+import AddHouse from "./components/CreateHouse/AddHouse";
+import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
 import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
 import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
-import NavbarComponent from "./component/NavbarComponent";
-import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
-import HouseComponent from "./component/HouseComponent";
 import Footer from "./component/Footer";
 
 function App() {
