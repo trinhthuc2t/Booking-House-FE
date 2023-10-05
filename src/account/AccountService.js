@@ -38,7 +38,7 @@ class AccountService extends Component {
 
     changePassWord = (account) => {
         return new Promise( (resolve, reject) => {
-            axios.post("http://localhost:8080/api/accounts/changePassword/" + account.id , account).then((response) => {
+            axios.put("http://localhost:8080/api/accounts/changePassword/" + account.id , account).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 console.log(err);

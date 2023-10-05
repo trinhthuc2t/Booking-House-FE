@@ -94,14 +94,13 @@ const EditProfile = () => {
                         <Form className="row">
                             <div className="col-2 border-right mt-5">
                                 <aside className="left-sidebar">
-
                                     <div>
                                         <nav className="sidebar-nav " data-simplebar="">
                                             <ul id="sidebarnav">
 
                                                 <li className="sidebar-item">
 
-                                                    <Link to={"/"} className="sidebar-link">
+                                                    <Link to={"/profile"} className="sidebar-link">
                                                          <span>
                                                              <i className="fa-solid fa-user"></i>
                                                             </span>
@@ -111,7 +110,7 @@ const EditProfile = () => {
 
                                                 <li className="sidebar-item">
                                                     <Link to={`/editProfile/${id}`} className="sidebar-link"
-                                                       aria-expanded="false">
+                                                          aria-expanded="false">
                                                         <span>
                                                           <i className="fa-solid fa-pen-to-square"></i>
                                                         </span>
@@ -120,7 +119,7 @@ const EditProfile = () => {
                                                 </li>
                                                 <li className="sidebar-item">
                                                     <Link to={`/changePassword/${id}`} className="sidebar-link"
-                                                       aria-expanded="false">
+                                                          aria-expanded="false">
                                                             <span>
                                                               <i className="fa-solid fa-rotate"></i>
                                                             </span>

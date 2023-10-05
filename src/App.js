@@ -6,6 +6,7 @@ import {Route, Routes} from "react-router-dom";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
 import AddHouse from "./components/AddHouse";
 import EditProfile from "./account/crud/EditProfile";
+import ChangePassword from "./account/crud/ChangePassword";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/" element={<HouseDetail/>}/>
             <Route path="/add" element={<AddHouse/>}/>
             <Route path={"/editProfile/:id"} element={<EditProfile/>}/>
+            <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>
         </Routes>
         <ToastContainer/>
     </div>
