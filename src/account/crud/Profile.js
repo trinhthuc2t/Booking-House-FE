@@ -25,9 +25,9 @@ const Profile = () => {
                 {!_.isEmpty(account) &&
 
                         <div className="row">
-                            <div className="col-2 border-right mt-5">
-                                <aside className="left-sidebar">
-                                    <div>
+                            <div className="col-2 border-right ">
+                                <aside className="left-sidebar " style={{height : '70vh'}}>
+                                    <div >
                                         <nav className="sidebar-nav " data-simplebar="">
                                             <ul id="sidebarnav">
 
@@ -63,12 +63,11 @@ const Profile = () => {
                                             </ul>
 
                                         </nav>
-
                                     </div>
 
                                 </aside>
                             </div>
-                            <div className="col-md-3 mt-5 border-right">
+                            <div className="col-md-3 mt-5 border-right row">
                                 <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                     <img className="rounded-circle mt-5" width="250px" height="300px"
                                          src={account.avatar} alt="avatar" id="image" name="avatar"

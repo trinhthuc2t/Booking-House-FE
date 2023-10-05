@@ -23,7 +23,6 @@ const AddHouse = () => {
     const [imagesURL, setImagesURL] = useState([]);
     const [thumnailFile, setThumnailFile] = useState(null);
     const [imagesFile, setImagesFile] = useState([]);
-
     const thumnailRef = useRef();
     const imagesRef = useRef();
 
@@ -200,8 +199,7 @@ const AddHouse = () => {
                             </div>
 
                             <div className="col-4 form-group mb-3">
-                                <label className="form-label" htmlFor="province">Tỉnh/Thành
-                                    phố:</label>
+                                <label className="form-label" htmlFor="province">Tỉnh/Thành phố:</label>
                                 <Field as="select" className="form-select" id="province" name="province">
                                     <option value="">---Chọn Tỉnh/Thành phố---</option>
                                     {!_.isEmpty(provinces) && provinces.map(province => (

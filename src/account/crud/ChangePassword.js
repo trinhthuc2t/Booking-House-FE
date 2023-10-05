@@ -67,7 +67,7 @@ const ChangePassword = () => {
             <section className="vh-100">
                 <div className="row ">
                     <div className="col-2">
-                        <aside className="left-sidebar mt-5">
+                        <aside className="left-sidebar ">
                             <div>
                                 <nav className="sidebar-nav " data-simplebar="">
                                     <ul id="sidebarnav">
@@ -110,7 +110,7 @@ const ChangePassword = () => {
                         </aside>
                     </div>
                     <div className="col-9">
-                        <div className="row mt-5 d-flex justify-content-center align-items-center h-100 ">
+                        <div className="row  d-flex justify-content-center align-items-center h-100 ">
 
                             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                                 <div className="card shadow-2-strong" style={{borderRadius: "1rem"}}>
