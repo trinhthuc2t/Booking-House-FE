@@ -17,21 +17,7 @@ import Profile from "./account/crud/Profile";
 import EditProfile from "./account/crud/EditProfile";
 import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./component/Footer";
-/*import Register from "./login-register/register";
-import HouseDetail from "./components/HouseDetail/HouseDetail";
-import Login from "./login-register/login";
-import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
-import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
-import NavbarComponent from "./component/NavbarComponent";
-import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
-import ForgotPassword from "./login-register/forgot-password";
-import Footer from "./component/Footer";
-import HouseComponent from "./component/HouseComponent";
-import AddHouse from "./components/CreateHouse/AddHouse";
 
-import EditProfile from "./account/crud/EditProfile";
-import ChangePassword from "./account/crud/ChangePassword";
-import Profile from "./account/crud/Profile";*/
 
 function App() {
     return (

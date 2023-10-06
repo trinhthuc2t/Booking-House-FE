@@ -55,6 +55,15 @@ const Profile = () => {
                                                     <span className="hide-menu">Đổi mật khẩu</span>
                                                 </Link>
                                             </li>
+                                            <li className="sidebar-item">
+                                                <Link to={`/`} className="sidebar-link"
+                                                      aria-expanded="false">
+                                                            <span>
+                                                              <i className="fa-solid fa-chevron-up"></i>
+                                                            </span>
+                                                    <span className="hide-menu">Đăng ký trở thành chủ nhà</span>
+                                                </Link>
+                                            </li>
                                         </ul>
                                     </nav>
                                 </div>

@@ -9,7 +9,7 @@ import {v4} from "uuid" ;
 import accountService from "../AccountService";
 import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
-import {addHouseSchema} from "../../validate/validate";
+
 
 const EditProfile = () => {
     const navigate = useNavigate();
@@ -91,7 +91,7 @@ const EditProfile = () => {
         console.log(address);
         let data = {...values, avatar: account.avatar, address: address};
         accountService.editAccount(id, data).then((response) => {
-            toast.success("Edit profile success", {position: "top-center", autoClose: 1000,});
+            toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
         }).catch(function (err) {
             console.log(err);
         })
@@ -110,11 +110,11 @@ const EditProfile = () => {
     const selectImage = (event) => {
         if (event.target.files[0] == null) return;
         const imageRef = ref(storage, `images/${event.target.files[0].name + v4()}`);
-        toast.info("Uploading Image", {position: "top-center", autoClose: 500,});
+        toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
                 setAccount({...account, avatar: url});
-                toast.success("Upload Image success", {position: "top-center", autoClose: 2000,});
+                toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
                 var output = document.getElementById('image');
                 output.src = URL.createObjectURL(event.target.files[0]);
                 output.onload = function () {
@@ -188,6 +188,15 @@ const EditProfile = () => {
                                                               <i className="fa-solid fa-rotate"></i>
                                                             </span>
                                                             <span className="hide-menu">Đổi mật khẩu</span>
+                                                        </Link>
+                                                    </li>
+                                                    <li className="sidebar-item">
+                                                        <Link to={`/`} className="sidebar-link"
+                                                              aria-expanded="false">
+                                                            <span>
+                                                              <i className="fa-solid fa-chevron-up"></i>
+                                                            </span>
+                                                            <span className="hide-menu">Đăng ký trở thành chủ nhà</span>
                                                         </Link>
                                                     </li>
                                                 </ul>
