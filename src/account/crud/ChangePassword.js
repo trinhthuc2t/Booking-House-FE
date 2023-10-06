@@ -67,45 +67,45 @@ const ChangePassword = () => {
 
             <section className="vh-100">
                 <div className="row ">
-                    <div className="col-2">
-                        <aside className="left-sidebar " style={{height: '70vh'}}>
+                    <div className="col-2 border-right ">
+                        <aside className="left-sidebar " style={{height: '80vh'}}>
                             <div>
-                                <nav className="sidebar-nav row" data-simplebar="">
+                                <nav className="list-group row" data-simplebar="">
                                     <ul id="sidebarnav">
-                                        <li className="sidebar-item">
-                                            <Link to={`/profile/${id}`} className="sidebar-link">
+                                        <li className="list-group-item">
+                                            <Link to={`/profile/${id}`}>
                                                          <span>
-                                                             <i className="fa-solid fa-user"></i>
-                                                         </span>
-                                                <span className="hide-menu">Thông tin cá nhân</span>
+                                                             <i className="fa-solid fa-user me-3"></i>
+                                                            </span>
+                                                <span className="hide-menu ">Thông tin cá nhân</span>
                                             </Link>
                                         </li>
 
-                                        <li className="sidebar-item">
-                                            <Link to={`/editProfile/${id}`} className="sidebar-link"
+                                        <li className="list-group-item">
+                                            <Link to={`/editProfile/${id}`}
                                                   aria-expanded="false">
                                                         <span>
-                                                          <i className="fa-solid fa-pen-to-square"></i>
+                                                          <i className="fa-solid fa-pen-to-square me-3"></i>
                                                         </span>
                                                 <span className="hide-menu">Sửa thông tin cá nhân</span>
                                             </Link>
                                         </li>
-                                        <li className="sidebar-item">
-                                            <Link to={`/changePassword/${id}`} className="sidebar-link"
+                                        <li className="list-group-item">
+                                            <Link to={`/changePassword/${id}`}
                                                   aria-expanded="false">
                                                             <span>
-                                                              <i className="fa-solid fa-rotate"></i>
+                                                              <i className="fa-solid fa-rotate me-3"></i>
                                                             </span>
                                                 <span className="hide-menu">Đổi mật khẩu</span>
                                             </Link>
                                         </li>
-                                        <li className="sidebar-item">
-                                            <Link to={`/`} className="sidebar-link"
+                                        <li className="list-group-item">
+                                            <Link to={`/upOwner/${id}`}
                                                   aria-expanded="false">
                                                             <span>
-                                                              <i className="fa-solid fa-chevron-up"></i>
+                                                              <i className="fa-solid fa-chevron-up me-3"></i>
                                                             </span>
-                                                <span className="hide-menu">Đăng ký trở thành chủ nhà</span>
+                                                <span className="hide-menu">Đăng ký làm chủ nhà</span>
                                             </Link>
                                         </li>
                                     </ul>

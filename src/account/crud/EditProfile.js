@@ -9,9 +9,10 @@ import {v4} from "uuid" ;
 import accountService from "../AccountService";
 import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
+import "./up.scss";
 
+const EditProfile = ({status}) => {
 
-const EditProfile = () => {
     const navigate = useNavigate();
     const {id} = useParams();
     const [account, setAccount] = useState({});
@@ -72,7 +73,7 @@ const EditProfile = () => {
             .min(2, "Mô tả dài hơn 2 ký tự!")
             .required("Địa chỉ không được để trống"),
         email: Yup.string()
-            .matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,"Nhập email có dạng @gmail")
+            .matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, "Nhập email có dạng @gmail")
             .min(11, "Email phải dài hơn 10 ký tự!")
             .required("Email không được để trống"),
         phone: Yup.string()
@@ -92,6 +93,7 @@ const EditProfile = () => {
         let data = {...values, avatar: account.avatar, address: address};
         accountService.editAccount(id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
+            console.log(response);
         }).catch(function (err) {
             console.log(err);
         })
@@ -123,9 +125,78 @@ const EditProfile = () => {
             });
         })
     }
+
+    const uploadIdentify = (event) => {
+        if (event.target.files[0] == null) return;
+        const imageRef = ref(storage, `images/${event.target.files[0].name + v4()}`);
+        var {name} = event.target;
+        console.log(name);
+        toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
+        uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
+            getDownloadURL(snapshot.ref).then((url) => {
+                console.log(url);
+                toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
+                var output = document.getElementById(name);
+                output.src = window.URL.createObjectURL(url);
+                output.onload = function () {
+                    URL.revokeObjectURL(output.src) // free memory
+                }
+            });
+        })
+    }
     const handleValueInput = (e) => {
         let {name, value} = e.target;
         setAccount({...account, [name]: value});
+    }
+
+    const uploadFileId = (e) => {
+        let {name} = e.target;
+        console.log(name);
+
+    }
+
+
+    const handleProps = () => {
+        if (status) {
+            return <div className="mt-2 text-center d-flex justify-content-around">
+                <Link to={'/'}>
+                    <button className="btn btn-primary profile-button"
+                            type="button">Trở về
+                    </button>
+                </Link>
+                <button className="btn btn-primary profile-button"
+                        type="submit">Lưu
+                </button>
+            </div>
+        }else {
+            return <div>
+                <div className="mt-2  text-center d-flex justify-content-center">
+                    <div className={"col-6"}>
+                        <p>Mặt trước CCCD</p>
+                        <div className={'identify m-lg-5'}>
+
+                            <input type="file" id="frontside"  name="frontside" onChange={uploadIdentify}/>
+                        </div>
+
+                    </div>
+                    <div className={"col-6"}>
+                        <p>Mặt sau CCCD</p>
+                        <div className={'identify m-lg-5'}>
+                            <input type="file" id="backside"  name="backside" onChange={uploadIdentify}/>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div className="mt-2 text-center d-flex justify-content-around">
+                    <button className="btn btn-primary profile-button"
+                            type="submit">Đăng ký
+                    </button>
+                </div>
+            </div>
+        }
+
+
     }
     return (
         <div className="container-fluid">
@@ -140,7 +211,9 @@ const EditProfile = () => {
                         avatar: account.avatar,
                         province: account.address.split("-")[3],
                         district: account.address.split("-")[2],
-                        ward: account.address.split("-")[1]
+                        ward: account.address.split("-")[1],
+                        frontside : '',
+                        backside : ''
                     }}
                             innerRef={(actions) => {
                                 if (actions && actions.touched.province)
@@ -153,7 +226,9 @@ const EditProfile = () => {
                             validationSchema={validateSchema}
 
                             onSubmit={(values) => {
-                                handleProfile(values);
+                                if (status){
+                                    handleProfile(values);
+                                }
                             }}>
 
                         {() => (
@@ -161,42 +236,42 @@ const EditProfile = () => {
                                 <div className="col-2 border-right ">
                                     <aside className="left-sidebar " style={{height: '80vh'}}>
                                         <div>
-                                            <nav className="sidebar-nav row" data-simplebar="">
+                                            <nav className="list-group row" data-simplebar="">
                                                 <ul id="sidebarnav">
-                                                    <li className="sidebar-item">
-                                                        <Link to={`/profile/${id}`} className="sidebar-link">
+                                                    <li className="list-group-item">
+                                                        <Link to={`/profile/${id}`} >
                                                          <span>
-                                                             <i className="fa-solid fa-user"></i>
+                                                             <i className="fa-solid fa-user me-3"></i>
                                                             </span>
-                                                            <span className="hide-menu">Thông tin cá nhân</span>
+                                                            <span className="hide-menu ">Thông tin cá nhân</span>
                                                         </Link>
                                                     </li>
 
-                                                    <li className="sidebar-item">
-                                                        <Link to={`/editProfile/${id}`} className="sidebar-link"
+                                                    <li class="list-group-item">
+                                                        <Link to={`/editProfile/${id}`}
                                                               aria-expanded="false">
                                                         <span>
-                                                          <i className="fa-solid fa-pen-to-square"></i>
+                                                          <i className="fa-solid fa-pen-to-square me-3"></i>
                                                         </span>
                                                             <span className="hide-menu">Sửa thông tin cá nhân</span>
                                                         </Link>
                                                     </li>
-                                                    <li className="sidebar-item">
-                                                        <Link to={`/changePassword/${id}`} className="sidebar-link"
+                                                    <li class="list-group-item">
+                                                        <Link to={`/changePassword/${id}`}
                                                               aria-expanded="false">
                                                             <span>
-                                                              <i className="fa-solid fa-rotate"></i>
+                                                              <i className="fa-solid fa-rotate me-3"></i>
                                                             </span>
                                                             <span className="hide-menu">Đổi mật khẩu</span>
                                                         </Link>
                                                     </li>
-                                                    <li className="sidebar-item">
-                                                        <Link to={`/`} className="sidebar-link"
+                                                    <li class="list-group-item">
+                                                        <Link to={`/upOwner/${id}`}
                                                               aria-expanded="false">
                                                             <span>
-                                                              <i className="fa-solid fa-chevron-up"></i>
+                                                              <i className="fa-solid fa-chevron-up me-3"></i>
                                                             </span>
-                                                            <span className="hide-menu">Đăng ký trở thành chủ nhà</span>
+                                                            <span className="hide-menu">Đăng ký làm chủ nhà</span>
                                                         </Link>
                                                     </li>
                                                 </ul>
@@ -205,8 +280,10 @@ const EditProfile = () => {
                                     </aside>
                                 </div>
                                 <div className="col-md-3  border-right">
+
+                                   {/* Select Image*/}
                                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                                        <img className="rounded-circle mt-5" width="250px" height="300px"
+                                        <img className="rounded-circle" width="300px" height="300px"
                                              src={account.avatar} alt="avatar" id="image" name="avatar"
                                              onChange={handleValueInput}/>
                                         <input type="file" onChange={selectImage}/>
@@ -334,15 +411,7 @@ const EditProfile = () => {
                                                    </span>
                                                 </div>
                                             </div>
-                                            <div className="mt-2 text-center d-flex justify-content-around">
-                                                <Link to={'/'}>
-                                                    <button className="btn btn-primary profile-button" type="button">Trở
-                                                        về
-                                                    </button>
-                                                </Link>
-                                                <button className="btn btn-primary profile-button" type="submit">Lưu
-                                                </button>
-                                            </div>
+                                            {handleProps()}
                                         </div>
                                     </div>
                                 </div>

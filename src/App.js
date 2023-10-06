@@ -17,6 +17,7 @@ import Profile from "./account/crud/Profile";
 import EditProfile from "./account/crud/EditProfile";
 import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./component/Footer";
+import UpOwner from "./account/crud/UpOwner";
 
 
 function App() {
@@ -37,8 +38,10 @@ function App() {
                     {/*<Route path={"/edit/:id"} element={}/>*/}
                 </Route>
                 <Route path={"/profile/:id"} element={<Profile/>}/>
-                <Route path={"/editProfile/:id"} element={<EditProfile/>}/>
+                <Route path={"/editProfile/:id"}  element={<EditProfile status={true}/>}/>
+                <Route path={"/upOwner/:id"}  element={<EditProfile status={false}/>}/>
                 <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>
+                <Route path={"/up"} element={<UpOwner/>}/>
             </Routes>
             <Footer/>
             <ToastContainer/>
