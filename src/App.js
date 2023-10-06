@@ -12,6 +12,7 @@ import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
 import Footer from "./components/Footer/Footer";
 import {useState} from "react";
 import HomePage from "./components/HomePage/HomePage";
+import EditHouse from "./components/EditHouse/EditHouse";
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>
                 <Route path={"/forgot"} element={<ForgotPassword/>}/>
                 <Route path="/add" element={<AddHouse/>}/>
+                <Route path="/edit/:houseId" element={<EditHouse/>}/>
                 <Route path={"/houses-owner"} element={<HouseByIdUser/>}>
                     <Route path={"/houses-owner"} element={<ByOwnerId/>}/>
                     <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
