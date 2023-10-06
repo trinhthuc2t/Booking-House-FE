@@ -21,7 +21,6 @@ const HouseByIdService = {
                 .get('http://localhost:8080/api/houses?page=' + currentPage )
                 .then(response => {
                     resolve(response.data);
-                    console.log(currentPage)
                 })
                 .catch(function (err) {
                     reject(err=>console.log(err))

@@ -8,7 +8,6 @@ const AccountService = {
                 .get('http://localhost:8080/api/accounts/admins')
                 .then(response => {
                     resolve(response.data);
-                    console.log(response.data)
                 })
                 .catch(function (err) {
                     reject(err=>console.log(err))

@@ -134,7 +134,7 @@ const HouseComponent = () => {
                         {
                             houses.map(house => {
                                 return (
-                                    <div className="col-lg-4 col-md-6">
+                                    <div className="col-lg-4 col-md-6" key={house.id}>
                                         <div className="house-item border rounded overflow-hidden">
                                             <div className="position-relative overflow-hidden">
                                                 <div>

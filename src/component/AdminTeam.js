@@ -26,7 +26,7 @@ const AdminTeam = () => {
                     <h5 className="text-center">Liên hệ Admin</h5>
                     {accounts.map(acc=>{
                         return(
-                            <div className="col-lg-3 col-md-6">
+                            <div className="col-lg-3 col-md-6" key={acc.id}>
                                 <div className="team-item rounded overflow-hidden border">
                                     <div className="position-relative">
                                         <img height={270} width={292} src={acc.avatar} alt=""/>
