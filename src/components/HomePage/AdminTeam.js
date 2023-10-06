@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import accountService from "../service/AccountService";
+import accountService from "../../service/AccountService";
 
 const AdminTeam = () => {
     const [accounts, setAccounts] = useState([]);
