@@ -72,7 +72,7 @@ const EditProfile = () => {
             .min(2, "Mô tả dài hơn 2 ký tự!")
             .required("Địa chỉ không được để trống"),
         email: Yup.string()
-            .email("Nhập email có dạng @gmail.com")
+            .matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/,"Nhập email có dạng @gmail")
             .min(11, "Email phải dài hơn 10 ký tự!")
             .required("Email không được để trống"),
         phone: Yup.string()
