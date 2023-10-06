@@ -25,7 +25,7 @@ const EditProfile = ({status}) => {
     const [identifyFront, setIdentifyFront] = useState(null);
     const [identifyBack, setIdentifyBack] = useState(null);
     const [fileFront, setFileFront] = useState("No selected file");
-   
+
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -140,11 +140,11 @@ const EditProfile = ({status}) => {
             getDownloadURL(snapshot.ref).then((url) => {
                 console.log(url);
                 toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
-               if (name === "frontside") {
-                   setIdentifyFront(url);
-               }else if (name === "backside") {
-                   setIdentifyBack(url)
-               }
+                if (name === "frontside") {
+                    setIdentifyFront(url);
+                } else if (name === "backside") {
+                    setIdentifyBack(url)
+                }
             });
         })
     }
@@ -153,9 +153,8 @@ const EditProfile = ({status}) => {
         setAccount({...account, [name]: value});
     }
 
-    const uploadFileId = (e) => {
-        let {name} = e.target;
-        console.log(name);
+    const handleRegisterOwner = (e) => {
+
 
     }
 
@@ -182,22 +181,19 @@ const EditProfile = ({status}) => {
                             <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
                                 event.target.files[0] && setFileFront(event.target.files[0].name);
                                 uploadIdentify(event)
-
                             }} hidden/>
                             {identifyFront ?
                                 <img src={identifyFront} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
                                 :
                                 <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                             }
-
                         </form>
-
                     </div>
                     <div className={"col-6"}>
                         <p>Mặt sau CCCD</p>
                         <form className={'identify m-lg-5'}
                               onClick={() => document.querySelector("#backsideFile").click()}>
-                            <input type="file" id="backsideFile"  name="backside" onChange={(event) => {
+                            <input type="file" id="backsideFile" name="backside" onChange={(event) => {
                                 event.target.files[0] && setFileFront(event.target.files[0].name);
                                 uploadIdentify(event)
 
@@ -207,9 +203,7 @@ const EditProfile = ({status}) => {
                                 :
                                 <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                             }
-
                         </form>
-
                     </div>
                 </div>
 
@@ -249,13 +243,13 @@ const EditProfile = ({status}) => {
 
                             }}
                             validationSchema={validateSchema}
-
                             onSubmit={(values) => {
                                 if (status) {
                                     handleProfile(values);
+                                }else {
+                                    handleRegisterOwner(values);
                                 }
                             }}>
-
                         {() => (
                             <Form className="row">
                                 <div className="col-2 border-right ">
@@ -305,7 +299,6 @@ const EditProfile = ({status}) => {
                                     </aside>
                                 </div>
                                 <div className="col-md-3  border-right">
-
                                     {/* Select Image*/}
                                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                         <img className="rounded-circle" width="300px" height="300px"
@@ -314,13 +307,11 @@ const EditProfile = ({status}) => {
                                         <input type="file" onChange={selectImage}/>
                                     </div>
                                 </div>
-
                                 <div className="col-md-7 border-right">
                                     <div className="p-3 py-3">
                                         <div className="d-flex justify-content-between align-items-center mb-3">
                                             <h4 className="text-right">Sửa thông tin cá nhân</h4>
                                         </div>
-
                                     </div>
                                     <div className={"row"}>
                                         <div className="col-md-6 mb-3">
@@ -342,7 +333,6 @@ const EditProfile = ({status}) => {
                                                 <ErrorMessage name={'lastname'}></ErrorMessage>
                                             </span>
                                         </div>
-
                                         <div className="col-md-12 mb-3">
                                             <label className="form-label" htmlFor="email">Email</label>
                                             <Field type="text" className="form-control" id="email"
@@ -352,7 +342,6 @@ const EditProfile = ({status}) => {
                                                <ErrorMessage name={'email'}></ErrorMessage>
                                             </span>
                                         </div>
-
                                         <div className=" mt-3">
                                             <div className="col-md-12 mb-3">
                                                 <div className="col-md-12 mb-3">
