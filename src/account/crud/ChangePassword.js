@@ -91,7 +91,7 @@ const ChangePassword = () => {
                                             </Link>
                                         </li>
                                         <li className="list-group-item">
-                                            <Link to={`/changePassword/${id}`}
+                                            <Link to={`/register-owner/${id}`}
                                                   aria-expanded="false">
                                                             <span>
                                                               <i className="fa-solid fa-rotate me-3"></i>

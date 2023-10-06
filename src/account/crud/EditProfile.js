@@ -10,6 +10,7 @@ import accountService from "../AccountService";
 import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import "./up.scss";
+import {MdCloudUpload} from "react-icons/md";
 
 const EditProfile = ({status}) => {
 
@@ -21,7 +22,10 @@ const EditProfile = ({status}) => {
     const [wards, setWards] = useState([]);
     const [provinceName, setProvinceName] = useState("");
     const [districtName, setDistrictName] = useState("");
-
+    const [identifyFront, setIdentifyFront] = useState(null);
+    const [identifyBack, setIdentifyBack] = useState(null);
+    const [fileFront, setFileFront] = useState("No selected file");
+   
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -129,18 +133,18 @@ const EditProfile = ({status}) => {
     const uploadIdentify = (event) => {
         if (event.target.files[0] == null) return;
         const imageRef = ref(storage, `images/${event.target.files[0].name + v4()}`);
-        var {name} = event.target;
+        const {name} = event.target;
         console.log(name);
         toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
                 console.log(url);
                 toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
-                var output = document.getElementById(name);
-                output.src = window.URL.createObjectURL(url);
-                output.onload = function () {
-                    URL.revokeObjectURL(output.src) // free memory
-                }
+               if (name === "frontside") {
+                   setIdentifyFront(url);
+               }else if (name === "backside") {
+                   setIdentifyBack(url)
+               }
             });
         })
     }
@@ -168,22 +172,43 @@ const EditProfile = ({status}) => {
                         type="submit">Lưu
                 </button>
             </div>
-        }else {
+        } else {
             return <div>
                 <div className="mt-2  text-center d-flex justify-content-center">
                     <div className={"col-6"}>
                         <p>Mặt trước CCCD</p>
-                        <div className={'identify m-lg-5'}>
+                        <form className={'identify m-lg-5'}
+                              onClick={() => document.querySelector("#frontsideFile").click()}>
+                            <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
+                                event.target.files[0] && setFileFront(event.target.files[0].name);
+                                uploadIdentify(event)
 
-                            <input type="file" id="frontside"  name="frontside" onChange={uploadIdentify}/>
-                        </div>
+                            }} hidden/>
+                            {identifyFront ?
+                                <img src={identifyFront} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
+                                :
+                                <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
+                            }
+
+                        </form>
 
                     </div>
                     <div className={"col-6"}>
                         <p>Mặt sau CCCD</p>
-                        <div className={'identify m-lg-5'}>
-                            <input type="file" id="backside"  name="backside" onChange={uploadIdentify}/>
-                        </div>
+                        <form className={'identify m-lg-5'}
+                              onClick={() => document.querySelector("#backsideFile").click()}>
+                            <input type="file" id="backsideFile"  name="backside" onChange={(event) => {
+                                event.target.files[0] && setFileFront(event.target.files[0].name);
+                                uploadIdentify(event)
+
+                            }} hidden/>
+                            {identifyBack ?
+                                <img src={identifyBack} id="backside" width={'100%'} height={'100%'} alt={'img'}/>
+                                :
+                                <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
+                            }
+
+                        </form>
 
                     </div>
                 </div>
@@ -212,8 +237,8 @@ const EditProfile = ({status}) => {
                         province: account.address.split("-")[3],
                         district: account.address.split("-")[2],
                         ward: account.address.split("-")[1],
-                        frontside : '',
-                        backside : ''
+                        frontside: '',
+                        backside: ''
                     }}
                             innerRef={(actions) => {
                                 if (actions && actions.touched.province)
@@ -226,7 +251,7 @@ const EditProfile = ({status}) => {
                             validationSchema={validateSchema}
 
                             onSubmit={(values) => {
-                                if (status){
+                                if (status) {
                                     handleProfile(values);
                                 }
                             }}>
@@ -239,7 +264,7 @@ const EditProfile = ({status}) => {
                                             <nav className="list-group row" data-simplebar="">
                                                 <ul id="sidebarnav">
                                                     <li className="list-group-item">
-                                                        <Link to={`/profile/${id}`} >
+                                                        <Link to={`/profile/${id}`}>
                                                          <span>
                                                              <i className="fa-solid fa-user me-3"></i>
                                                             </span>
@@ -266,7 +291,7 @@ const EditProfile = ({status}) => {
                                                         </Link>
                                                     </li>
                                                     <li class="list-group-item">
-                                                        <Link to={`/upOwner/${id}`}
+                                                        <Link to={`/register-owner/${id}`}
                                                               aria-expanded="false">
                                                             <span>
                                                               <i className="fa-solid fa-chevron-up me-3"></i>
@@ -281,7 +306,7 @@ const EditProfile = ({status}) => {
                                 </div>
                                 <div className="col-md-3  border-right">
 
-                                   {/* Select Image*/}
+                                    {/* Select Image*/}
                                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                         <img className="rounded-circle" width="300px" height="300px"
                                              src={account.avatar} alt="avatar" id="image" name="avatar"
