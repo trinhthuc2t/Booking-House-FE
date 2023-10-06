@@ -1,17 +1,5 @@
-/*@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-body{
-    height: 100vh;
-    background: linear-gradient(to right, rgba(132, 250, 176, 0.5), rgba(143, 211, 244, 0.5));
-}*/
-
 .login-container {
-    margin: 50px auto;
+    $color-primary: rgb(0, 185, 142);
 
     .panel-heading {
         text-align: center;
@@ -22,7 +10,7 @@ body{
         min-width: 100px;
         margin-left: auto;
         text-decoration: none;
-        color: #84fab0;
+        color: $color-primary;
     }
 
     a:hover {
@@ -53,7 +41,7 @@ body{
         align-items: center;
         cursor: pointer;
         border: 1px solid #ddd;
-        color: #84fab0;
+        color: $color-primary;
     }
 
     input[type='text'],
@@ -83,18 +71,27 @@ body{
         transition: all 0.1s ease-in-out;
     }
 
+    .forgot{
+        color: $color-primary;
+    }
+
+    .btn-login{
+        background-color: $color-primary;
+        color: #FFFFFF;
+    }
+
     .bordert {
         border-top: 1px solid #aaa;
         position: relative;
     }
 
     .bordert:after {
-        content: "or connect with";
+        content: "hoặc đăng nhập với";
         position: absolute;
         top: -13px;
         left: 33%;
         background-color: #fff;
-        padding: 0px 8px;
+        padding: 0 8px;
     }
 }
 @media(max-width: 360px){

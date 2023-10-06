@@ -1,14 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import houseByIdService from "../../service/HouseByIdService";
 import {useParams} from "react-router-dom";
+import {Pagination} from "@mui/material";
 
 const ByNameAndStatus = () => {
 
 
     const [houses, setHouses] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
     const search = useParams("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
+    const changePage = (e, value) =>{
+        setCurrentPage(value)
+    }
     const checkSearchName = (id, search, currentPage) => {
         const validStatusValues = ["available", "booked", "repair"];
         if (validStatusValues.includes(search)) {
@@ -20,7 +25,8 @@ const ByNameAndStatus = () => {
     const findByOwnerIdAndStatus = (id, search,currentPage) => {
         houseByIdService.findByOwnerIdAndStatus(id, search,currentPage)
             .then((houses) => {
-                setHouses(houses);
+                setHouses(houses.content);
+                setTotalPages(houses.totalPages);
             })
             .catch((err) => {
                 console.log(err);
@@ -32,7 +38,8 @@ const ByNameAndStatus = () => {
     const findByOwnerIdAndNameContains = (id, search,currentPage) => {
         houseByIdService.findByOwnerIdAndNameContains(id, search,currentPage)
             .then((houses) => {
-                setHouses(houses);
+                setHouses(houses.content);
+                setTotalPages(houses.totalPages);
             })
             .catch((err) => {
                 console.log(err);
@@ -44,15 +51,10 @@ const ByNameAndStatus = () => {
 
 
     useEffect(() => {
-        checkSearchName(2, search.search,currentPage);
+        checkSearchName(2, search.search,currentPage-1);
     }, [search,currentPage])
 
 
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
-        const ownerId = 2;
-        checkSearchName( ownerId,search.search,currentPage);
-    };
     return (
         <div>
             <div className="container-xxl py-5">
@@ -95,27 +97,9 @@ const ByNameAndStatus = () => {
                                     )
                                 })}
                             </div>
-                            <nav aria-label="Page navigation">
-                                <ul className="pagination">
-                                    <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
-                                        <a className="page-link"
-                                           onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
-                                        <a className="page-link" onClick={() => handlePageChange(0)}>1</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" onClick={() => handlePageChange(1)}>2</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
-                                        <a className="page-link" onClick={() => handlePageChange(2)}>3</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
-                                        <a className="page-link"
-                                           onClick={() => handlePageChange(currentPage + 1)}>Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <div className="col-12 mt-5 d-flex justify-content-center">
+                                <Pagination count={totalPages} size="large" variant="outlined" shape="rounded" onChange={changePage} color="primary"/>
+                            </div>
                         </div>
 
                     </div>

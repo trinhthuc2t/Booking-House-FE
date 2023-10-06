@@ -1,33 +1,32 @@
 import React, {useEffect, useState} from 'react';
 import houseByIdService from "../../service/HouseByIdService";
+import {Pagination} from "@mui/material";
 
 const ByOwnerId = () => {
 
     const [houses, setHouses] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const changePage = (e, value) =>{
+        setCurrentPage(value)
+    }
     const getHousesByOwnerId = (id,currentPage) => {
         houseByIdService.getHousesByOwnerId(id,currentPage)
             .then((houses) => {
-                setHouses(houses);
+                setHouses(houses.content);
+                setTotalPages(houses.totalPages);
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    const handlePageChange = (newPage) => {
-        setCurrentPage(newPage);
-        getHousesByOwnerId(2, currentPage);
-    };
-
-    useEffect(() => {
-        getHousesByOwnerId(2, currentPage);
-    }, [currentPage]);
 
     useEffect(() => {
         const ownerId = 2;
-        getHousesByOwnerId( ownerId,currentPage);
-    }, [])
+        getHousesByOwnerId( ownerId,currentPage-1);
+    }, [currentPage])
     return (
         <div>
             <div className="container-xxl py-5">
@@ -92,27 +91,9 @@ const ByOwnerId = () => {
                                     )
                                 })}
                             </div>
-                            <nav aria-label="Page navigation">
-                                <ul className="pagination">
-                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link"
-                                           onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 0 ? 'disabled' : ''}`}>
-                                        <a className="page-link" onClick={() => handlePageChange(0)}>1</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
-                                        <a className="page-link" onClick={() => handlePageChange(1)}>2</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 2 ? 'disabled' : ''}`}>
-                                        <a className="page-link" onClick={() => handlePageChange(2)}>3</a>
-                                    </li>
-                                    <li className={`page-item ${currentPage === 3 ? 'disabled' : ''}`}>
-                                        <a className="page-link"
-                                           onClick={() => handlePageChange(currentPage + 1)}>Next</a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <div className="col-12 mt-5 d-flex justify-content-center">
+                                <Pagination count={totalPages} size="large" variant="outlined" shape="rounded" onChange={changePage} color="primary"/>
+                            </div>
                         </div>
 
                     </div>

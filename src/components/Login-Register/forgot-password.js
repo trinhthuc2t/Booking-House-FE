@@ -1,6 +1,6 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import LoginRegisterService from "../service/login-registerService";
+import LoginRegisterService from "../../service/login-registerService";
 
 function ForgotPassword(){
     const initialValues = {
