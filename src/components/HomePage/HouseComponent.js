@@ -1,36 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import _ from 'lodash';
 import './home.scss';
 import {Pagination} from "@mui/material";
-import houseByIdService from "../../service/HouseByIdService";
 import {formatCurrency} from "../../service/format";
 
-const HouseComponent = () => {
-    const [houses, setHouses] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
+const HouseComponent = ({houses, totalPages, changePage}) => {
 
-    const changePage = (e, value) => {
-        setCurrentPage(value);
-    }
-    const getAllHouse = (currentPage) => {
-        houseByIdService.getAllHouse(currentPage)
-            .then((houses) => {
-                setHouses(houses.content);
-                setTotalPages(houses.totalPages);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
-
-    useEffect(() => {
-        getAllHouse(currentPage - 1);
-        window.scrollTo({
-            top: 600,
-            behavior: "smooth"
-        })
-    }, [currentPage])
     return (
         <div className="container">
             <div className="row g-4">
@@ -78,8 +53,8 @@ const HouseComponent = () => {
                 }
 
                 <div className="col-12 mt-5 d-flex justify-content-center">
-                    <Pagination count={totalPages} size="large" variant="outlined" shape="rounded" onChange={changePage}
-                                color="primary"/>
+                    <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
+                                onChange={changePage} color="primary"/>
                 </div>
             </div>
         </div>
