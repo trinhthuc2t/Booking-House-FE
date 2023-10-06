@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import {Link, useParams} from "react-router-dom";
 import {toast} from 'react-toastify';
 import accountService from "../AccountService";
+
 const ChangePassword = () => {
 
     const blankRegex = /[\s]/
@@ -67,17 +68,15 @@ const ChangePassword = () => {
             <section className="vh-100">
                 <div className="row ">
                     <div className="col-2">
-                        <aside className="left-sidebar ">
+                        <aside className="left-sidebar " style={{height: '70vh'}}>
                             <div>
-                                <nav className="sidebar-nav " data-simplebar="">
+                                <nav className="sidebar-nav row" data-simplebar="">
                                     <ul id="sidebarnav">
-
                                         <li className="sidebar-item">
-
                                             <Link to={`/profile/${id}`} className="sidebar-link">
                                                          <span>
                                                              <i className="fa-solid fa-user"></i>
-                                                            </span>
+                                                         </span>
                                                 <span className="hide-menu">Thông tin cá nhân</span>
                                             </Link>
                                         </li>
@@ -100,22 +99,16 @@ const ChangePassword = () => {
                                                 <span className="hide-menu">Đổi mật khẩu</span>
                                             </Link>
                                         </li>
-
                                     </ul>
-
                                 </nav>
-
                             </div>
-
                         </aside>
                     </div>
                     <div className="col-9">
                         <div className="row  d-flex justify-content-center align-items-center h-100 ">
-
                             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                                 <div className="card shadow-2-strong" style={{borderRadius: "1rem"}}>
                                     <div className="card-body p-5 text-center">
-
                                         <h3 className="mb-5" style={{color: "#0174c3"}}>Thay đổi mật khẩu</h3>
                                         <Formik initialValues={{
                                             password: '',
@@ -126,47 +119,45 @@ const ChangePassword = () => {
                                                 onSubmit={(values) => {
                                                     handleChangePassword(values);
                                                 }}>
-
                                             <Form>
                                                 <div className="form-outline mb-4">
                                                     <div>
-                                                        <label className="form-label" htmlFor="password">Mật khẩu hiện tại</label>
+                                                        <label className="form-label" htmlFor="password">Mật khẩu hiện
+                                                            tại</label>
                                                     </div>
                                                     <Field type="text" id="password" name="password"
                                                            className="form-control form-control-lg"
                                                            onInput={(event) => {
                                                                setAccount({...account, password: event.target.value})
                                                            }}/>
-
                                                 </div>
                                                 <div className="form-outline mb-4">
                                                     <div>
-                                                        <label className="form-label" htmlFor="newPassword">Mật khẩu mới </label>
+                                                        <label className="form-label" htmlFor="newPassword">Mật khẩu
+                                                            mới </label>
                                                     </div>
                                                     <Field type="password" id="newPassword" name="newPassword"
-                                                           className="form-control form-control-lg"
-                                                    />
-
+                                                           className="form-control form-control-lg"/>
                                                     <span style={{color: 'red'}}>
-                                        <ErrorMessage name={'newPassword'}></ErrorMessage>
-                                   </span>
+                                                        <ErrorMessage name={'newPassword'}></ErrorMessage>
+                                                    </span>
                                                 </div>
                                                 <div className="form-outline mb-4">
                                                     <div>
-                                                        <label className="form-label" htmlFor="confirmNewPassword">Xác nhận mật khẩu mới</label>
+                                                        <label className="form-label" htmlFor="confirmNewPassword">Xác
+                                                            nhận mật khẩu mới</label>
                                                     </div>
-                                                    <Field type="password" id="confirmNewPassword" name="confirmNewPassword"
-                                                           className="form-control form-control-lg"
-                                                    />
+                                                    <Field type="password" id="confirmNewPassword"
+                                                           name="confirmNewPassword"
+                                                           className="form-control form-control-lg"/>
                                                     <span style={{color: 'red'}}>
-                                        <ErrorMessage name={'confirmNewPassword'}></ErrorMessage>
-                                   </span>
+                                                        <ErrorMessage name={'confirmNewPassword'}></ErrorMessage>
+                                                   </span>
                                                 </div>
 
                                                 <button className="btn btn-lg btn-block btn-primary"
                                                         style={{backgroundColor: "#39dd86 ", color: "#fff"}}
-                                                        type="submit">
-                                                    Xác nhận thay đổi
+                                                        type="submit">Xác nhận thay đổi
                                                 </button>
                                             </Form>
 

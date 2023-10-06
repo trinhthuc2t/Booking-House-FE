@@ -87,7 +87,9 @@ const EditProfile = () => {
             .required('Vui lòng không được để trống')
     });
     const handleProfile = (values) => {
-        let data = {...values, avatar: account.avatar};
+        let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
+        console.log(address);
+        let data = {...values, avatar: account.avatar, address: address};
         accountService.editAccount(id, data).then((response) => {
             toast.success("Edit profile success", {position: "top-center", autoClose: 1000,});
         }).catch(function (err) {
@@ -132,13 +134,13 @@ const EditProfile = () => {
                     <Formik initialValues={{
                         firstname: account.firstname,
                         lastname: account.lastname,
-                        address: account.address,
+                        address: account.address.split("-")[0],
                         email: account.email,
                         phone: account.phone,
                         avatar: account.avatar,
-                        province: "",
-                        district: "",
-                        ward: ""
+                        province: account.address.split("-")[3],
+                        district: account.address.split("-")[2],
+                        ward: account.address.split("-")[1]
                     }}
                             innerRef={(actions) => {
                                 if (actions && actions.touched.province)
@@ -146,6 +148,7 @@ const EditProfile = () => {
 
                                 if (actions && actions.touched.district)
                                     setDistrictName(actions.values.district);
+
                             }}
                             validationSchema={validateSchema}
 
@@ -187,13 +190,9 @@ const EditProfile = () => {
                                                             <span className="hide-menu">Đổi mật khẩu</span>
                                                         </Link>
                                                     </li>
-
                                                 </ul>
-
                                             </nav>
-
                                         </div>
-
                                     </aside>
                                 </div>
                                 <div className="col-md-3  border-right">
@@ -202,135 +201,144 @@ const EditProfile = () => {
                                              src={account.avatar} alt="avatar" id="image" name="avatar"
                                              onChange={handleValueInput}/>
                                         <input type="file" onChange={selectImage}/>
-                                        <span> </span>
                                     </div>
                                 </div>
 
                                 <div className="col-md-7 border-right">
-                                    <div className="p-3 py-5">
+                                    <div className="p-3 py-3">
                                         <div className="d-flex justify-content-between align-items-center mb-3">
                                             <h4 className="text-right">Sửa thông tin cá nhân</h4>
                                         </div>
-                                        <div className="row mt-2">
-                                            <div className="col-md-6">
-                                                <label className="labels" htmlFor="firstname">Họ</label>
-                                                <Field type="text" className="form-control" id="firstname"
-                                                       placeholder="Nhập họ" value={account.firstname} name="firstname"
-                                                       onInput={handleValueInput}/>
-                                                <span style={{color: 'red'}}>
-                                       <ErrorMessage name={'firstname'}></ErrorMessage>
-                                   </span>
-                                            </div>
-                                            <div className="col-md-6">
-                                                <label className="labels" htmlFor="lastname">Tên</label>
-                                                <Field type="text" className="form-control" id="Nhập tên"
-                                                       placeholder="Enter Lastname" value={account.lastname}
-                                                       name="lastname"
-                                                       onInput={handleValueInput}/>
-                                                <span style={{color: 'red'}}>
-                                       <ErrorMessage name={'lastname'}></ErrorMessage>
-                                   </span>
-                                            </div>
+
+                                    </div>
+                                    <div className={"row"}>
+                                        <div className="col-md-6 mb-3">
+                                            <label className="form-label" htmlFor="firstname">Họ</label>
+                                            <Field type="text" className="form-control" id="firstname"
+                                                   placeholder="Nhập họ" value={account.firstname} name="firstname"
+                                                   onInput={handleValueInput}/>
+                                            <span style={{color: 'red'}}>
+                                                <ErrorMessage name={'firstname'}></ErrorMessage>
+                                            </span>
                                         </div>
-                                        <div className="row mt-3">
-                                            <div className="col-md-12 mb-3">
-                                                <label className="labels" htmlFor="address">Địa chỉ</label>
-                                                <Field type="text" className="form-control" id="address"
-                                                       placeholder="Nhập địa chỉ" value={account.address} name="address"
-                                                       onInput={handleValueInput}/>
-                                                <span style={{color: 'red'}}>
-                                       <ErrorMessage name={'address'}></ErrorMessage>
-                                   </span>
-                                            </div>
+                                        <div className="col-md-6 mb-3">
+                                            <label className="form-label" htmlFor="lastname">Tên</label>
+                                            <Field type="text" className="form-control" id="Nhập tên"
+                                                   placeholder="Enter Lastname" value={account.lastname}
+                                                   name="lastname"
+                                                   onInput={handleValueInput}/>
+                                            <span style={{color: 'red'}}>
+                                                <ErrorMessage name={'lastname'}></ErrorMessage>
+                                            </span>
+                                        </div>
 
-                                            <div className="col-md-12 mb-3">
-                                                <label className="labels" htmlFor="email">Email</label>
-                                                <Field type="text" className="form-control" id="email"
-                                                       placeholder="Nhập Email" value={account.email} name="email"
-                                                       onInput={handleValueInput}/>
-                                                <span style={{color: 'red'}}>
-                                       <ErrorMessage name={'email'}></ErrorMessage>
-                                   </span>
-                                            </div>
+                                        <div className="col-md-12 mb-3">
+                                            <label className="form-label" htmlFor="email">Email</label>
+                                            <Field type="text" className="form-control" id="email"
+                                                   placeholder="Nhập Email" value={account.email} name="email"
+                                                   onInput={handleValueInput}/>
+                                            <span style={{color: 'red'}}>
+                                               <ErrorMessage name={'email'}></ErrorMessage>
+                                            </span>
+                                        </div>
 
+                                        <div className=" mt-3">
                                             <div className="col-md-12 mb-3">
-                                                <div className="row">
+                                                <div className="col-md-12 mb-3">
+                                                    <div className="row">
 
-                                                    <div className="col-4">
-                                                        <p className="labels" htmlFor="province">Tỉnh/thành phố</p>
-                                                        <Field as="select" className="form-select" name="province"
-                                                               id="province">
-                                                            <option value="">---Chọn Tỉnh/Thành phố---</option>
-                                                            {!_.isEmpty(provinces) && provinces.map(province => (
-                                                                <option key={province.ProvinceID}
-                                                                        value={province.ProvinceName}>
-                                                                    {province.ProvinceName}
-                                                                </option>
-                                                            ))}
-                                                        </Field>
-                                                        <span style={{color: 'red'}}>
-                                       <ErrorMessage name={'province'}></ErrorMessage>
-                                   </span>
-                                                    </div>
-                                                    <div className="col-4">
-                                                        <p className="labels" htmlFor="district">Quận/Huyện</p>
-                                                        <Field as="select" className="form-select" id="district"
-                                                               name="district">
-                                                            <option value="">---Chọn Quận/Huyện---</option>
-                                                            {!_.isEmpty(districts) && districts.map(district => (
-                                                                <option key={district.DistrictID}
-                                                                        value={district.DistrictName}>
-                                                                    {district.DistrictName}
-                                                                </option>
-                                                            ))}
-                                                        </Field>
-                                                        <span style={{color: 'red'}}>
+                                                        <div className="col-4">
+                                                            <p className="form-label" htmlFor="province">Tỉnh/thành
+                                                                phố</p>
+                                                            <Field as="select" className="form-select" name="province"
+                                                                   id="province">
+                                                                <option
+                                                                    value="">{account.address.split("-")[3]}</option>
+                                                                {!_.isEmpty(provinces) && provinces.map(province => (
+                                                                    <option key={province.ProvinceID}
+                                                                            value={province.ProvinceName}>
+                                                                        {province.ProvinceName}
+                                                                    </option>
+                                                                ))}
+                                                            </Field>
+                                                            <span style={{color: 'red'}}>
+                                                               <ErrorMessage name={'province'}></ErrorMessage>
+                                                            </span>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <p className="form-label" htmlFor="district">Quận/Huyện</p>
+                                                            <Field as="select" className="form-select" id="district"
+                                                                   name="district">
+                                                                <option
+                                                                    value="">{account.address.split("-")[2]}</option>
+                                                                {!_.isEmpty(districts) && districts.map(district => (
+                                                                    <option key={district.DistrictID}
+                                                                            value={district.DistrictName}>
+                                                                        {district.DistrictName}
+                                                                    </option>
+                                                                ))}
+                                                            </Field>
+                                                            <span style={{color: 'red'}}>
                                                               <ErrorMessage name={'district'}></ErrorMessage>
-                                                          </span>
-                                                    </div>
-                                                    <div className="col-4">
-                                                        <p className="labels" htmlFor="ward">Phường/xã</p>
-                                                        <Field as="select" className="form-select" id="ward"
-                                                               name="ward">
-                                                            <option value="">---Chọn Phường/Xã---</option>
-                                                            {!_.isEmpty(wards) && wards.map(ward => (
-                                                                <option key={ward.WardCode} value={ward.WardName}>
-                                                                    {ward.WardName}
-                                                                </option>
-                                                            ))}
-                                                        </Field>
-                                                        <span style={{color: 'red'}}>
+                                                            </span>
+                                                        </div>
+                                                        <div className="col-4">
+                                                            <p className="form-label" htmlFor="ward">Phường/xã</p>
+                                                            <Field as="select" className="form-select" id="ward"
+                                                                   name="ward">
+                                                                <option
+                                                                    value="">{account.address.split("-")[1]}</option>
+                                                                {!_.isEmpty(wards) && wards.map(ward => (
+                                                                    <option key={ward.WardCode} value={ward.WardName}>
+                                                                        {ward.WardName}
+                                                                    </option>
+                                                                ))}
+                                                            </Field>
+                                                            <span style={{color: 'red'}}>
                                                                 <ErrorMessage name={'ward'}></ErrorMessage>
                                                           </span>
+
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                                <div className="col-md-12 mb-3">
+                                                    <label className="form-label" htmlFor="address">Số
+                                                        nhà</label>
+                                                    <Field type="text" className="form-control" id="address"
+                                                           placeholder="Nhập địa chỉ"
+                                                           value={account.address.split("-")[0]}
+                                                           name="address"
+                                                           onInput={handleValueInput}/>
+                                                    <span style={{color: 'red'}}>
+                                                        <ErrorMessage name={'address'}></ErrorMessage>
+                                                    </span>
+                                                </div>
 
-
-                                            <div className="col-md-12 mb-3">
-                                                <label className="labels" htmlFor="phone">Số điện thoại</label>
-                                                <Field type="text" className="form-control" id="phone"
-                                                       placeholder="Nhập số điện thoại" value={account.phone}
-                                                       name="phone"
-                                                       onInput={handleValueInput}/>
-                                                <span style={{color: 'red'}}>
-                                       <ErrorMessage name={'phone'}></ErrorMessage>
-                                   </span>
+                                                <div className="col-md-12 mb-3">
+                                                    <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                                                    <Field type="text" className="form-control" id="phone"
+                                                           placeholder="Nhập số điện thoại" value={account.phone}
+                                                           name="phone"
+                                                           onInput={handleValueInput}/>
+                                                    <span style={{color: 'red'}}>
+                                                       <ErrorMessage name={'phone'}></ErrorMessage>
+                                                   </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className="mt-2 text-center d-flex justify-content-around">
-                                            <Link to={'/'}>
-                                                <button className="btn btn-primary profile-button" type="button">Trở về
+                                            <div className="mt-2 text-center d-flex justify-content-around">
+                                                <Link to={'/'}>
+                                                    <button className="btn btn-primary profile-button" type="button">Trở
+                                                        về
+                                                    </button>
+                                                </Link>
+                                                <button className="btn btn-primary profile-button" type="submit">Lưu
                                                 </button>
-                                            </Link>
-                                            <button className="btn btn-primary profile-button" type="submit">Lưu
-                                            </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </Form>
                         )}
-
                     </Formik>
                 }
             </div>
