@@ -9,14 +9,17 @@ import houseByIdService from "../service/HouseByIdService";
 const HouseComponent = () => {
     const [provinces, setProvinces] = useState([]);
     const [houses, setHouses] = useState([]);
-    const [page, setPage] = useState(3);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
-
+   const changePage = (e, value) =>{
+       setCurrentPage(value)
+   }
     const getAllHouse = (currentPage) => {
         houseByIdService.getAllHouse(currentPage)
             .then((houses) => {
                 setHouses(houses.content);
-                setPage(houses.totalPages);
+                setTotalPages(houses.totalPages);
             })
             .catch((err) => {
                 console.log(err);
@@ -31,8 +34,8 @@ const HouseComponent = () => {
     }, [])
 
     useEffect(() => {
-       getAllHouse()
-    }, [])
+        getAllHouse(currentPage -1);
+    }, [currentPage])
     return (
         <div className="container-home">
             <div className="container mb-5">
@@ -125,27 +128,25 @@ const HouseComponent = () => {
             {/*Search End*/}
 
 
-            {/*Property List Start*/}
             <div className="container py-5">
                 <div className="container">
                     <div className="row g-4">
-                        {/*map house*/}
-
                         {
-                            houses.map(house=>{
-                                {console.log(houses)}
-                                return(
+                            houses.map(house => {
+                                return (
                                     <div className="col-lg-4 col-md-6">
                                         <div className="house-item border rounded overflow-hidden">
                                             <div className="position-relative overflow-hidden">
                                                 <div>
-                                                    <img className="img-fluid" src={house.thumbnail} alt=""/>
+                                                    <img height={273} width={406} src={house.thumbnail} alt=""/>
                                                 </div>
                                             </div>
                                             <div className="p-4 pb-0">
                                                 <h5 className="mb-2 text-center">{house.name}</h5>
-                                                <h5 className=" mb-3 color-primary text-center">{house.newPrice} <del
-                                                    className="text-secondary fs-6">{house.oldPrice}</del></h5>
+                                                <h5 className=" mb-3 color-primary text-center">{house.newPrice}
+                                                    <del
+                                                        className="text-secondary fs-6">{house.oldPrice}</del>
+                                                </h5>
                                                 <p>
                                                     <i className="fa fa-map-marker-alt me-2 color-primary"></i>
                                                     {house.address}
@@ -167,14 +168,11 @@ const HouseComponent = () => {
                                             </div>
                                         </div>
                                     </div>
+                                )}
+                            )}
 
-                                )
-                        })
-                        }
-
-                        {/*map house*/}
                         <div className="col-12 mt-5 d-flex justify-content-center">
-                            <Pagination count={page} size="large" variant="outlined" shape="rounded" color="primary"/>
+                            <Pagination count={totalPages} size="large" variant="outlined" shape="rounded" onChange={changePage} color="primary"/>
                         </div>
 
                         <AdminTeam/>

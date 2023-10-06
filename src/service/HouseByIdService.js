@@ -7,7 +7,7 @@ const HouseByIdService = {
             axios
                 .get('http://localhost:8080/api/houses/owner/' + ownerId + "?page=" + currentPage )
                 .then(response => {
-                    resolve(response.data.content);
+                    resolve(response.data);
                 })
                 .catch(function (err) {
                     reject(err=>console.log(err))
@@ -18,9 +18,10 @@ const HouseByIdService = {
     getAllHouse: ( currentPage) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses' )
+                .get('http://localhost:8080/api/houses?page=' + currentPage )
                 .then(response => {
                     resolve(response.data);
+                    console.log(currentPage)
                 })
                 .catch(function (err) {
                     reject(err=>console.log(err))
@@ -33,7 +34,7 @@ const HouseByIdService = {
             axios
                 .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId + "?name=" + name + "&page=" + currentPage)
                 .then(response => {
-                    resolve(response.data.content);
+                    resolve(response.data);
                 })
                 .catch(function (err) {
                     reject(err)
@@ -47,7 +48,7 @@ const HouseByIdService = {
             axios
                 .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId + "?status=" + status + "&page=" + currentPage)
                 .then(response => {
-                    resolve(response.data.content);
+                    resolve(response.data);
                 })
                 .catch(function (err) {
                     reject(err)
