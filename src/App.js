@@ -41,7 +41,7 @@ function App() {
                 </Route>
                 <Route path={"/profile/:id"} element={<Profile/>}/>
                 <Route path={"/editProfile/:id"}  element={<EditProfile status={true}/>}/>
-                <Route path={"/register-owner/:id"}  element={<EditProfile status={false}/>}/>
+                <Route path={"/registerOwner/:id"}  element={<EditProfile status={false}/>}/>
                 <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>
             </Routes>
             <Footer/>

@@ -46,6 +46,17 @@ class AccountService extends Component {
         })
     }
 
+    registerOwner = (id ,account) => {
+        return new Promise( (resolve, reject) => {
+            axios.post("http://localhost:8080/api/accounts/registerOwner/" + id , account).then((response) => {
+                resolve(response.data);
+            }).catch(function (err) {
+                console.log(err);
+                reject(err);
+            })
+        })
+    }
+
 
     render() {
         return (

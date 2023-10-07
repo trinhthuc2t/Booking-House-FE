@@ -93,7 +93,6 @@ const EditProfile = ({status}) => {
     });
     const handleProfile = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
-        console.log(address);
         let data = {...values, avatar: account.avatar, address: address};
         accountService.editAccount(id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
@@ -101,6 +100,23 @@ const EditProfile = ({status}) => {
         }).catch(function (err) {
             console.log(err);
         })
+    }
+    const handleRegisterOwner = (values) => {
+        let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
+        let data = {...values,
+            avatar: account.avatar,
+            address: address,
+            frontside : identifyFront,
+            backside : identifyBack
+        };
+        console.log(data);
+        accountService.registerOwner( id ,data).then((response) => {
+            toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
+            console.log(response);
+        }).catch(function (err) {
+            console.log(err);
+        })
+
     }
     useEffect(() => {
         getAccountById();
@@ -151,12 +167,9 @@ const EditProfile = ({status}) => {
     const handleValueInput = (e) => {
         let {name, value} = e.target;
         setAccount({...account, [name]: value});
-    }
-
-    const handleRegisterOwner = (e) => {
-
 
     }
+
 
 
     const handleProps = () => {
