@@ -61,9 +61,9 @@ const SearchHouse = ({setNameSearch, setProvince, setMinPrice, setMaxPrice, setC
                             <div className="col-md-4">
                                 <select className="form-select border-0 py-3" onChange={handleOptionChange}>
                                     <option>Khoảng giá</option>
-                                    <option value="1">Dưới 1.000.000 ₫</option>
-                                    <option value="2">Từ 1.000.000 ₫ - 5.000.000 ₫</option>
-                                    <option value="3">Trên 5.000.000 ₫</option>
+                                    <option value="1">Dưới 2.000.000 ₫</option>
+                                    <option value="2">Từ 2.000.000 ₫ - 3.000.000 ₫</option>
+                                    <option value="3">Trên 3.000.000 ₫</option>
                                 </select>
                             </div>
                             <div className="col-md-4">
