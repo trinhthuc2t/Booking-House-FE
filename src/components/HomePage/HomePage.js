@@ -1,72 +1,53 @@
 import React, {useEffect, useState} from 'react';
 import Banner from "./Banner";
-import _ from "lodash";
 import AdminTeam from "./AdminTeam";
 import HouseComponent from "./HouseComponent";
-import {getAllProvinces} from "../../service/addressService";
+import houseByIdService from "../../service/HouseByIdService";
+import SearchHouse from "./SearchHouse";
 
 const HomePage = () => {
-    const [provinces, setProvinces] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [nameSearch, setNameSearch] = useState("");
+    const [minPrice, setMinPrice] = useState(0);
+    const [maxPrice, setMaxPrice] = useState(0);
+    const [province, setProvince] = useState("");
+    const [houses, setHouses] = useState([]);
+
+    const changePage = (e, value) => {
+        setCurrentPage(value);
+    }
+
+    const getAllHouseByPriceAndProvince = (currentPage, nameSearch, province, minPrice, maxPrice) => {
+        houseByIdService.getAllHouseByPriceAndProvince(currentPage, nameSearch, province, minPrice, maxPrice)
+            .then((houses) => {
+                setHouses(houses.content);
+                setTotalPages(houses.totalPages);
+                console.log(province)
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    };
 
     useEffect(() => {
-        getAllProvinces().then(response => {
-            setProvinces(response.data.data);
-        }).catch(error => {
-            console.log(error)
-        })
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
-    }, [])
+        getAllHouseByPriceAndProvince(currentPage - 1, nameSearch, province, minPrice, maxPrice)
+    }, [currentPage, nameSearch, province, minPrice, maxPrice])
+
 
     return (
         <div className="container-home">
             <Banner/>
 
             {/*Search begin*/}
-            <div className="container-fluid mb-5" style={{padding: "35px", backgroundColor: "rgb(0,185,142)"}}>
-                <div className="container">
-                    <div className="row g-2">
-                        <div className="col-md-10">
-                            <div className="row g-2">
-                                <div className="col-md-4">
-                                    <input type="text" className="form-control border-0 py-3"
-                                           placeholder="Nhập từ khóa tìm kiếm"/>
-                                </div>
-                                <div className="col-md-4">
-                                    <select className="form-select border-0 py-3">
-                                        <option>Khoảng giá</option>
-                                        <option value="1">Dưới 1.000.000 ₫</option>
-                                        <option value="2">Từ 1.000.000 ₫ - 5.000.000 ₫</option>
-                                        <option value="3">Trên 5.000.000 ₫</option>
-                                    </select>
-                                </div>
-                                <div className="col-md-4">
-                                    <select className="form-select border-0 py-3">
-                                        <option>Vị trí</option>
-                                        {!_.isEmpty(provinces) && provinces.map(province => (
-                                            <option key={province.ProvinceID}
-                                                    value={province.ProvinceName}>
-                                                {province.ProvinceName}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-2">
-                            <button className="btn btn-dark border-0 w-100 py-3">Tìm kiếm</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <SearchHouse setNameSearch={setNameSearch} setMinPrice={setMinPrice}
+                         setMaxPrice={setMaxPrice} setProvince={setProvince} setCurrentPage={setCurrentPage}/>
             {/*Search End*/}
 
             <div className="container py-5">
-                <HouseComponent/>
-                <AdminTeam/>
+                <HouseComponent houses={houses} totalPages={totalPages} changePage={changePage}/>
 
+                <AdminTeam/>
             </div>
         </div>
     );

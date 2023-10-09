@@ -15,17 +15,32 @@ const HouseByIdService = {
         })
     },
 
-    getAllHouse: ( currentPage) => {
+    updateStatusHouse: (id, status) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses?page=' + currentPage )
+                .put(`http://localhost:8080/api/houses/owner/${id}?status=${status}`)
                 .then(response => {
                     resolve(response.data);
                 })
-                .catch(function (err) {
-                    reject(err=>console.log(err))
+                .catch(error => {
+                    reject(error);
                 });
-        })
+        });
+    },
+
+    getAllHouseByPriceAndProvince: (currentPage = 0, nameSearch = "", province = "", minPrice = 0, maxPrice = 0) => {
+        return new Promise((resolve, reject) => {
+            const formattedProvince = province.replace(/\s/g, "_");
+            axios
+                .get(`http://localhost:8080/api/houses/search?page=${currentPage}&nameSearch=${nameSearch}&province=${formattedProvince}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
+                .then(response => {
+                    resolve(response.data);
+                    console.log(response.data);
+                })
+                .catch(function (err) {
+                    reject(err => console.log(err));
+                });
+        });
     },
 
     findByOwnerIdAndNameContains: (ownerId, name,currentPage) => {
