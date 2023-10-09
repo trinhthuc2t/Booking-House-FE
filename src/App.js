@@ -17,6 +17,7 @@ import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
+import BodyProfile from "./account/crud/BodyProfile";
 
 
 function App() {
@@ -37,10 +38,19 @@ function App() {
                     <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
                     {/*<Route path={"/edit/:id"} element={}/>*/}
                 </Route>
-                <Route path={"/profile/:id"} element={<Profile/>}/>
+               {/* <Route path={"/profile/:id"} element={<Profile/>}/>
                 <Route path={"/editProfile/:id"}  element={<EditProfile status={true}/>}/>
                 <Route path={"/registerOwner/:id"}  element={<EditProfile status={false}/>}/>
-                <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>
+                <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>*/}
+                <Route path={"/profile/"} element={<Profile/>}>
+                    <Route path={"editProfile"}  element={<EditProfile status={true}/>}/>
+                    <Route path={"registerOwner"}  element={<EditProfile status={false}/>}/>
+                    <Route path={"changePassword"} element={<ChangePassword/>}/>
+                    <Route path={"information"} element={<BodyProfile/>}/>
+
+                </Route>
+
+
             </Routes>
             <Footer/>
             <ToastContainer/>

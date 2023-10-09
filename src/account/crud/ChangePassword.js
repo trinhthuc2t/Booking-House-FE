@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import {Link, useParams} from "react-router-dom";
 import {toast} from 'react-toastify';
 import accountService from "../AccountService";
+import LeftSidebar from "./Left-sidebar";
 
 const ChangePassword = () => {
 
@@ -63,56 +64,11 @@ const ChangePassword = () => {
     }
     return (
 
-        <div className="container-fluid">
+        <div className="col-10">
 
             <section className="vh-100">
                 <div className="row ">
-                    <div className="col-2 border-right ">
-                        <aside className="left-sidebar " style={{height: '80vh'}}>
-                            <div>
-                                <nav className="list-group row" data-simplebar="">
-                                    <ul id="sidebarnav">
-                                        <li className="list-group-item">
-                                            <Link to={`/profile/${id}`}>
-                                                         <span>
-                                                             <i className="fa-solid fa-user me-3"></i>
-                                                            </span>
-                                                <span className="hide-menu ">Thông tin cá nhân</span>
-                                            </Link>
-                                        </li>
 
-                                        <li className="list-group-item">
-                                            <Link to={`/editProfile/${id}`}
-                                                  aria-expanded="false">
-                                                        <span>
-                                                          <i className="fa-solid fa-pen-to-square me-3"></i>
-                                                        </span>
-                                                <span className="hide-menu">Sửa thông tin cá nhân</span>
-                                            </Link>
-                                        </li>
-                                        <li className="list-group-item">
-                                            <Link to={`/register-owner/${id}`}
-                                                  aria-expanded="false">
-                                                            <span>
-                                                              <i className="fa-solid fa-rotate me-3"></i>
-                                                            </span>
-                                                <span className="hide-menu">Đổi mật khẩu</span>
-                                            </Link>
-                                        </li>
-                                        <li className="list-group-item">
-                                            <Link to={`/registerOwner/${id}`}
-                                                  aria-expanded="false">
-                                                            <span>
-                                                              <i className="fa-solid fa-chevron-up me-3"></i>
-                                                            </span>
-                                                <span className="hide-menu">Đăng ký làm chủ nhà</span>
-                                            </Link>
-                                        </li>
-                                    </ul>
-                                </nav>
-                            </div>
-                        </aside>
-                    </div>
                     <div className="col-9">
                         <div className="row  d-flex justify-content-center align-items-center h-100 ">
                             <div className="col-12 col-md-8 col-lg-6 col-xl-5">

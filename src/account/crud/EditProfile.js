@@ -11,12 +11,14 @@ import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import "./up.scss";
 import {MdCloudUpload} from "react-icons/md";
+import LeftSidebar from "./Left-sidebar";
+import {useSelector} from "react-redux";
 
 const EditProfile = ({status}) => {
 
     const navigate = useNavigate();
     const {id} = useParams();
-    const [account, setAccount] = useState({});
+    const [accountInfo, setAccountInfo] = useState({});
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
@@ -25,7 +27,7 @@ const EditProfile = ({status}) => {
     const [identifyFront, setIdentifyFront] = useState(null);
     const [identifyBack, setIdentifyBack] = useState(null);
     const [fileFront, setFileFront] = useState("No selected file");
-
+    const account = useSelector(state => state.account);
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -93,7 +95,7 @@ const EditProfile = ({status}) => {
     });
     const handleProfile = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
-        let data = {...values, avatar: account.avatar, address: address};
+        let data = {...values, avatar: accountInfo.avatar, address: address};
         accountService.editAccount(id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
@@ -104,7 +106,7 @@ const EditProfile = ({status}) => {
     const handleRegisterOwner = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
         let data = {...values,
-            avatar: account.avatar,
+            avatar: accountInfo.avatar,
             address: address,
             frontside : identifyFront,
             backside : identifyBack
@@ -123,8 +125,8 @@ const EditProfile = ({status}) => {
     }, []);
     const getAccountById = () => {
 
-        accountService.getAccountById(id).then((response) => {
-            setAccount(response)
+        accountService.getAccountById(account.id).then((response) => {
+            setAccountInfo(response)
         }).catch(function (err) {
             console.log(err);
         })
@@ -135,7 +137,7 @@ const EditProfile = ({status}) => {
         toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
-                setAccount({...account, avatar: url});
+                setAccountInfo({...accountInfo, avatar: url});
                 toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
                 var output = document.getElementById('image');
                 output.src = URL.createObjectURL(event.target.files[0]);
@@ -166,7 +168,7 @@ const EditProfile = ({status}) => {
     }
     const handleValueInput = (e) => {
         let {name, value} = e.target;
-        setAccount({...account, [name]: value});
+        setAccountInfo({...accountInfo, [name]: value});
 
     }
 
@@ -231,19 +233,19 @@ const EditProfile = ({status}) => {
 
     }
     return (
-        <div className="container-fluid">
+        <div className="col-10">
             <div className=" rounded bg-white mb-5">
-                {!_.isEmpty(account) &&
+                {!_.isEmpty(accountInfo) &&
                     <Formik initialValues={{
-                        firstname: account.firstname,
-                        lastname: account.lastname,
-                        address: account.address.split("-")[0],
-                        email: account.email,
-                        phone: account.phone,
-                        avatar: account.avatar,
-                        province: account.address.split("-")[3],
-                        district: account.address.split("-")[2],
-                        ward: account.address.split("-")[1],
+                        firstname: accountInfo.firstname,
+                        lastname: accountInfo.lastname,
+                        address: accountInfo.address.split("-")[0],
+                        email: accountInfo.email,
+                        phone: accountInfo.phone,
+                        avatar: accountInfo.avatar,
+                        province: accountInfo.address.split("-")[3],
+                        district: accountInfo.address.split("-")[2],
+                        ward: accountInfo.address.split("-")[1],
                         frontside: '',
                         backside: ''
                     }}
@@ -265,57 +267,11 @@ const EditProfile = ({status}) => {
                             }}>
                         {() => (
                             <Form className="row">
-                                <div className="col-2 border-right ">
-                                    <aside className="left-sidebar " style={{height: '80vh'}}>
-                                        <div>
-                                            <nav className="list-group row" data-simplebar="">
-                                                <ul id="sidebarnav">
-                                                    <li className="list-group-item">
-                                                        <Link to={`/profile/${id}`}>
-                                                         <span>
-                                                             <i className="fa-solid fa-user me-3"></i>
-                                                            </span>
-                                                            <span className="hide-menu ">Thông tin cá nhân</span>
-                                                        </Link>
-                                                    </li>
-
-                                                    <li class="list-group-item">
-                                                        <Link to={`/editProfile/${id}`}
-                                                              aria-expanded="false">
-                                                        <span>
-                                                          <i className="fa-solid fa-pen-to-square me-3"></i>
-                                                        </span>
-                                                            <span className="hide-menu">Sửa thông tin cá nhân</span>
-                                                        </Link>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <Link to={`/changePassword/${id}`}
-                                                              aria-expanded="false">
-                                                            <span>
-                                                              <i className="fa-solid fa-rotate me-3"></i>
-                                                            </span>
-                                                            <span className="hide-menu">Đổi mật khẩu</span>
-                                                        </Link>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <Link to={`/registerOwner/${id}`}
-                                                              aria-expanded="false">
-                                                            <span>
-                                                              <i className="fa-solid fa-chevron-up me-3"></i>
-                                                            </span>
-                                                            <span className="hide-menu">Đăng ký làm chủ nhà</span>
-                                                        </Link>
-                                                    </li>
-                                                </ul>
-                                            </nav>
-                                        </div>
-                                    </aside>
-                                </div>
                                 <div className="col-md-3  border-right">
                                     {/* Select Image*/}
                                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
                                         <img className="rounded-circle" width="300px" height="300px"
-                                             src={account.avatar} alt="avatar" id="image" name="avatar"
+                                             src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
                                              onChange={handleValueInput}/>
                                         <input type="file" onChange={selectImage}/>
                                     </div>
@@ -330,7 +286,7 @@ const EditProfile = ({status}) => {
                                         <div className="col-md-6 mb-3">
                                             <label className="form-label" htmlFor="firstname">Họ</label>
                                             <Field type="text" className="form-control" id="firstname"
-                                                   placeholder="Nhập họ" value={account.firstname} name="firstname"
+                                                   placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
                                                    onInput={handleValueInput}/>
                                             <span style={{color: 'red'}}>
                                                 <ErrorMessage name={'firstname'}></ErrorMessage>
@@ -339,7 +295,7 @@ const EditProfile = ({status}) => {
                                         <div className="col-md-6 mb-3">
                                             <label className="form-label" htmlFor="lastname">Tên</label>
                                             <Field type="text" className="form-control" id="Nhập tên"
-                                                   placeholder="Enter Lastname" value={account.lastname}
+                                                   placeholder="Enter Lastname" value={accountInfo.lastname}
                                                    name="lastname"
                                                    onInput={handleValueInput}/>
                                             <span style={{color: 'red'}}>
@@ -349,7 +305,7 @@ const EditProfile = ({status}) => {
                                         <div className="col-md-12 mb-3">
                                             <label className="form-label" htmlFor="email">Email</label>
                                             <Field type="text" className="form-control" id="email"
-                                                   placeholder="Nhập Email" value={account.email} name="email"
+                                                   placeholder="Nhập Email" value={accountInfo.email} name="email"
                                                    onInput={handleValueInput}/>
                                             <span style={{color: 'red'}}>
                                                <ErrorMessage name={'email'}></ErrorMessage>
@@ -366,7 +322,7 @@ const EditProfile = ({status}) => {
                                                             <Field as="select" className="form-select" name="province"
                                                                    id="province">
                                                                 <option
-                                                                    value="">{account.address.split("-")[3]}</option>
+                                                                    value="">{accountInfo.address.split("-")[3]}</option>
                                                                 {!_.isEmpty(provinces) && provinces.map(province => (
                                                                     <option key={province.ProvinceID}
                                                                             value={province.ProvinceName}>
@@ -383,7 +339,7 @@ const EditProfile = ({status}) => {
                                                             <Field as="select" className="form-select" id="district"
                                                                    name="district">
                                                                 <option
-                                                                    value="">{account.address.split("-")[2]}</option>
+                                                                    value="">{accountInfo.address.split("-")[2]}</option>
                                                                 {!_.isEmpty(districts) && districts.map(district => (
                                                                     <option key={district.DistrictID}
                                                                             value={district.DistrictName}>
@@ -400,7 +356,7 @@ const EditProfile = ({status}) => {
                                                             <Field as="select" className="form-select" id="ward"
                                                                    name="ward">
                                                                 <option
-                                                                    value="">{account.address.split("-")[1]}</option>
+                                                                    value="">{accountInfo.address.split("-")[1]}</option>
                                                                 {!_.isEmpty(wards) && wards.map(ward => (
                                                                     <option key={ward.WardCode} value={ward.WardName}>
                                                                         {ward.WardName}
@@ -419,7 +375,7 @@ const EditProfile = ({status}) => {
                                                         nhà</label>
                                                     <Field type="text" className="form-control" id="address"
                                                            placeholder="Nhập địa chỉ"
-                                                           value={account.address.split("-")[0]}
+                                                           value={accountInfo.address.split("-")[0]}
                                                            name="address"
                                                            onInput={handleValueInput}/>
                                                     <span style={{color: 'red'}}>
@@ -430,7 +386,7 @@ const EditProfile = ({status}) => {
                                                 <div className="col-md-12 mb-3">
                                                     <label className="form-label" htmlFor="phone">Số điện thoại</label>
                                                     <Field type="text" className="form-control" id="phone"
-                                                           placeholder="Nhập số điện thoại" value={account.phone}
+                                                           placeholder="Nhập số điện thoại" value={accountInfo.phone}
                                                            name="phone"
                                                            onInput={handleValueInput}/>
                                                     <span style={{color: 'red'}}>
