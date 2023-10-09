@@ -6,4 +6,8 @@ const getHouseById = (id) => {
   return axios.get(`${API_URL}/${id}`);
 }
 
-export {getHouseById};
+const getHouseByIdAndOwnerId = (id, ownerId) => {
+  return axios.get(`${API_URL}/${id}/${ownerId}`);
+}
+
+export {getHouseById, getHouseByIdAndOwnerId};

@@ -5,16 +5,16 @@ import _ from 'lodash';
 import {addHouseSchema} from "../../validate/validate";
 import {Modal} from "react-bootstrap";
 import './saveHouse.scss';
+import {createHouse, editHouse} from "../../service/ownerService";
 import Swal from 'sweetalert2'
 import ThumbnailItem from "./ThumbnailItem";
 import ImageItem from "./ImageItem";
 import TinyMCE from "./TinyMCE";
 import {useParams} from "react-router-dom";
+import {getHouseByIdAndOwnerId} from "../../service/houseService";
 import {getAllImagesByHouseId} from "../../service/imageService";
 import ImageItemEdit from "./ImageItemEdit";
 import {useSelector} from "react-redux";
-import {getHouseById} from "../../service/houseService";
-import {createHouse} from "../../service/ownerService";
 
 const SaveHouse = () => {
     const [provinces, setProvinces] = useState([]);
@@ -69,7 +69,7 @@ const SaveHouse = () => {
         })
 
         if (houseId) {
-            getHouseById(houseId, account.id).then(response => {
+            getHouseByIdAndOwnerId(houseId, account.id).then(response => {
                 setHouse(response.data);
                 setThumbnailURL(response.data.thumbnail);
                 setProvinceName(response.data.province);
@@ -156,7 +156,7 @@ const SaveHouse = () => {
             data.status = house.status;
             data.images = [...imagesURLEdit, ...imagesURL];
             data.imagesDelete = imagesURLDelete;
-            createHouse(data).then(response => {
+            editHouse(data).then(response => {
                 Swal.fire({
                     icon: 'success',
                     title: 'Cập nhật nhà thành công !',

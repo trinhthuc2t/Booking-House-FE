@@ -1,9 +1,13 @@
-import axios from "axios";
+import instance from "./axiosConfig";
 
-const API_URL = 'http://localhost:8080/api/owners';
+const API_URL = '/api/owners';
 
 const createHouse = (data) =>{
-    return axios.post(`${API_URL}/create-house`, data);
+    return instance.post(`${API_URL}/create-house`, data);
 }
 
-export {createHouse};
+const editHouse = (data) =>{
+    return instance.post(`${API_URL}/edit-house`, data);
+}
+
+export {createHouse, editHouse};

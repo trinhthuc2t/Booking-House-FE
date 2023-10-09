@@ -30,29 +30,28 @@ const HouseDetail = () => {
         }).catch(error => {
             console.log(error);
         })
-    }, [])
 
-    useEffect(() => {
         getAllReviewsByHouseId(houseId).then(response => {
             setReviews(response.data);
         }).catch(error => {
             console.log(error);
         })
-    }, [])
 
-    useEffect(() => {
         getAllImagesByHouseId(houseId).then(response => {
             setImages(response.data);
         }).catch(error => {
             console.log(error);
         })
-    }, [])
 
-    useEffect(() => {
         avgRatingByHouseId(houseId).then(response => {
             setAvgRating(response.data);
         }).catch(error => {
             console.log(error);
+        })
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
         })
     }, [])
     return (

@@ -1,4 +1,7 @@
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React, {useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import Register from "./components/Login-Register/register";
@@ -6,9 +9,15 @@ import HouseDetail from "./components/HouseDetail/HouseDetail";
 import Login from "./components/Login-Register/login";
 import ForgotPassword from "./components/Login-Register/forgot-password";
 import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
+import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
+import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
+import Profile from "./account/crud/Profile";
+import EditProfile from "./account/crud/EditProfile";
+import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./components/Footer/Footer";
-import {useState} from "react";
 import HomePage from "./components/HomePage/HomePage";
+import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
+import Information from "./account/crud/Information";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
 
 
@@ -25,8 +34,25 @@ function App() {
                 <Route path={"/forgot"} element={<ForgotPassword/>}/>
                 <Route path="/add" element={<SaveHouse/>}/>
                 <Route path={"/houses-owner"} element={<HouseByIdUser/>}/>
+                <Route path="/add" element={<SaveHouse/>}/>
+                <Route path="/edit/:houseId" element={<SaveHouse/>}/>
+                <Route path={"/houses-owner"} element={<HouseByIdUser/>}>
+                    <Route path={"/houses-owner"} element={<ByOwnerId/>}/>
+                    <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
+                    {/*<Route path={"/edit/:id"} element={}/>*/}
+                </Route>
+
+                <Route path={"/profile/"} element={<Profile/>}>
+                    <Route path={"edit-profile"}  element={<EditProfile status={true}/>}/>
+                    <Route path={"register-owner"}  element={<EditProfile status={false}/>}/>
+                    <Route path={"change-password"} element={<ChangePassword/>}/>
+                    <Route path={"information"} element={<Information/>}/>
+                </Route>
+
+
             </Routes>
-            {show && <Footer/>}
+            <Footer/>
+            <ToastContainer/>
         </div>
     );
 }
