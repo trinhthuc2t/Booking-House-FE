@@ -1,4 +1,7 @@
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import React, {useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import Register from "./components/Login-Register/register";
@@ -8,8 +11,10 @@ import ForgotPassword from "./components/Login-Register/forgot-password";
 import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
 import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
 import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
+import Profile from "./account/crud/Profile";
+import EditProfile from "./account/crud/EditProfile";
+import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./components/Footer/Footer";
-import {useState} from "react";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
 
@@ -32,8 +37,13 @@ function App() {
                     <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
                     {/*<Route path={"/edit/:id"} element={}/>*/}
                 </Route>
+                <Route path={"/profile/:id"} element={<Profile/>}/>
+                <Route path={"/editProfile/:id"}  element={<EditProfile status={true}/>}/>
+                <Route path={"/registerOwner/:id"}  element={<EditProfile status={false}/>}/>
+                <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>
             </Routes>
-            {show && <Footer/>}
+            <Footer/>
+            <ToastContainer/>
         </div>
     );
 }
