@@ -7,6 +7,7 @@ import AccountService from "../../service/AccountService";
 
 const ChangePassword = () => {
 
+
     const blankRegex = /[\s]/
     const validateSchema = Yup.object().shape({
         newPassword: Yup.string()
