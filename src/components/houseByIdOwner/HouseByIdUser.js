@@ -17,23 +17,31 @@ const HouseByIdUser = () => {
 
     const handleStatusChange = (house) => {
         const updatedHouse = {...house};
+        if (house.status === "Đang thuê") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Không thể thay đổi trang thái khi có người đang thuê !',
+                showConfirmButton: false,
+                timer: 1000
+            })
+            return;
+        } else {
+            Swal.fire({
+                title: 'Bạn có chắc muốn thay đổi trạng thái không?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Có, thay đổi!'
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-        Swal.fire({
-            title: 'Bạn có chắc muốn thay đổi trạng thái không?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Có, thay đổi!'
-        }).then((result) => {
-            if (result.isConfirmed) {
+                    updatedHouse.status = house.status === "Đang sửa" ? "Đang trống" : "Đang sửa";
 
-                updatedHouse.status = house.status === "Đang sửa" ? "Đang trống" : "Đang sửa";
-
-                updateStatus(updatedHouse);
-            }
-        });
-
+                    updateStatus(updatedHouse);
+                }
+            });
+        }
     };
 
 
@@ -101,9 +109,9 @@ const HouseByIdUser = () => {
                                     <select name="" id="" className="form-select border-0" value={status}
                                             onChange={handleOptionChange}>
                                         <option value="">Tất cả</option>
-                                        <option value="Available">Available</option>
-                                        <option value="Booked">Booked</option>
-                                        <option value="Repair">Repair</option>
+                                        <option value="Đang trống">Đang trống</option>
+                                        <option value="Đang thuê">Đang thuê</option>
+                                        <option value="Đang sửa">Đang sửa</option>
                                     </select>
                                 </div>
 
@@ -161,23 +169,15 @@ const HouseByIdUser = () => {
                                                 </div>
                                                 <div
                                                     className=" col-md-2 d-flex justify-content-center align-items-center">
-                                                    {house.status === "Đang trống" ?
-                                                        (
-                                                            <select name="" id=""
-                                                                    className="form-select border-0  btn btn-warning"
-                                                                    value={house.status}
-                                                                    onChange={() => handleStatusChange(house)}
-                                                                    style={{}}>
-                                                                <option value="Đang trống">Đang trống</option>
-                                                                <option value="Đang sửa">Đang sửa</option>
-                                                            </select>) : (<select name="" id=""
-                                                                                  className="form-select border-0  btn btn-danger"
-                                                                                  value={house.status}
-                                                                                  onChange={() => handleStatusChange(house)}
-                                                                                  style={{}}>
-                                                            <option value="Đang trống">Đang trống</option>
-                                                            <option value="Đang sửa">Đang sửa</option>
-                                                        </select>)}
+                                                    <select name="" id=""
+                                                            className="form-select border-0  btn btn-warning"
+                                                            value={house.status}
+                                                            onChange={() => handleStatusChange(house)}
+                                                            style={{}}>
+                                                        <option value="Đang trống">Đang trống</option>
+                                                        <option value="Đang thuê">Đang thuê</option>
+                                                        <option value="Đang sửa">Đang sửa</option>
+                                                    </select>
                                                 </div>
                                                 <div
                                                     className="col-sm-12 col-md-1 d-flex flex-column align-items-center justify-content-center">
