@@ -10,7 +10,6 @@ const HouseByIdUser = () => {
     const [totalPages, setTotalPages] = useState(0);
     const [houses, setHouses] = useState([]);
     const [house, setHouse] = useState({});
-
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
@@ -164,21 +163,37 @@ const HouseByIdUser = () => {
                                                 </div>
 
                                                 <div
-                                                    className="col-sm-12 col-md-1 d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                                    className="col-sm-12 m-auto p-0 col-md-1 d-flex flex-column align-items-start align-items-md-end justify-content-center">
                                                     <b>{house.revenue} - VNĐ</b>
                                                 </div>
-                                                <div
-                                                    className=" col-md-2 d-flex justify-content-center align-items-center">
-                                                    <select name="" id=""
-                                                            className="form-select border-0  btn btn-warning"
+                                                <div className="col-md-2 d-flex justify-content-center align-items-center">
+                                                    {house.status === "Đang thuê" ? (
+                                                        <select
+                                                            name=""
+                                                            id=""
+                                                            className="form-select border-0 btn btn-primary"
                                                             value={house.status}
                                                             onChange={() => handleStatusChange(house)}
-                                                            style={{}}>
-                                                        <option value="Đang trống">Đang trống</option>
-                                                        <option value="Đang thuê">Đang thuê</option>
-                                                        <option value="Đang sửa">Đang sửa</option>
-                                                    </select>
+                                                        >
+                                                            <option value="Đang trống">Đang trống</option>
+                                                            <option value="Đang thuê">Đang thuê</option>
+                                                            <option value="Đang sửa">Đang sửa</option>
+                                                        </select>
+
+                                                    ) : (
+                                                        <select
+                                                            name=""
+                                                            id=""
+                                                            className={`form-select border-0 ${house.status === "Đang sửa" ? "btn btn-danger" : "btn btn-warning"}`}
+                                                            value={house.status}
+                                                            onChange={() => handleStatusChange(house)}
+                                                        >
+                                                            <option value="Đang trống">Đang trống</option>
+                                                            <option value="Đang sửa">Đang sửa</option>
+                                                        </select>
+                                                    )}
                                                 </div>
+
                                                 <div
                                                     className="col-sm-12 col-md-1 d-flex flex-column align-items-center justify-content-center">
                                                     <div className="d-flex mb-3">
