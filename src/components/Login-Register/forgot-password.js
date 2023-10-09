@@ -24,7 +24,7 @@ function ForgotPassword(){
             })
             .catch(err => {
                 console.log(err)
-                setCheckEmail("Không tìm thấy email")
+                setCheckEmail("Email không tồn tại")
             })
     }
     return(
@@ -32,10 +32,8 @@ function ForgotPassword(){
         <Formik initialValues={initialValues} onSubmit={sendPassword} validationSchema={validationSchema}>
         <Form>
             <div className="form-outline mb-4">
-                <Field type="text" id="email" name="email"
+                <Field type="text" id="email" name="email" placeholder="Nhập email mà bạn dùng để đăng ký tài khoản"
                        className="form-control form-control-lg"/>
-                <label className="form-label" htmlFor="form3Example1cg">Nhập
-                    Email</label>
                 <ErrorMessage name="email" className="text-danger" component="div"/>
             </div>
             <div className="text-danger">{checkEmail}</div>
