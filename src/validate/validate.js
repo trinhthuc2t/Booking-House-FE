@@ -90,7 +90,8 @@ const profileSchema = Yup.object().shape({
     district: Yup.string()
         .required('Vui lòng không được để trống'),
     ward: Yup.string()
-        .required('Vui lòng không được để trống')
+        .required('Vui lòng không được để trống'),
+
 });
 
 export {addHouseSchema, loginSchema, registerSchema, profileSchema};

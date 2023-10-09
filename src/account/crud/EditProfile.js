@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import * as Yup from "yup";
 import _ from 'lodash';
 import {storage} from "../../firebase/firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
@@ -18,7 +17,6 @@ import {editAccount} from "../../redux/actions";
 const EditProfile = ({status}) => {
 
     const navigate = useNavigate();
-    const {id} = useParams();
     const [accountInfo, setAccountInfo] = useState({});
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
@@ -53,7 +51,6 @@ const EditProfile = ({status}) => {
             setDistrictName("");
         }
     }, [provinceName])
-
     useEffect(() => {
         if (districtName) {
             const district = districts.find(item => item.DistrictName === districtName);
@@ -71,8 +68,7 @@ const EditProfile = ({status}) => {
 
 
     const handleProfile = (values) => {
-        let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
-        let data = {...values, avatar: accountInfo.avatar, address: address};
+        let data = {...values, avatar: accountInfo.avatar};
         accountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
@@ -80,6 +76,9 @@ const EditProfile = ({status}) => {
             account.firstname = response.firstname;
             account.lastname = response.lastname;
             account.address = response.address;
+            account.province = response.province;
+            account.district = response.district;
+            account.ward = response.ward;
             account.email = response.email;
             account.phone = response.phone;
             account.avatar = response.avatar;
@@ -99,7 +98,7 @@ const EditProfile = ({status}) => {
             backside: identifyBack
         };
         console.log(data);
-        accountService.registerOwner(id, data).then((response) => {
+        accountService.registerOwner(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
         }).catch(function (err) {
@@ -111,9 +110,8 @@ const EditProfile = ({status}) => {
         getAccountById();
     }, []);
     const getAccountById = () => {
-
         accountService.getAccountById(account.id).then((response) => {
-            setAccountInfo(response)
+            setAccountInfo(response);
         }).catch(function (err) {
             console.log(err);
         })
@@ -188,6 +186,7 @@ const EditProfile = ({status}) => {
                                     :
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
+
                             </form>
                         </div>
                         <div className="col-6">
@@ -204,6 +203,7 @@ const EditProfile = ({status}) => {
                                     :
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
+                                <ErrorMessage name='backside' className="text-danger" component="small"/>
                             </form>
                         </div>
                     </div>
@@ -219,19 +219,21 @@ const EditProfile = ({status}) => {
 
 
     }
+
+
     return (
         <div className="col-9">
             {!_.isEmpty(accountInfo) &&
                 <Formik initialValues={{
                     firstname: accountInfo.firstname,
                     lastname: accountInfo.lastname,
-                    address: accountInfo.address.split("-")[0],
+                    address: accountInfo.address,
                     email: accountInfo.email,
                     phone: accountInfo.phone,
                     avatar: accountInfo.avatar,
-                    province: accountInfo.address.split("-")[3],
-                    district: accountInfo.address.split("-")[2],
-                    ward: accountInfo.address.split("-")[1],
+                    province: accountInfo.province,
+                    district: accountInfo.district,
+                    ward: accountInfo.ward,
                     frontside: '',
                     backside: ''
                 }}
@@ -287,7 +289,6 @@ const EditProfile = ({status}) => {
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name='email' className="text-danger" component="small"/>
                                     </div>
-
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="phone">Số điện thoại</label>
                                         <Field type="text" className="form-control" id="phone"
@@ -297,15 +298,12 @@ const EditProfile = ({status}) => {
                                         <ErrorMessage name='phone' className="text-danger"
                                                       component="small"/>
                                     </div>
-
                                     <div className="col-6 mb-3">
                                         <label className="form-label" htmlFor="province">
                                             Tỉnh/thành phố
                                         </label>
-                                        <Field as="select" className="form-select" name="province"
-                                               id="province">
-                                            <option
-                                                value="">{accountInfo.address.split("-")[3]}</option>
+                                        <Field as="select" className="form-select" name="province" id="province">
+                                            <option value="">{accountInfo.province}</option>
                                             {!_.isEmpty(provinces) && provinces.map(province => (
                                                 <option key={province.ProvinceID}
                                                         value={province.ProvinceName}>
@@ -320,8 +318,7 @@ const EditProfile = ({status}) => {
                                         <label className="form-label" htmlFor="district">Quận/Huyện</label>
                                         <Field as="select" className="form-select" id="district"
                                                name="district">
-                                            <option
-                                                value="">{accountInfo.address.split("-")[2]}</option>
+                                            <option value="">{accountInfo.district}</option>
                                             {!_.isEmpty(districts) && districts.map(district => (
                                                 <option key={district.DistrictID}
                                                         value={district.DistrictName}>
@@ -336,8 +333,7 @@ const EditProfile = ({status}) => {
                                         <label className="form-label" htmlFor="ward">Phường/xã</label>
                                         <Field as="select" className="form-select" id="ward"
                                                name="ward">
-                                            <option
-                                                value="">{accountInfo.address.split("-")[1]}</option>
+                                            <option value="">{accountInfo.ward}</option>
                                             {!_.isEmpty(wards) && wards.map(ward => (
                                                 <option key={ward.WardCode} value={ward.WardName}>
                                                     {ward.WardName}
@@ -353,7 +349,7 @@ const EditProfile = ({status}) => {
                                         </label>
                                         <Field type="text" className="form-control" id="address"
                                                placeholder="Nhập địa chỉ"
-                                               value={accountInfo.address.split("-")[0]}
+                                               value={accountInfo.address}
                                                name="address"
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name='address' className="text-danger"
