@@ -57,7 +57,7 @@ const Profile = () => {
                                                 </Link>
                                             </li>
                                             <li className="list-group-item">
-                                                <Link to={`/register-owner/${id}`}
+                                                <Link to={`/registerOwner/${id}`}
                                                       aria-expanded="false">
                                                             <span>
                                                               <i className="fa-solid fa-chevron-up me-3"></i>

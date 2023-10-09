@@ -298,7 +298,7 @@ const EditProfile = ({status}) => {
                                                         </Link>
                                                     </li>
                                                     <li class="list-group-item">
-                                                        <Link to={`/register-owner/${id}`}
+                                                        <Link to={`/registerOwner/${id}`}
                                                               aria-expanded="false">
                                                             <span>
                                                               <i className="fa-solid fa-chevron-up me-3"></i>
