@@ -1,19 +1,22 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import _ from 'lodash';
 import {addHouseSchema} from "../../validate/validate";
 import {Modal} from "react-bootstrap";
-import '.././CreateHouse/addHouse.scss';
-import {createHouse} from "../../service/ownerService";
+import './saveHouse.scss';
+import {createHouse, editHouse} from "../../service/ownerService";
 import Swal from 'sweetalert2'
-import ThumnailItem from "../CreateHouse/ThumnailItem";
-import ImageItem from "../CreateHouse/ImageItem";
-import TinyMCE from "../CreateHouse/TinyMCE";
+import ThumbnailItem from "./ThumbnailItem";
+import ImageItem from "./ImageItem";
+import TinyMCE from "./TinyMCE";
 import {useParams} from "react-router-dom";
-import {getHouseById} from "../../service/houseService";
+import {getHouseByIdAndOwnerId} from "../../service/houseService";
+import {getAllImagesByHouseId} from "../../service/imageService";
+import ImageItemEdit from "./ImageItemEdit";
+import {useSelector} from "react-redux";
 
-const EditHouse = () => {
+const SaveHouse = () => {
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
     const [wards, setWards] = useState([]);
@@ -21,16 +24,19 @@ const EditHouse = () => {
     const [districtName, setDistrictName] = useState("");
     const [isDescription, setIsDescription] = useState(true);
     const [showTinyMCE, setShowTinyMCE] = useState(false);
-    const [thumnailURL, setThumnailURL] = useState("");
+    const [thumbnailURL, setThumbnailURL] = useState("");
     const [imagesURL, setImagesURL] = useState([]);
-    const [thumnailFile, setThumnailFile] = useState(null);
+    const [imagesURLEdit, setImagesURLEdit] = useState([]);
+    const [imagesURLDelete, setImagesURLDelete] = useState([]);
+    const [thumbnailFile, setThumbnailFile] = useState(null);
     const [imagesFile, setImagesFile] = useState([]);
     const [house, setHouse] = useState({});
+    const account = useSelector(state => state.account);
 
 
     const {houseId} = useParams();
 
-    const thumnailRef = useRef();
+    const thumbnailRef = useRef();
     const imagesRef = useRef();
 
     const handleClose = () => setShowTinyMCE(false);
@@ -55,29 +61,45 @@ const EditHouse = () => {
         }
     };
 
-    useEffect( () => {
-       /* const callAPI = async () => {
-            const provincesRes = await getAllProvinces();
-            await setProvinces(provincesRes.data.data);
-            const houseRes = await getHouseById(houseId);
-            await setProvinceName(houseRes.data.province);
-            await setDistrictName(houseRes.data.district);
-            await setHouse(houseRes.data)
-        }
-        callAPI().then();*/
+    useEffect(() => {
         getAllProvinces().then(response => {
             setProvinces(response.data.data);
         }).catch(error => {
             console.log(error)
         })
 
-        getHouseById(houseId).then(response => {
-            setHouse(response.data);
-            setProvinceName(response.data.province);
-            setDistrictName(response.data.district);
-        }).catch(error => {
-            console.log(error);
-        })
+        if (houseId) {
+            getHouseByIdAndOwnerId(houseId, account.id).then(response => {
+                setHouse(response.data);
+                setThumbnailURL(response.data.thumbnail);
+                setProvinceName(response.data.province);
+                setDistrictName(response.data.district);
+            }).catch(error => {
+                console.log(error);
+            })
+
+            getAllImagesByHouseId(houseId).then(response => {
+                setImagesURLEdit(response.data);
+            }).catch(error => {
+                console.log(error);
+            })
+        } else {
+            setHouse({
+                name: "",
+                bedroom: "",
+                bathroom: "",
+                province: "",
+                district: "",
+                ward: "",
+                houseNumber: "",
+                newPrice: "",
+                oldPrice: "",
+                description: "",
+                facility: "",
+                thumbnail: "",
+                images: ""
+            })
+        }
     }, [])
 
     useEffect(() => {
@@ -111,45 +133,69 @@ const EditHouse = () => {
         }
     }, [districtName, districts])
 
-    const handleThumnailFile = (event, values) => {
-        values.thumbnail = 'ok';
-        setThumnailFile(event.target.files[0]);
-        if (thumnailRef) thumnailRef.current.value = null;
+    const handleThumbnailFile = (event, values) => {
+        values.thumbnail = 'is valid';
+        setThumbnailFile(event.target.files[0]);
+        if (thumbnailRef) thumbnailRef.current.value = null;
     }
 
     const handleImagesFile = (event, values) => {
-        values.images = 'ok';
+        values.images = 'is valid';
         setImagesFile([...imagesFile, ...event.target.files]);
         if (imagesRef) imagesRef.current.value = null;
     }
 
-    const handleCreateHouse = (data) => {
+    const handleSaveHouse = (values) => {
+        const data = {...values};
+        data.id = parseInt(houseId);
         data.address = `${data.houseNumber}, ${data.ward}, ${data.district}, ${data.province}`;
-        data.thumbnail = thumnailURL;
-        data.images = imagesURL;
-        data.owner = {id: 1};
-        console.log(data)
-        createHouse(data).then(response => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Thêm nhà thành công !',
-                showConfirmButton: false,
-                timer: 1500
+        data.thumbnail = thumbnailURL;
+        data.owner = {id: account.id};
+        if (houseId) {
+            data.createAt = house.createAt;
+            data.status = house.status;
+            data.images = [...imagesURLEdit, ...imagesURL];
+            data.imagesDelete = imagesURLDelete;
+            editHouse(data).then(response => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Cập nhật nhà thành công !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }).catch(error => {
+                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Thêm nhà thất bại !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
-        }).catch(error => {
-            console.log(error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Thêm nhà thất bại !',
-                showConfirmButton: false,
-                timer: 1500
+        } else {
+            data.images = imagesURL;
+            createHouse(data).then(response => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thêm nhà thành công !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }).catch(error => {
+                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Thêm nhà thất bại !',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
-        })
+        }
     }
 
     return (
         <div className="container">
-            {!_.isEmpty(house) && !_.isEmpty(districts) &&
+            {!_.isEmpty(house) &&
                 <Formik
                     initialValues={{
                         name: house.name,
@@ -163,8 +209,8 @@ const EditHouse = () => {
                         oldPrice: house.oldPrice,
                         description: house.description,
                         facility: house.facility,
-                        thumbnail: "",
-                        images: ""
+                        thumbnail: thumbnailURL ? "is valid" : "",
+                        images: !_.isEmpty(imagesURLEdit) ? "is valid" : ""
                     }}
                     innerRef={(actions) => {
                         if (actions && actions.touched.province)
@@ -177,20 +223,17 @@ const EditHouse = () => {
                     validateOnBlur={true}
                     validateOnChange={true}
                     onSubmit={values => {
-                        handleCreateHouse(values);
+                        handleSaveHouse(values);
                     }}>
-                    {({errors, touched, values}) => (
+                    {({values}) => (
                         <Form>
                             <div className="row">
+                                <h2 className="text-center text-uppercase mb-5">{houseId ? "Sửa đổi thông tin nhà" : "Thêm nhà mới"}</h2>
                                 <div className="mb-3 col-4">
                                     <label htmlFor="name" className="form-label">Tên nhà:</label>
                                     <Field type="text" className="form-control" id="name" placeholder="Tên nhà"
                                            name="name"/>
-                                    {errors.name && touched.name ?
-                                        <small className="text-danger">{errors.name}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="name" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="mb-3 col-4">
@@ -201,11 +244,7 @@ const EditHouse = () => {
                                             <option value={i + 1} key={i + 1}>{i + 1}</option>
                                         ))}
                                     </Field>
-                                    {errors.bedroom && touched.bedroom ?
-                                        <small className="text-danger">{errors.bedroom}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="bedroom" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="mb-3 col-4">
@@ -216,11 +255,7 @@ const EditHouse = () => {
                                         <option value="2">2</option>
                                         <option value="3">3</option>
                                     </Field>
-                                    {errors.bathroom && touched.bathroom ?
-                                        <small className="text-danger">{errors.bathroom}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="bathroom" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-4 form-group mb-3">
@@ -235,11 +270,7 @@ const EditHouse = () => {
                                             </option>
                                         ))}
                                     </Field>
-                                    {errors.province && touched.province ?
-                                        <small className="text-danger">{errors.province}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="province" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-4 form-group mb-3">
@@ -253,11 +284,7 @@ const EditHouse = () => {
                                             </option>
                                         ))}
                                     </Field>
-                                    {errors.district && touched.district ?
-                                        <small className="text-danger">{errors.district}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="district" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-4 form-group mb-3">
@@ -270,78 +297,50 @@ const EditHouse = () => {
                                             </option>
                                         ))}
                                     </Field>
-                                    {errors.ward && touched.ward ?
-                                        <small className="text-danger">{errors.ward}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="ward" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
                                     <label className="form-label" htmlFor="houseNumber">Địa chỉ thêm:</label>
                                     <Field className="form-control" id="houseNumber" type="text" name="houseNumber"
                                            placeholder="Số nhà"/>
-                                    {errors.houseNumber && touched.houseNumber ?
-                                        <small className="text-danger">{errors.houseNumber}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="province" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
                                     <label className="form-label" htmlFor="newPrice">Giá tiền mới (VNĐ/ngày):</label>
                                     <Field className="form-control" id="newPrice" type="number" name="newPrice"
                                            placeholder="Giá tiền mới"/>
-                                    {errors.newPrice && touched.newPrice ?
-                                        <small className="text-danger">{errors.newPrice}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="newPrice" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
                                     <label className="form-label" htmlFor="oldPrice">Giá tiền cũ (VNĐ/ngày):</label>
                                     <Field className="form-control" id="oldPrice" type="number" name="oldPrice"
                                            placeholder="Giá tiền cũ"/>
-                                    {errors.oldPrice && touched.oldPrice ?
-                                        <small className="text-danger">{errors.oldPrice}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="oldPrice" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
                                     <label htmlFor="description" className="form-label">Mô tả:</label>
                                     <Field as="textarea" type="text" className="form-control" id="description"
                                            name="description" placeholder="Mô tả" onClick={handleShowDescription}/>
-                                    {errors.description && touched.description ?
-                                        <small className="text-danger">{errors.description}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="description" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
                                     <label htmlFor="facility" className="form-label">Tiện ích:</label>
                                     <Field as="textarea" type="text" className="form-control" id="facility"
                                            name="facility" placeholder="Tiện ích" onClick={handleShowFacility}/>
-                                    {errors.facility && touched.facility ?
-                                        <small className="text-danger">{errors.facility}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="facility" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
                                     <label htmlFor="thumbnail" className="form-label">Ảnh đại diện:</label>
                                     <input type="file" className="form-control" id="thumbnail" name="thumbnail"
-                                           ref={thumnailRef}
-                                           onChange={(event) => handleThumnailFile(event, values)}/>
-                                    {errors.thumbnail && touched.thumbnail ?
-                                        <small className="text-danger">{errors.thumbnail}</small>
-                                        :
-                                        null
-                                    }
+                                           ref={thumbnailRef}
+                                           onChange={(event) => handleThumbnailFile(event, values)}/>
+                                    <ErrorMessage name="thumbnail" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
@@ -349,29 +348,34 @@ const EditHouse = () => {
                                     <input type="file" className="form-control" id="images" name="images"
                                            multiple={true}
                                            onChange={(event) => handleImagesFile(event, values)} ref={imagesRef}/>
-                                    {errors.images && touched.images ?
-                                        <small className="text-danger">{errors.images}</small>
-                                        :
-                                        null
-                                    }
+                                    <ErrorMessage name="images" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    <ThumnailItem file={thumnailFile} setThumnailFile={setThumnailFile}
-                                                  setThumnailURL={setThumnailURL} values={values}/>
+                                    <ThumbnailItem file={thumbnailFile} setThumbnailFile={setThumbnailFile}
+                                                   setThumbnailURL={setThumbnailURL} thumbnailURL={thumbnailURL}
+                                                   values={values}/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    {imagesFile && imagesFile.map(file => (
+                                    {!_.isEmpty(imagesURLEdit) && imagesURLEdit.map((item, index) => (
+                                        <ImageItemEdit key={item.id} index={index} url={item.url}
+                                                       setImageURLEdit={setImagesURLEdit} values={values}
+                                                       imagesFile={imagesFile} setImagesURLDelete={setImagesURLDelete}/>
+                                    ))}
+
+                                    {!_.isEmpty(imagesFile) && imagesFile.map(file => (
                                         <ImageItem file={file} setImagesFile={setImagesFile}
                                                    setImagesURL={setImagesURL} key={file.name}
-                                                   imagesFile={imagesFile} values={values}/>
+                                                   imagesFile={imagesFile} values={values} houseId={houseId}/>
                                     ))}
 
                                 </div>
 
                                 <div className="text-center my-3">
-                                    <button type="submit" className="btn btn-primary">Thêm nhà</button>
+                                    <button type="submit" className="btn btn-primary">
+                                        {houseId ? "Cập nhật" : "Thêm nhà"}
+                                    </button>
                                 </div>
                             </div>
 
@@ -393,4 +397,4 @@ const EditHouse = () => {
     );
 };
 
-export default EditHouse;
+export default SaveHouse;
