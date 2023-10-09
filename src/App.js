@@ -39,6 +39,7 @@ function App() {
                     <Route path={"register-owner"}  element={<EditProfile status={false}/>}/>
                     <Route path={"change-password"} element={<ChangePassword/>}/>
                     <Route path={"information"} element={<Information/>}/>
+                    <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                 </Route>
             </Routes>
             <Footer/>

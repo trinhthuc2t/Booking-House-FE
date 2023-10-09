@@ -1,13 +1,13 @@
 import React from 'react';
 import {Editor} from '@tinymce/tinymce-react';
 
-const TinyMce = ({editorRef, handleSaveTinyMCE, values, isDescription}) => {
+const TinyMce = ({editorRef, handleSaveTinyMCE, handleClose, isDescription, description, facility, values}) => {
     return (
         <div className="p-3">
             <Editor
                 apiKey='wetnv4w1c89n0nn68dmjily9a0ctn93oxuzn2244a5c7bq5f'
                 onInit={(event, editor) => editorRef.current = editor}
-                initialValue={isDescription ? values.description : values.facility}
+                initialValue={isDescription ? description : facility}
                 init={{
                     height: 500,
                     menubar: true,
@@ -25,7 +25,8 @@ const TinyMce = ({editorRef, handleSaveTinyMCE, values, isDescription}) => {
             />
 
             <div className="mt-3 text-center">
-                <button className="btn btn-primary px-4" onClick={() => handleSaveTinyMCE(values)}>Lưu</button>
+                <button className="btn btn-primary px-4 me-3" onClick={() => handleSaveTinyMCE(values)}>Lưu</button>
+                <button className="btn btn-secondary px-4" onClick={() => handleClose()}>Hủy</button>
             </div>
         </div>
     );

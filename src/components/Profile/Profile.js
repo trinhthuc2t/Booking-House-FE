@@ -15,7 +15,6 @@ const Profile = () => {
                 {!_.isEmpty(account) &&
                     <div className="row">
                         <LeftSidebar id={account.id}/>
-
                         <Outlet/>
                     </div>
                 }

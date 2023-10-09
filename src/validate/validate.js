@@ -18,17 +18,16 @@ const addHouseSchema = Yup.object().shape({
         .required('Vui lòng không được để trống'),
     houseNumber: Yup.string()
         .required('Vui lòng không được để trống'),
-    newPrice: Yup.number()
+    price: Yup.number()
         .min(1, 'Giá tiền phải lớn hơn 0')
         .required('Vui lòng không được để trống'),
-    oldPrice: Yup.number()
-        .min(1, 'Giá tiền phải lớn hơn 0')
+    sale: Yup.number()
+        .min(0, 'Giảm giá phải lớn hơn hoặc bằng 0')
+        .max(100, 'Giảm giá phải nhỏ hơn hoặc bằng 100')
         .required('Vui lòng không được để trống'),
     description: Yup.string()
-        .min(10, 'Mô tả tối thiểu phải 10 kí tự')
         .required('Vui lòng không được để trống'),
     facility: Yup.string()
-        .min(10, 'Mô tả tối thiểu phải 10 kí tự')
         .required('Vui lòng không được để trống'),
     thumbnail: Yup.string()
         .required('Vui lòng không được để trống'),

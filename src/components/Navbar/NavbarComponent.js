@@ -46,7 +46,7 @@ const Navbar = () => {
                                         </li>
                                         <li className="p-1">
                                             <Link to="/" className="dropdown-item nav-link" onClick={handleLogout}>
-                                                <i className="bi bi-box-arrow-in-right me-2"></i>Đăng xuất
+                                                <i className="bi bi-power me-2"></i>Đăng xuất
                                             </Link>
                                         </li>
                                     </ul>
