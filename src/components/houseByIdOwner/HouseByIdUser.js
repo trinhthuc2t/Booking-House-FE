@@ -17,29 +17,23 @@ const HouseByIdUser = () => {
 
     const handleStatusChange = (house) => {
         const updatedHouse = {...house};
-        if (house.status === "Đang thuê") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Không thể thay đổi trang thái khi có người đang thuê !',
-                showConfirmButton: false,
-                timer: 1000
-            })
-            return;
-        } else {
-            Swal.fire({
-                title: 'Bạn có chắc muốn thay đổi trạng thái không?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Có, thay đổi!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    updatedHouse.status = house.status === "Đang sửa" ? "Đang trống" : "Đang sửa";
-                    updateStatus(updatedHouse);
-                }
-            });
-        }
+
+        Swal.fire({
+            title: 'Bạn có chắc muốn thay đổi trạng thái không?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có, thay đổi!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                updatedHouse.status = house.status === "Đang sửa" ? "Đang trống" : "Đang sửa";
+
+                updateStatus(updatedHouse);
+            }
+        });
+
     };
 
 
@@ -68,11 +62,10 @@ const HouseByIdUser = () => {
     };
 
 
+    const findByOwnerIdAndNameAndStatus = (id, nameSearch, status, currentPage) => {
+        console.log(currentPage + " " + id + " " + nameSearch + " " + status)
 
-    const findByOwnerIdAndNameAndStatus = ( id, nameSearch, status,currentPage) => {
-        console.log(currentPage + " " + id + " " + nameSearch + " "+ status)
-
-        houseByIdService.findByOwnerIdAndNameAndStatus(id, nameSearch, status ,currentPage)
+        houseByIdService.findByOwnerIdAndNameAndStatus(id, nameSearch, status, currentPage)
             .then((houses) => {
                 setHouses(houses.content);
                 setTotalPages(houses.totalPages);
@@ -93,8 +86,8 @@ const HouseByIdUser = () => {
 
     useEffect(() => {
         const ownerId = 1;
-        findByOwnerIdAndNameAndStatus(ownerId,nameSearch,status , currentPage-1)
-    }, [currentPage, house, status , nameSearch])
+        findByOwnerIdAndNameAndStatus(ownerId, nameSearch, status, currentPage - 1)
+    }, [currentPage, house, status, nameSearch])
 
     return (
         <div>
@@ -108,9 +101,9 @@ const HouseByIdUser = () => {
                                     <select name="" id="" className="form-select border-0" value={status}
                                             onChange={handleOptionChange}>
                                         <option value="">Tất cả</option>
-                                        <option value="Đang trống">Đang trống</option>
-                                        <option value="Đang thuê">Đang thuê</option>
-                                        <option value="Đang sửa">Đang sửa</option>
+                                        <option value="Available">Available</option>
+                                        <option value="Booked">Booked</option>
+                                        <option value="Repair">Repair</option>
                                     </select>
                                 </div>
 
@@ -167,33 +160,30 @@ const HouseByIdUser = () => {
                                                     <b>{house.revenue} - VNĐ</b>
                                                 </div>
                                                 <div
-                                                    className="col-sm-12 col-md-1  d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                    {/*<div className="d-flex mb-3">*/}
-                                                    {/*    <a className="btn"*/}
-                                                    {/*       style={{*/}
-                                                    {/*           backgroundColor: "rgb(0,185,142)",*/}
-                                                    {/*           textcolor: "white"*/}
-                                                    {/*       }}*/}
-                                                    {/*       href="">ok</a>*/}
-                                                    {/*</div>*/}
+                                                    className=" col-md-2 d-flex justify-content-center align-items-center">
+                                                    {house.status === "Đang trống" ?
+                                                        (
+                                                            <select name="" id=""
+                                                                    className="form-select border-0  btn btn-warning"
+                                                                    value={house.status}
+                                                                    onChange={() => handleStatusChange(house)}
+                                                                    style={{}}>
+                                                                <option value="Đang trống">Đang trống</option>
+                                                                <option value="Đang sửa">Đang sửa</option>
+                                                            </select>) : (<select name="" id=""
+                                                                                  className="form-select border-0  btn btn-danger"
+                                                                                  value={house.status}
+                                                                                  onChange={() => handleStatusChange(house)}
+                                                                                  style={{}}>
+                                                            <option value="Đang trống">Đang trống</option>
+                                                            <option value="Đang sửa">Đang sửa</option>
+                                                        </select>)}
                                                 </div>
                                                 <div
-                                                    className="col-sm-12 col-md-1 ms-5 d-flex flex-column align-items-start align-items-md-end justify-content-center">
-                                                    <div className="d-flex mb-3">
-                                                    <span className="btn btn-warning" style={{width: 100}}
-                                                          onClick={() => handleStatusChange(house)}
-                                                          href="">{house.status}</span>
-                                                    </div>
-                                                </div>
-
-                                                <div
-                                                    className="col-sm-12 col-md-1  d-flex flex-column align-items-start align-items-md-end justify-content-center">
+                                                    className="col-sm-12 col-md-1 d-flex flex-column align-items-center justify-content-center">
                                                     <div className="d-flex mb-3">
                                                         <a className="btn"
-                                                           style={{
-                                                               backgroundColor: "rgb(0,185,142)",
-                                                               textcolor: "white"
-                                                           }}
+                                                           style={{backgroundColor: "rgb(0,185,142)", color: "white"}}
                                                            href="">Edit</a>
                                                     </div>
                                                 </div>
