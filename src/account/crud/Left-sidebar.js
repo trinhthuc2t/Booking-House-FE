@@ -1,61 +1,42 @@
 import React from 'react';
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
+import {Link, NavLink} from "react-router-dom";
 
 const LeftSidebar = ({id}) => {
-    const account = useSelector(state => state.account);
-    const checkAdmin = () => {
-        if (account.role.id === 2) {
-            return;
-        } else {
-            return (
-                <li className="list-group-item">
-                    <Link to={`/profile/registerOwner`}
-                          aria-expanded="false">
-                        <span>
-                            <i className="fa-solid fa-chevron-up me-3"></i>
-                        </span>
-                        <span className="hide-menu">Đăng ký làm chủ nhà</span>
-                    </Link>
-                </li>
-            )
-        }
-    }
     return (
-        <div className="col-2 border-right ">
-            <aside className="left-sidebar " style={{height: '80vh'}}>
+        <div className="col-3 bg-light border-end py-3">
+            <aside className="left-sidebar" style={{height: '80vh'}}>
                 <div>
-                    <nav className="list-group row" data-simplebar="">
+                    <nav className="list-group row">
                         <ul id="sidebarnav">
-                            <li className="list-group-item">
-                                <Link to={`/profile/information`}>
-                                    <span>
-                                        <i className="fa-solid fa-user me-3"></i>
-                                    </span>
+                            <li className="px-3 py-2">
+                                <NavLink to="/profile/information"
+                                      className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                    <i className="fa-solid fa-user me-3"></i>
                                     <span className="hide-menu ">Thông tin cá nhân</span>
-                                </Link>
+                                </NavLink>
                             </li>
 
-                            <li className="list-group-item">
-                                <Link to={`/profile/editProfile`}
-                                      aria-expanded="false">
-                                    <span>
-                                        <i className="fa-solid fa-pen-to-square me-3"></i>
-                                    </span>
+                            <li className="px-3 py-2">
+                                <NavLink to="/profile/edit-profile"
+                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                    <i className="fa-solid fa-pen-to-square me-3"></i>
                                     <span className="hide-menu">Sửa thông tin cá nhân</span>
-                                </Link>
+                                </NavLink>
                             </li>
-                            <li className="list-group-item">
-                                <Link to={`/profile/changePassword`}
-                                      aria-expanded="false">
-                                    <span>
-                                        <i className="fa-solid fa-rotate me-3"></i>
-                                    </span>
+                            <li className="px-3 py-2">
+                                <NavLink to="/profile/change-password"
+                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                    <i className="fa-solid fa-rotate me-3"></i>
                                     <span className="hide-menu">Đổi mật khẩu</span>
-                                </Link>
+                                </NavLink>
                             </li>
-
-                            {checkAdmin()}
+                            <li className="px-3 py-2">
+                                <NavLink to="/profile/register-owner"
+                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                    <i className="fa-solid fa-chevron-up me-3"></i>
+                                    <span className="hide-menu">Đăng ký làm chủ nhà</span>
+                                </NavLink>
+                            </li>
                         </ul>
                     </nav>
                 </div>

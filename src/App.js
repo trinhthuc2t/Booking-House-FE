@@ -17,7 +17,7 @@ import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
-import BodyProfile from "./account/crud/BodyProfile";
+import Information from "./account/crud/Information";
 
 
 function App() {
@@ -36,13 +36,14 @@ function App() {
                 <Route path={"/houses-owner"} element={<HouseByIdUser/>}>
                     <Route path={"/houses-owner"} element={<ByOwnerId/>}/>
                     <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
+                    {/*<Route path={"/edit/:id"} element={}/>*/}
                 </Route>
-                <Route path={"/profile/"} element={<Profile/>}>
-                    <Route path={"editProfile"}  element={<EditProfile status={true}/>}/>
-                    <Route path={"registerOwner"}  element={<EditProfile status={false}/>}/>
-                    <Route path={"changePassword"} element={<ChangePassword/>}/>
-                    <Route path={"information"} element={<BodyProfile/>}/>
 
+                <Route path={"/profile/"} element={<Profile/>}>
+                    <Route path={"edit-profile"}  element={<EditProfile status={true}/>}/>
+                    <Route path={"register-owner"}  element={<EditProfile status={false}/>}/>
+                    <Route path={"change-password"} element={<ChangePassword/>}/>
+                    <Route path={"information"} element={<Information/>}/>
                 </Route>
 
 

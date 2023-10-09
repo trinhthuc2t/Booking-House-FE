@@ -67,4 +67,30 @@ const registerSchema = Yup.object({
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp')
 });
 
-export {addHouseSchema, loginSchema, registerSchema};
+const profileSchema = Yup.object().shape({
+    firstname: Yup.string()
+        .min(2, "Họ có ít nhất 2 ký tự!")
+        .required("Họ không được để trống"),
+    lastname: Yup.string()
+        .min(2, "Tên có ít nhất 2 ký tự!")
+        .required("Tên không được để trống"),
+    address: Yup.string()
+        .min(2, "Mô tả dài hơn 2 ký tự!")
+        .required("Địa chỉ không được để trống"),
+    email: Yup.string()
+        .matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, "Nhập email có dạng @gmail")
+        .min(11, "Email phải dài hơn 10 ký tự!")
+        .required("Email không được để trống"),
+    phone: Yup.string()
+        .length(10, "Số điện phải gồm 10 số!")
+        .typeError("Số điện thoại phải nhập số")
+        .required("Số điện thoại không được để trống"),
+    province: Yup.string()
+        .required('Vui lòng không được để trống'),
+    district: Yup.string()
+        .required('Vui lòng không được để trống'),
+    ward: Yup.string()
+        .required('Vui lòng không được để trống')
+});
+
+export {addHouseSchema, loginSchema, registerSchema, profileSchema};

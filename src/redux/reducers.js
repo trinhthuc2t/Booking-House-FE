@@ -15,7 +15,7 @@ export const accountInfo = (state = initialState, action) => {
             };
         case EDIT_ACCOUNT:
             return {
-                account: {...state.account,...action.payload}
+                account: {...action.payload}
             };
 
         case DELETE_ACCOUNT:
