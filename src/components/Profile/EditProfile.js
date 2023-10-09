@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import * as Yup from "yup";
 import _ from 'lodash';
 import {storage} from "../../firebase/firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid" ;
-import accountService from "../AccountService";
 import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import "./up.scss";
@@ -14,6 +12,7 @@ import {MdCloudUpload} from "react-icons/md";
 import {useDispatch, useSelector} from "react-redux";
 import {profileSchema} from "../../validate/validate";
 import {editAccount} from "../../redux/actions";
+import AccountService from "../../service/AccountService";
 
 const EditProfile = ({status}) => {
 
@@ -73,7 +72,7 @@ const EditProfile = ({status}) => {
     const handleProfile = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
         let data = {...values, avatar: accountInfo.avatar, address: address};
-        accountService.editAccount(account.id, data).then((response) => {
+        AccountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
             console.log("Account", account)
@@ -99,7 +98,7 @@ const EditProfile = ({status}) => {
             backside: identifyBack
         };
         console.log(data);
-        accountService.registerOwner(id, data).then((response) => {
+        AccountService.registerOwner(id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
         }).catch(function (err) {
@@ -112,7 +111,7 @@ const EditProfile = ({status}) => {
     }, []);
     const getAccountById = () => {
 
-        accountService.getAccountById(account.id).then((response) => {
+        AccountService.getAccountById(account.id).then((response) => {
             setAccountInfo(response)
         }).catch(function (err) {
             console.log(err);

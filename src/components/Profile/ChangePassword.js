@@ -3,7 +3,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {useParams} from "react-router-dom";
 import {toast} from 'react-toastify';
-import accountService from "../AccountService";
+import AccountService from "../../service/AccountService";
 
 const ChangePassword = () => {
 
@@ -31,14 +31,14 @@ const ChangePassword = () => {
         getAccountById();
     }, []);
     const getAccountById = () => {
-        accountService.getAccountById(id).then((response) => {
+        AccountService.getAccountById(id).then((response) => {
             setAccount(response)
         }).catch(function (err) {
             console.log(err);
         })
     }
     const handleChangePassword = (values) => {
-        accountService.checkPassword(account).then((response) => {
+        AccountService.checkPassword(account).then((response) => {
             if (!response) {
                 toast.error("Mật khẩu hiện tại không đúng!!!", {position: "top-center", autoClose: 1000,});
             } else {
@@ -55,8 +55,7 @@ const ChangePassword = () => {
         })
     }
     const editPassword = (account) => {
-        console.log(account);
-        accountService.changePassWord(account).then((response) => {
+        AccountService.changePassWord(account).then((response) => {
             toast.success("Thay đổi mật khẩu thành công", {position: "top-center", autoClose: 1000,});
         });
     }

@@ -9,13 +9,13 @@ import HouseDetail from "./components/HouseDetail/HouseDetail";
 import Login from "./components/Login-Register/login";
 import ForgotPassword from "./components/Login-Register/forgot-password";
 import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
-import Profile from "./account/crud/Profile";
-import EditProfile from "./account/crud/EditProfile";
-import ChangePassword from "./account/crud/ChangePassword";
+import Profile from "./components/Profile/Profile";
+import EditProfile from "./components/Profile/EditProfile";
+import ChangePassword from "./components/Profile/ChangePassword";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
-import Information from "./account/crud/Information";
+import Information from "./components/Profile/Information";
 
 
 function App() {
