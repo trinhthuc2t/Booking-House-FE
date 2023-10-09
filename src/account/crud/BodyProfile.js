@@ -5,7 +5,6 @@ const BodyProfile = () => {
 
     const account = useSelector(state => state.account);
     return (
-
         <>
             <div className="col-md-3 mt-5 border-right row">
                 <div className="d-flex flex-column align-items-center text-center p-3 py-5">

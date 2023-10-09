@@ -36,12 +36,7 @@ function App() {
                 <Route path={"/houses-owner"} element={<HouseByIdUser/>}>
                     <Route path={"/houses-owner"} element={<ByOwnerId/>}/>
                     <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
-                    {/*<Route path={"/edit/:id"} element={}/>*/}
                 </Route>
-               {/* <Route path={"/profile/:id"} element={<Profile/>}/>
-                <Route path={"/editProfile/:id"}  element={<EditProfile status={true}/>}/>
-                <Route path={"/registerOwner/:id"}  element={<EditProfile status={false}/>}/>
-                <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>*/}
                 <Route path={"/profile/"} element={<Profile/>}>
                     <Route path={"editProfile"}  element={<EditProfile status={true}/>}/>
                     <Route path={"registerOwner"}  element={<EditProfile status={false}/>}/>

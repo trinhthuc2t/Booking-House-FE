@@ -15,7 +15,7 @@ import LeftSidebar from "./Left-sidebar";
 import {useSelector} from "react-redux";
 
 const EditProfile = ({status}) => {
-
+    console.log(status);
     const navigate = useNavigate();
     const {id} = useParams();
     const [accountInfo, setAccountInfo] = useState({});
@@ -28,7 +28,7 @@ const EditProfile = ({status}) => {
     const [identifyBack, setIdentifyBack] = useState(null);
     const [fileFront, setFileFront] = useState("No selected file");
     const account = useSelector(state => state.account);
-
+    console.log(account);
     useEffect(() => {
         getAllProvinces().then(response => {
             setProvinces(response.data.data);
@@ -96,7 +96,7 @@ const EditProfile = ({status}) => {
     const handleProfile = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
         let data = {...values, avatar: accountInfo.avatar, address: address};
-        accountService.editAccount(id, data).then((response) => {
+        accountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
         }).catch(function (err) {
@@ -233,7 +233,7 @@ const EditProfile = ({status}) => {
 
     }
     return (
-        <div className="col-10">
+        <div className="col">
             <div className=" rounded bg-white mb-5">
                 {!_.isEmpty(accountInfo) &&
                     <Formik initialValues={{
@@ -267,6 +267,7 @@ const EditProfile = ({status}) => {
                             }}>
                         {() => (
                             <Form className="row">
+
                                 <div className="col-md-3  border-right">
                                     {/* Select Image*/}
                                     <div className="d-flex flex-column align-items-center text-center p-3 py-5">
@@ -374,13 +375,13 @@ const EditProfile = ({status}) => {
                                                     <label className="form-label" htmlFor="address">Số
                                                         nhà</label>
                                                     <Field type="text" className="form-control" id="address"
-                                                           placeholder="Nhập địa chỉ"
+                                                           placeholder="Nhập số nhà"
                                                            value={accountInfo.address.split("-")[0]}
                                                            name="address"
                                                            onInput={handleValueInput}/>
-                                                    <span style={{color: 'red'}}>
+                                                   {/* <span style={{color: 'red'}}>
                                                         <ErrorMessage name={'address'}></ErrorMessage>
-                                                    </span>
+                                                    </span>*/}
                                                 </div>
 
                                                 <div className="col-md-12 mb-3">
