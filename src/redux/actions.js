@@ -2,16 +2,16 @@ export const SAVE_ACCOUNT = 'SAVE_ACCOUNT';
 export const EDIT_ACCOUNT = 'EDIT_ACCOUNT';
 export const DELETE_ACCOUNT = 'DELETE_ACCOUNT';
 
-export const saveAccount = (payload) => {
+export const saveAccount = (account) => {
     return {
         type: SAVE_ACCOUNT,
-        payload
+        payload: account
     };
 }
-export const editAccount = (payload) => {
+export const editAccount = (account) => {
     return {
         type: EDIT_ACCOUNT,
-        payload
+        payload: account
     };
 }
 
