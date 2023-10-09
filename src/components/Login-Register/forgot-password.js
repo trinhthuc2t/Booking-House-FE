@@ -1,8 +1,11 @@
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import LoginRegisterService from "../../service/login-registerService";
+import Swal from "sweetalert2";
+import {useState} from "react";
 
 function ForgotPassword(){
+    const [checkEmail, setCheckEmail] = useState("")
     const initialValues = {
         email: ''
     };
@@ -12,11 +15,16 @@ function ForgotPassword(){
     const sendPassword= (value) => {
         LoginRegisterService.sendPassword(value)
             .then(() => {
-                alert("Email đã được gửi")
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Email đã được gửi!',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
             .catch(err => {
                 console.log(err)
-                alert("Vui lòng nhập email mà bạn đã đăng ký")
+                setCheckEmail("Không tìm thấy email")
             })
     }
     return(
@@ -28,9 +36,9 @@ function ForgotPassword(){
                        className="form-control form-control-lg"/>
                 <label className="form-label" htmlFor="form3Example1cg">Nhập
                     Email</label>
-                <ErrorMessage name="username" className="text-danger" component="div"/>
+                <ErrorMessage name="email" className="text-danger" component="div"/>
             </div>
-
+            <div className="text-danger">{checkEmail}</div>
             <button type="submit" className="btn btn-success btn-block btn-lg gradient-custom-4 text-body">Gửi email</button>
         </Form>
         </Formik>
