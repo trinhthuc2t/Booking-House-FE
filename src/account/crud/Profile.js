@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {Link, Outlet, useParams} from "react-router-dom";
-import accountService from "../AccountService";
-
+import React from 'react';
+import {Outlet} from "react-router-dom";
 import _ from 'lodash';
 import LeftSidebar from "./Left-sidebar";
 import {useSelector} from "react-redux";
-
+import './profile.scss';
 
 const Profile = () => {
 
@@ -16,9 +14,9 @@ const Profile = () => {
             <div className=" rounded bg-white mb-5">
                 {!_.isEmpty(account) &&
                     <div className="row">
-                        <LeftSidebar id={account.id}></LeftSidebar>
+                        <LeftSidebar id={account.id}/>
 
-                        <Outlet></Outlet>
+                        <Outlet/>
                     </div>
                 }
             </div>

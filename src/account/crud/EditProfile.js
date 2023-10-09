@@ -11,8 +11,9 @@ import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import "./up.scss";
 import {MdCloudUpload} from "react-icons/md";
-import LeftSidebar from "./Left-sidebar";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {profileSchema} from "../../validate/validate";
+import {editAccount} from "../../redux/actions";
 
 const EditProfile = ({status}) => {
 
@@ -28,6 +29,7 @@ const EditProfile = ({status}) => {
     const [identifyBack, setIdentifyBack] = useState(null);
     const [fileFront, setFileFront] = useState("No selected file");
     const account = useSelector(state => state.account);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -68,51 +70,36 @@ const EditProfile = ({status}) => {
     }, [districtName])
 
 
-    const validateSchema = Yup.object().shape({
-        firstname: Yup.string()
-            .min(2, "Họ có ít nhất 2 ký tự!")
-            .required("Họ không được để trống"),
-        lastname: Yup.string()
-            .min(2, "Tên có ít nhất 2 ký tự!")
-            .required("Tên không được để trống"),
-        address: Yup.string()
-            .min(2, "Mô tả dài hơn 2 ký tự!")
-            .required("Địa chỉ không được để trống"),
-        email: Yup.string()
-            .matches(/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/, "Nhập email có dạng @gmail")
-            .min(11, "Email phải dài hơn 10 ký tự!")
-            .required("Email không được để trống"),
-        phone: Yup.string()
-            .length(10, "Số điện phải gồm 10 số!")
-            .typeError("Số điện thoại phải nhập số")
-            .required("Số điện thoại không được để trống"),
-        province: Yup.string()
-            .required('Vui lòng không được để trống'),
-        district: Yup.string()
-            .required('Vui lòng không được để trống'),
-        ward: Yup.string()
-            .required('Vui lòng không được để trống')
-    });
     const handleProfile = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
         let data = {...values, avatar: accountInfo.avatar, address: address};
-        accountService.editAccount(id, data).then((response) => {
+        accountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
+            console.log("Account", account)
+            account.firstname = response.firstname;
+            account.lastname = response.lastname;
+            account.address = response.address;
+            account.email = response.email;
+            account.phone = response.phone;
+            account.avatar = response.avatar;
+            dispatch(editAccount(account));
+            localStorage.setItem("account", JSON.stringify(account));
         }).catch(function (err) {
             console.log(err);
         })
     }
     const handleRegisterOwner = (values) => {
         let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
-        let data = {...values,
+        let data = {
+            ...values,
             avatar: accountInfo.avatar,
             address: address,
-            frontside : identifyFront,
-            backside : identifyBack
+            frontside: identifyFront,
+            backside: identifyBack
         };
         console.log(data);
-        accountService.registerOwner( id ,data).then((response) => {
+        accountService.registerOwner(id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
         }).catch(function (err) {
@@ -172,237 +159,213 @@ const EditProfile = ({status}) => {
 
     }
 
-
-
     const handleProps = () => {
         if (status) {
-            return <div className="mt-2 text-center d-flex justify-content-around">
-                <Link to={'/'}>
-                    <button className="btn btn-primary profile-button"
-                            type="button">Trở về
-                    </button>
+            return <div className="mt-2 text-center d-flex justify-content-center">
+                <Link to={'/'} className="btn btn-lg btn-danger me-4" type="button"
+                      style={{minWidth: '100px'}}>
+                    Hủy
                 </Link>
-                <button className="btn btn-primary profile-button"
-                        type="submit">Lưu
+                <button className="btn btn-lg btn-primary" type="submit"
+                        style={{minWidth: '100px'}}>
+                    Lưu
                 </button>
             </div>
         } else {
-            return <div>
-                <div className="mt-2  text-center d-flex justify-content-center">
-                    <div className={"col-6"}>
-                        <p>Mặt trước CCCD</p>
-                        <form className={'identify m-lg-5'}
-                              onClick={() => document.querySelector("#frontsideFile").click()}>
-                            <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
-                                event.target.files[0] && setFileFront(event.target.files[0].name);
-                                uploadIdentify(event)
-                            }} hidden/>
-                            {identifyFront ?
-                                <img src={identifyFront} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
-                                :
-                                <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
-                            }
-                        </form>
-                    </div>
-                    <div className={"col-6"}>
-                        <p>Mặt sau CCCD</p>
-                        <form className={'identify m-lg-5'}
-                              onClick={() => document.querySelector("#backsideFile").click()}>
-                            <input type="file" id="backsideFile" name="backside" onChange={(event) => {
-                                event.target.files[0] && setFileFront(event.target.files[0].name);
-                                uploadIdentify(event)
+            return (
+                <div className="mt-3">
+                    <div className="text-center d-flex">
+                        <div className={"col-6"}>
+                            <p>Mặt trước CCCD</p>
+                            <form className='identify'
+                                  onClick={() => document.querySelector("#frontsideFile").click()}>
+                                <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
+                                    event.target.files[0] && setFileFront(event.target.files[0].name);
+                                    uploadIdentify(event)
+                                }} hidden/>
+                                {identifyFront ?
+                                    <img src={identifyFront} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
+                                    :
+                                    <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
+                                }
+                            </form>
+                        </div>
+                        <div className="col-6">
+                            <p>Mặt sau CCCD</p>
+                            <form className='identify'
+                                  onClick={() => document.querySelector("#backsideFile").click()}>
+                                <input type="file" id="backsideFile" name="backside" onChange={(event) => {
+                                    event.target.files[0] && setFileFront(event.target.files[0].name);
+                                    uploadIdentify(event)
 
-                            }} hidden/>
-                            {identifyBack ?
-                                <img src={identifyBack} id="backside" width={'100%'} height={'100%'} alt={'img'}/>
-                                :
-                                <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
-                            }
-                        </form>
+                                }} hidden/>
+                                {identifyBack ?
+                                    <img src={identifyBack} id="backside" width={'100%'} height={'100%'} alt={'img'}/>
+                                    :
+                                    <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
+                                }
+                            </form>
+                        </div>
+                    </div>
+
+                    <div className="mt-5 text-center d-flex justify-content-around">
+                        <button className="btn btn-lg btn-primary profile-button"
+                                type="submit">Đăng ký
+                        </button>
                     </div>
                 </div>
-
-                <div className="mt-2 text-center d-flex justify-content-around">
-                    <button className="btn btn-primary profile-button"
-                            type="submit">Đăng ký
-                    </button>
-                </div>
-            </div>
+            )
         }
 
 
     }
     return (
-        <div className="col-10">
-            <div className=" rounded bg-white mb-5">
-                {!_.isEmpty(accountInfo) &&
-                    <Formik initialValues={{
-                        firstname: accountInfo.firstname,
-                        lastname: accountInfo.lastname,
-                        address: accountInfo.address.split("-")[0],
-                        email: accountInfo.email,
-                        phone: accountInfo.phone,
-                        avatar: accountInfo.avatar,
-                        province: accountInfo.address.split("-")[3],
-                        district: accountInfo.address.split("-")[2],
-                        ward: accountInfo.address.split("-")[1],
-                        frontside: '',
-                        backside: ''
-                    }}
-                            innerRef={(actions) => {
-                                if (actions && actions.touched.province)
-                                    setProvinceName(actions.values.province);
+        <div className="col-9">
+            {!_.isEmpty(accountInfo) &&
+                <Formik initialValues={{
+                    firstname: accountInfo.firstname,
+                    lastname: accountInfo.lastname,
+                    address: accountInfo.address.split("-")[0],
+                    email: accountInfo.email,
+                    phone: accountInfo.phone,
+                    avatar: accountInfo.avatar,
+                    province: accountInfo.address.split("-")[3],
+                    district: accountInfo.address.split("-")[2],
+                    ward: accountInfo.address.split("-")[1],
+                    frontside: '',
+                    backside: ''
+                }}
+                        innerRef={(actions) => {
+                            if (actions && actions.touched.province)
+                                setProvinceName(actions.values.province);
 
-                                if (actions && actions.touched.district)
-                                    setDistrictName(actions.values.district);
+                            if (actions && actions.touched.district)
+                                setDistrictName(actions.values.district);
 
-                            }}
-                            validationSchema={validateSchema}
-                            onSubmit={(values) => {
-                                if (status) {
-                                    handleProfile(values);
-                                }else {
-                                    handleRegisterOwner(values);
-                                }
-                            }}>
-                        {() => (
-                            <Form className="row">
-                                <div className="col-md-3  border-right">
-                                    {/* Select Image*/}
-                                    <div className="d-flex flex-column align-items-center text-center p-3 py-5">
-                                        <img className="rounded-circle" width="300px" height="300px"
-                                             src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
-                                             onChange={handleValueInput}/>
-                                        <input type="file" onChange={selectImage}/>
-                                    </div>
+                        }}
+                        validationSchema={profileSchema}
+                        onSubmit={(values) => {
+                            if (status) {
+                                handleProfile(values);
+                            } else {
+                                handleRegisterOwner(values);
+                            }
+                        }}>
+                    {() => (
+                        <Form className="row">
+                            <div className="col-md-4">
+                                {/* Select Image*/}
+                                <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
+                                    <img className="rounded-circle" width="300px" height="300px"
+                                         src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
+                                         onChange={handleValueInput}/>
+                                    <input className="mt-2 form-control" type="file" onChange={selectImage}/>
                                 </div>
-                                <div className="col-md-7 border-right">
-                                    <div className="p-3 py-3">
-                                        <div className="d-flex justify-content-between align-items-center mb-3">
-                                            <h4 className="text-right">Sửa thông tin cá nhân</h4>
-                                        </div>
+                            </div>
+                            <div className="col-md-8">
+                                <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="lastname">Họ</label>
+                                        <Field type="text" className="form-control" id="lastname"
+                                               placeholder="Nhập họ" value={accountInfo.lastname} name="lastname"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name={'lastname'} className="text-danger" component="small"/>
                                     </div>
-                                    <div className={"row"}>
-                                        <div className="col-md-6 mb-3">
-                                            <label className="form-label" htmlFor="firstname">Họ</label>
-                                            <Field type="text" className="form-control" id="firstname"
-                                                   placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
-                                                   onInput={handleValueInput}/>
-                                            <span style={{color: 'red'}}>
-                                                <ErrorMessage name={'firstname'}></ErrorMessage>
-                                            </span>
-                                        </div>
-                                        <div className="col-md-6 mb-3">
-                                            <label className="form-label" htmlFor="lastname">Tên</label>
-                                            <Field type="text" className="form-control" id="Nhập tên"
-                                                   placeholder="Enter Lastname" value={accountInfo.lastname}
-                                                   name="lastname"
-                                                   onInput={handleValueInput}/>
-                                            <span style={{color: 'red'}}>
-                                                <ErrorMessage name={'lastname'}></ErrorMessage>
-                                            </span>
-                                        </div>
-                                        <div className="col-md-12 mb-3">
-                                            <label className="form-label" htmlFor="email">Email</label>
-                                            <Field type="text" className="form-control" id="email"
-                                                   placeholder="Nhập Email" value={accountInfo.email} name="email"
-                                                   onInput={handleValueInput}/>
-                                            <span style={{color: 'red'}}>
-                                               <ErrorMessage name={'email'}></ErrorMessage>
-                                            </span>
-                                        </div>
-                                        <div className=" mt-3">
-                                            <div className="col-md-12 mb-3">
-                                                <div className="col-md-12 mb-3">
-                                                    <div className="row">
-
-                                                        <div className="col-4">
-                                                            <p className="form-label" htmlFor="province">Tỉnh/thành
-                                                                phố</p>
-                                                            <Field as="select" className="form-select" name="province"
-                                                                   id="province">
-                                                                <option
-                                                                    value="">{accountInfo.address.split("-")[3]}</option>
-                                                                {!_.isEmpty(provinces) && provinces.map(province => (
-                                                                    <option key={province.ProvinceID}
-                                                                            value={province.ProvinceName}>
-                                                                        {province.ProvinceName}
-                                                                    </option>
-                                                                ))}
-                                                            </Field>
-                                                            <span style={{color: 'red'}}>
-                                                               <ErrorMessage name={'province'}></ErrorMessage>
-                                                            </span>
-                                                        </div>
-                                                        <div className="col-4">
-                                                            <p className="form-label" htmlFor="district">Quận/Huyện</p>
-                                                            <Field as="select" className="form-select" id="district"
-                                                                   name="district">
-                                                                <option
-                                                                    value="">{accountInfo.address.split("-")[2]}</option>
-                                                                {!_.isEmpty(districts) && districts.map(district => (
-                                                                    <option key={district.DistrictID}
-                                                                            value={district.DistrictName}>
-                                                                        {district.DistrictName}
-                                                                    </option>
-                                                                ))}
-                                                            </Field>
-                                                            <span style={{color: 'red'}}>
-                                                              <ErrorMessage name={'district'}></ErrorMessage>
-                                                            </span>
-                                                        </div>
-                                                        <div className="col-4">
-                                                            <p className="form-label" htmlFor="ward">Phường/xã</p>
-                                                            <Field as="select" className="form-select" id="ward"
-                                                                   name="ward">
-                                                                <option
-                                                                    value="">{accountInfo.address.split("-")[1]}</option>
-                                                                {!_.isEmpty(wards) && wards.map(ward => (
-                                                                    <option key={ward.WardCode} value={ward.WardName}>
-                                                                        {ward.WardName}
-                                                                    </option>
-                                                                ))}
-                                                            </Field>
-                                                            <span style={{color: 'red'}}>
-                                                                <ErrorMessage name={'ward'}></ErrorMessage>
-                                                          </span>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-12 mb-3">
-                                                    <label className="form-label" htmlFor="address">Số
-                                                        nhà</label>
-                                                    <Field type="text" className="form-control" id="address"
-                                                           placeholder="Nhập địa chỉ"
-                                                           value={accountInfo.address.split("-")[0]}
-                                                           name="address"
-                                                           onInput={handleValueInput}/>
-                                                    <span style={{color: 'red'}}>
-                                                        <ErrorMessage name={'address'}></ErrorMessage>
-                                                    </span>
-                                                </div>
-
-                                                <div className="col-md-12 mb-3">
-                                                    <label className="form-label" htmlFor="phone">Số điện thoại</label>
-                                                    <Field type="text" className="form-control" id="phone"
-                                                           placeholder="Nhập số điện thoại" value={accountInfo.phone}
-                                                           name="phone"
-                                                           onInput={handleValueInput}/>
-                                                    <span style={{color: 'red'}}>
-                                                       <ErrorMessage name={'phone'}></ErrorMessage>
-                                                   </span>
-                                                </div>
-                                            </div>
-                                            {handleProps()}
-                                        </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="firstname">Tên</label>
+                                        <Field type="text" className="form-control" id="firstname"
+                                               placeholder="Nhập tên" value={accountInfo.firstname}
+                                               name="firstname"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='firstname' className="text-danger" component="small"/>
                                     </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="email">Email</label>
+                                        <Field type="text" className="form-control" id="email"
+                                               placeholder="Nhập Email" value={accountInfo.email} name="email"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='email' className="text-danger" component="small"/>
+                                    </div>
+
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                                        <Field type="text" className="form-control" id="phone"
+                                               placeholder="Nhập số điện thoại" value={accountInfo.phone}
+                                               name="phone"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='phone' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+
+                                    <div className="col-6 mb-3">
+                                        <label className="form-label" htmlFor="province">
+                                            Tỉnh/thành phố
+                                        </label>
+                                        <Field as="select" className="form-select" name="province"
+                                               id="province">
+                                            <option
+                                                value="">{accountInfo.address.split("-")[3]}</option>
+                                            {!_.isEmpty(provinces) && provinces.map(province => (
+                                                <option key={province.ProvinceID}
+                                                        value={province.ProvinceName}>
+                                                    {province.ProvinceName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name='province' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    <div className="col-6">
+                                        <label className="form-label" htmlFor="district">Quận/Huyện</label>
+                                        <Field as="select" className="form-select" id="district"
+                                               name="district">
+                                            <option
+                                                value="">{accountInfo.address.split("-")[2]}</option>
+                                            {!_.isEmpty(districts) && districts.map(district => (
+                                                <option key={district.DistrictID}
+                                                        value={district.DistrictName}>
+                                                    {district.DistrictName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name='district' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    <div className="col-6">
+                                        <label className="form-label" htmlFor="ward">Phường/xã</label>
+                                        <Field as="select" className="form-select" id="ward"
+                                               name="ward">
+                                            <option
+                                                value="">{accountInfo.address.split("-")[1]}</option>
+                                            {!_.isEmpty(wards) && wards.map(ward => (
+                                                <option key={ward.WardCode} value={ward.WardName}>
+                                                    {ward.WardName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name='ward' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="address">
+                                            Số nhà
+                                        </label>
+                                        <Field type="text" className="form-control" id="address"
+                                               placeholder="Nhập địa chỉ"
+                                               value={accountInfo.address.split("-")[0]}
+                                               name="address"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='address' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    {handleProps()}
                                 </div>
-                            </Form>
-                        )}
-                    </Formik>
-                }
-            </div>
+                            </div>
+                        </Form>
+                    )}
+                </Formik>
+            }
         </div>
     );
 };
