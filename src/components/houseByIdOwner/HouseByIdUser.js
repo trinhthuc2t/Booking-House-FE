@@ -101,9 +101,9 @@ const HouseByIdUser = () => {
                                     <select name="" id="" className="form-select border-0" value={status}
                                             onChange={handleOptionChange}>
                                         <option value="">Tất cả</option>
-                                        <option value="Đang trống">Đang trống</option>
-                                        <option value="Đang thuê">Đang thuê</option>
-                                        <option value="Đang sửa">Đang sửa</option>
+                                        <option value="Available">Available</option>
+                                        <option value="Booked">Booked</option>
+                                        <option value="Repair">Repair</option>
                                     </select>
                                 </div>
 
