@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {toast} from 'react-toastify';
-import accountService from "../AccountService";
+import AccountService from "../../service/AccountService";
+import {useSelector} from "react-redux";
 
 const ChangePassword = () => {
 
+    const navigate = useNavigate();
     const blankRegex = /[\s]/
     const validateSchema = Yup.object().shape({
         newPassword: Yup.string()
@@ -24,28 +26,30 @@ const ChangePassword = () => {
                 return !blankRegex.test(value);
             })
     });
-    const {id} = useParams();
-    const [account, setAccount] = useState({});
+    const account = useSelector(state => state.account);
+    const [accountInfor, setAccountInfor] = useState({});
 
     useEffect(() => {
         getAccountById();
     }, []);
     const getAccountById = () => {
-        accountService.getAccountById(id).then((response) => {
-            setAccount(response)
+        AccountService.getAccountById(account.id).then((response) => {
+            console.log(account.id);
+            setAccountInfor(response);
         }).catch(function (err) {
             console.log(err);
         })
     }
     const handleChangePassword = (values) => {
-        accountService.checkPassword(account).then((response) => {
+        console.log(accountInfor);
+        AccountService.checkPassword(accountInfor).then((response) => {
             if (!response) {
-                toast.error("Mật khẩu hiện tại không đúng!!!", {position: "top-center", autoClose: 1000,});
+                toast.error("Mật khẩu cũ không đúng!!!", {position: "top-center", autoClose: 1000,});
             } else {
                 if (values.newPassword !== values.confirmNewPassword) {
                     toast.error("Mật khẩu mới không đúng!!!", {position: "top-center", autoClose: 1000,});
                 } else {
-                    const newAccount = {...account, password: values.newPassword};
+                    const newAccount = {...accountInfor, password: values.newPassword};
                     editPassword(newAccount);
                 }
             }
@@ -55,9 +59,9 @@ const ChangePassword = () => {
         })
     }
     const editPassword = (account) => {
-        console.log(account);
-        accountService.changePassWord(account).then((response) => {
+        AccountService.changePassWord(account).then((response) => {
             toast.success("Thay đổi mật khẩu thành công", {position: "top-center", autoClose: 1000,});
+            navigate("/profile");
         });
     }
     return (
@@ -86,7 +90,7 @@ const ChangePassword = () => {
                                                className="form-control form-control"
                                                placeholder="Nhập mật khẩu cũ"
                                                onInput={(event) => {
-                                                   setAccount({...account, password: event.target.value})
+                                                   setAccountInfor({...accountInfor, password: event.target.value})
                                                }}/>
                                     </div>
                                     <div className="form-outline mb-4">

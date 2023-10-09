@@ -21,8 +21,10 @@ function Login({setShow}) {
     };
 
     const login = (value) => {
+        console.log(1);
         LoginRegisterService.login(value)
             .then(res => {
+                console.log(2);
                 if (remember) {
                     localStorage.setItem("account", JSON.stringify(res.data));
                 }

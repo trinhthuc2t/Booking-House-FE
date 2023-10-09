@@ -5,7 +5,6 @@ import _ from 'lodash';
 import {storage} from "../../firebase/firebase";
 import {ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import {v4} from "uuid" ;
-import accountService from "../AccountService";
 import {toast} from 'react-toastify';
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import "./up.scss";
@@ -13,6 +12,7 @@ import {MdCloudUpload} from "react-icons/md";
 import {useDispatch, useSelector} from "react-redux";
 import {profileSchema} from "../../validate/validate";
 import {editAccount} from "../../redux/actions";
+import AccountService from "../../service/AccountService";
 
 const EditProfile = ({status}) => {
 
@@ -69,7 +69,7 @@ const EditProfile = ({status}) => {
 
     const handleProfile = (values) => {
         let data = {...values, avatar: accountInfo.avatar};
-        accountService.editAccount(account.id, data).then((response) => {
+        AccountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
             console.log("Account", account)
@@ -89,16 +89,16 @@ const EditProfile = ({status}) => {
         })
     }
     const handleRegisterOwner = (values) => {
-        let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
+
         let data = {
             ...values,
             avatar: accountInfo.avatar,
-            address: address,
+            address: values.address,
             frontside: identifyFront,
             backside: identifyBack
         };
         console.log(data);
-        accountService.registerOwner(account.id, data).then((response) => {
+        AccountService.registerOwner(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
         }).catch(function (err) {
@@ -110,8 +110,9 @@ const EditProfile = ({status}) => {
         getAccountById();
     }, []);
     const getAccountById = () => {
-        accountService.getAccountById(account.id).then((response) => {
-            setAccountInfo(response);
+
+        AccountService.getAccountById(account.id).then((response) => {
+            setAccountInfo(response)
         }).catch(function (err) {
             console.log(err);
         })
@@ -186,8 +187,8 @@ const EditProfile = ({status}) => {
                                     :
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
-
                             </form>
+                            <ErrorMessage name={'frontside'} className="text-danger" component="small"/>
                         </div>
                         <div className="col-6">
                             <p>Mặt sau CCCD</p>
@@ -203,8 +204,8 @@ const EditProfile = ({status}) => {
                                     :
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
-                                <ErrorMessage name='backside' className="text-danger" component="small"/>
                             </form>
+                            <ErrorMessage name={'backside'} className="text-danger" component="small"/>
                         </div>
                     </div>
 
@@ -219,8 +220,6 @@ const EditProfile = ({status}) => {
 
 
     }
-
-
     return (
         <div className="col-9">
             {!_.isEmpty(accountInfo) &&
@@ -289,6 +288,7 @@ const EditProfile = ({status}) => {
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name='email' className="text-danger" component="small"/>
                                     </div>
+
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="phone">Số điện thoại</label>
                                         <Field type="text" className="form-control" id="phone"
@@ -298,6 +298,7 @@ const EditProfile = ({status}) => {
                                         <ErrorMessage name='phone' className="text-danger"
                                                       component="small"/>
                                     </div>
+
                                     <div className="col-6 mb-3">
                                         <label className="form-label" htmlFor="province">
                                             Tỉnh/thành phố
