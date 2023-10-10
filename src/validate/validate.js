@@ -1,7 +1,7 @@
 import * as Yup from "yup";
 import LoginRegisterService from "../service/login-registerService";
 
-const addHouseSchema = Yup.object().shape({
+const saveHouseSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Tên tối thiểu phải 2 kí tự')
         .max(20, 'Tên quá dài')
@@ -92,4 +92,4 @@ const profileSchema = Yup.object().shape({
         .required('Vui lòng không được để trống')
 });
 
-export {addHouseSchema, loginSchema, registerSchema, profileSchema};
+export {saveHouseSchema, loginSchema, registerSchema, profileSchema};

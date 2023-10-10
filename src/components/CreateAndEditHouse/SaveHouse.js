@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import _ from 'lodash';
-import {addHouseSchema} from "../../validate/validate";
+import {saveHouseSchema} from "../../validate/validate";
 import {Modal} from "react-bootstrap";
 import './saveHouse.scss';
 import {createHouse, editHouse} from "../../service/ownerService";
@@ -57,6 +57,7 @@ const SaveHouse = () => {
     const handleSaveTinyMCE = (values) => {
         if (!editorRef.current) return;
         if (editorRef.current.getContent()) {
+            console.log(editorRef.current.getContent())
             if (isDescription) {
                 values.description = "Bài viết mô tả đã được lưu. Click để sửa bài viết";
                 setDescription(editorRef.current.getContent());
@@ -235,7 +236,7 @@ const SaveHouse = () => {
                         if (actions && actions.touched.district)
                             setDistrictName(actions.values.district);
                     }}
-                    validationSchema={addHouseSchema}
+                    validationSchema={saveHouseSchema}
                     validateOnBlur={true}
                     validateOnChange={true}
                     onSubmit={values => {
@@ -321,7 +322,7 @@ const SaveHouse = () => {
                                     <label className="form-label" htmlFor="houseNumber">Địa chỉ chi tiết</label>
                                     <Field className="form-control" id="houseNumber" type="text" name="houseNumber"
                                            placeholder="Nhập địa chỉ chi tiết"/>
-                                    <ErrorMessage name="province" className="text-danger" component="small"/>
+                                    <ErrorMessage name="houseNumber" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
