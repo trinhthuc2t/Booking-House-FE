@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 
 const Information = () => {
     const account = useSelector(state => state.account);
+    console.log(account.province);
     return (
         <div className="col-9">
             <div className="row">

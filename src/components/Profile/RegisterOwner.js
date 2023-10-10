@@ -20,14 +20,15 @@ const RegisterOwner = () => {
     }
 
     const checkOwner = () => {
-        if (owner.status === "Chờ xác nhận"){
-            return <div className={"col-9 text-center"}>
+        if (owner.status === "Chờ xác nhận" ){
+            return <div className={"col-9 "}>
                 <h3>Đơn đăng ký đang chờ xác nhận</h3>
             </div>
         }else {
            return <EditProfile status={false}/>
         }
     }
+
 
     return (
             checkOwner()

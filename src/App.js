@@ -17,6 +17,7 @@ import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
 import Information from "./components/Profile/Information";
 import RegisterOwner from "./components/Profile/RegisterOwner";
+import ConfirmOwner from "./components/Profile/ConfirmOwner";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
                     <Route path={"register-owner"}  element={<RegisterOwner />}/>
                     <Route path={"change-password"} element={<ChangePassword/>}/>
                     <Route path={"information"} element={<Information/>}/>
+                    <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                 </Route>
             </Routes>
             <Footer/>

@@ -57,7 +57,7 @@ const AccountService = {
 
     registerOwner:  (data) => {
         return new Promise( (resolve, reject) => {
-            instance.post("/api/accounts/registerOwner" , data).then((response) => {
+            instance.post("/api/accounts/agreeRegister" , data).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 alert(err);
@@ -76,6 +76,15 @@ const AccountService = {
                 reject(err);
             })
         })
+    },
+    getListRegisterOwner :  async () => {
+        return await instance.get("/api/accounts/getRegisterOwner");
+    },
+    agreeRegister :  async (data) => {
+        return await instance.get("/api/accounts/agreeRegister" , data);
     }
+
+
+
 }
 export default AccountService;
