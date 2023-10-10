@@ -21,10 +21,8 @@ function Login({setShow}) {
     };
 
     const login = (value) => {
-        console.log(1);
         LoginRegisterService.login(value)
             .then(res => {
-                console.log(2);
                 if (remember) {
                     localStorage.setItem("account", JSON.stringify(res.data));
                 }
@@ -77,7 +75,7 @@ function Login({setShow}) {
                                                         <Field type={showPassword ? "text" : "password"} id="password"
                                                                name="password"
                                                                placeholder="Mật khẩu"/>
-                                                        <button className="btn bg-white text-muted"
+                                                        <button type="button" className="btn bg-white text-muted"
                                                                 onClick={toggleShowPassword}>
                                                             <span className="far fa-eye-slash"></span>
                                                         </button>

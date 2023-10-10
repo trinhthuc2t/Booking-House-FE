@@ -12,7 +12,7 @@ const LeftSidebar = ({id}) => {
                                 <NavLink to="/profile/information"
                                       className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                                     <i className="fa-solid fa-user me-3"></i>
-                                    <span className="hide-menu ">Thông tin cá nhân</span>
+                                    Thông tin cá nhân
                                 </NavLink>
                             </li>
 
@@ -20,21 +20,28 @@ const LeftSidebar = ({id}) => {
                                 <NavLink to="/profile/edit-profile"
                                          className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                                     <i className="fa-solid fa-pen-to-square me-3"></i>
-                                    <span className="hide-menu">Sửa thông tin cá nhân</span>
+                                    Sửa thông tin cá nhân
                                 </NavLink>
                             </li>
                             <li className="px-3 py-2">
                                 <NavLink to="/profile/change-password"
                                          className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                                     <i className="fa-solid fa-rotate me-3"></i>
-                                    <span className="hide-menu">Đổi mật khẩu</span>
+                                    Đổi mật khẩu
                                 </NavLink>
                             </li>
                             <li className="px-3 py-2">
                                 <NavLink to="/profile/register-owner"
                                          className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                                    <i className="fa-solid fa-chevron-up me-3"></i>
-                                    <span className="hide-menu">Đăng ký làm chủ nhà</span>
+                                    <i className="fa-solid fa-house-user me-3"></i>
+                                    Đăng ký làm chủ nhà
+                                </NavLink>
+                            </li>
+                            <li className="px-3 py-2">
+                                <NavLink to="/profile/houses-owner"
+                                         className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                                    <i className="fa-solid fa-list-check me-3"></i>
+                                    Quản lý nhà cho thuê
                                 </NavLink>
                             </li>
                         </ul>

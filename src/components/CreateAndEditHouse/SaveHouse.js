@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from 'react';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {getAllDistrictsByProvinceId, getAllProvinces, getAllWardsByDistrictId} from "../../service/addressService";
 import _ from 'lodash';
-import {addHouseSchema} from "../../validate/validate";
+import {saveHouseSchema} from "../../validate/validate";
 import {Modal} from "react-bootstrap";
 import './saveHouse.scss';
 import {createHouse, editHouse} from "../../service/ownerService";
@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 import ThumbnailItem from "./ThumbnailItem";
 import ImageItem from "./ImageItem";
 import TinyMCE from "./TinyMCE";
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getHouseByIdAndOwnerId} from "../../service/houseService";
 import {getAllImagesByHouseId} from "../../service/imageService";
 import ImageItemEdit from "./ImageItemEdit";
@@ -31,7 +31,10 @@ const SaveHouse = () => {
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [imagesFile, setImagesFile] = useState([]);
     const [house, setHouse] = useState({});
+    const [description, setDescription] = useState("");
+    const [facility, setFacility] = useState("");
     const account = useSelector(state => state.account);
+    const navigate = useNavigate();
 
 
     const {houseId} = useParams();
@@ -52,54 +55,64 @@ const SaveHouse = () => {
 
     const editorRef = useRef(null);
     const handleSaveTinyMCE = (values) => {
-        if (editorRef.current) {
-            if (isDescription)
-                values.description = editorRef.current.getContent();
-            else
-                values.facility = editorRef.current.getContent();
-            handleClose();
+        if (!editorRef.current) return;
+        if (editorRef.current.getContent()) {
+            console.log(editorRef.current.getContent())
+            if (isDescription) {
+                values.description = "Bài viết mô tả đã được lưu. Click để sửa bài viết";
+                setDescription(editorRef.current.getContent());
+            } else {
+                values.facility = "Bài viết giới thiệu tiện ích đã được lưu. Click để sửa bài viết";
+                setFacility(editorRef.current.getContent());
+            }
+        } else {
+            if (isDescription) {
+                values.description = "";
+                setDescription("");
+            } else {
+                values.facility = "";
+                setFacility("");
+            }
         }
+        handleClose();
     };
 
     useEffect(() => {
-        getAllProvinces().then(response => {
-            setProvinces(response.data.data);
-        }).catch(error => {
-            console.log(error)
-        })
+        const callAPI = async () => {
+            const provincesData = await getAllProvinces();
+            await setProvinces(provincesData.data.data);
 
-        if (houseId) {
-            getHouseByIdAndOwnerId(houseId, account.id).then(response => {
-                setHouse(response.data);
-                setThumbnailURL(response.data.thumbnail);
-                setProvinceName(response.data.province);
-                setDistrictName(response.data.district);
-            }).catch(error => {
-                console.log(error);
-            })
+            if (houseId) {
+                const imagesHouseData = await getAllImagesByHouseId(houseId);
+                setImagesURLEdit(imagesHouseData.data);
 
-            getAllImagesByHouseId(houseId).then(response => {
-                setImagesURLEdit(response.data);
-            }).catch(error => {
-                console.log(error);
-            })
-        } else {
-            setHouse({
-                name: "",
-                bedroom: "",
-                bathroom: "",
-                province: "",
-                district: "",
-                ward: "",
-                houseNumber: "",
-                newPrice: "",
-                oldPrice: "",
-                description: "",
-                facility: "",
-                thumbnail: "",
-                images: ""
-            })
+                const houseData = await getHouseByIdAndOwnerId(houseId, account.id);
+                setThumbnailURL(houseData.data.thumbnail);
+                setHouse(houseData.data);
+                setDescription(houseData.data.description);
+                setFacility(houseData.data.facility);
+                setProvinceName(houseData.data.province);
+                setDistrictName(houseData.data.district);
+            } else {
+                setHouse({
+                    name: "",
+                    bedroom: "",
+                    bathroom: "",
+                    province: "",
+                    district: "",
+                    ward: "",
+                    houseNumber: "",
+                    price: "",
+                    sale: 0,
+                    description: "",
+                    facility: "",
+                    thumbnail: "",
+                    images: ""
+                })
+            }
         }
+
+        callAPI();
     }, [])
 
     useEffect(() => {
@@ -149,6 +162,8 @@ const SaveHouse = () => {
         const data = {...values};
         data.id = parseInt(houseId);
         data.address = `${data.houseNumber}, ${data.ward}, ${data.district}, ${data.province}`;
+        data.description = description;
+        data.facility = facility;
         data.thumbnail = thumbnailURL;
         data.owner = {id: account.id};
         if (houseId) {
@@ -163,6 +178,7 @@ const SaveHouse = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                navigate("/profile/houses-owner");
             }).catch(error => {
                 console.log(error);
                 Swal.fire({
@@ -181,6 +197,7 @@ const SaveHouse = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                navigate("/profile/houses-owner");
             }).catch(error => {
                 console.log(error);
                 Swal.fire({
@@ -205,10 +222,10 @@ const SaveHouse = () => {
                         district: house.district,
                         ward: house.ward,
                         houseNumber: house.houseNumber,
-                        newPrice: house.newPrice,
-                        oldPrice: house.oldPrice,
-                        description: house.description,
-                        facility: house.facility,
+                        price: house.price,
+                        sale: house.sale,
+                        description: house.description ? "Bài viết mô tả đã được lưu. Click để sửa bài viết" : "",
+                        facility: house.facility ? "Bài viết giới thiệu tiện ích đã được lưu. Click để sửa bài viết" : "",
                         thumbnail: thumbnailURL ? "is valid" : "",
                         images: !_.isEmpty(imagesURLEdit) ? "is valid" : ""
                     }}
@@ -219,7 +236,7 @@ const SaveHouse = () => {
                         if (actions && actions.touched.district)
                             setDistrictName(actions.values.district);
                     }}
-                    validationSchema={addHouseSchema}
+                    validationSchema={saveHouseSchema}
                     validateOnBlur={true}
                     validateOnChange={true}
                     onSubmit={values => {
@@ -230,14 +247,14 @@ const SaveHouse = () => {
                             <div className="row">
                                 <h2 className="text-center text-uppercase mb-5">{houseId ? "Sửa đổi thông tin nhà" : "Thêm nhà mới"}</h2>
                                 <div className="mb-3 col-4">
-                                    <label htmlFor="name" className="form-label">Tên nhà:</label>
-                                    <Field type="text" className="form-control" id="name" placeholder="Tên nhà"
+                                    <label htmlFor="name" className="form-label">Tên nhà</label>
+                                    <Field type="text" className="form-control" id="name" placeholder="Nhập tên nhà"
                                            name="name"/>
                                     <ErrorMessage name="name" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="mb-3 col-4">
-                                    <label htmlFor="bedroom" className="form-label">Số phòng ngủ:</label>
+                                    <label htmlFor="bedroom" className="form-label">Số phòng ngủ</label>
                                     <Field as="select" className="form-select" name="bedroom">
                                         <option value="">---Vui lòng chọn---</option>
                                         {Array.from({length: 10}, (v, i) => (
@@ -248,7 +265,7 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="mb-3 col-4">
-                                    <label htmlFor="bathroom" className="form-label">Số phòng tắm:</label>
+                                    <label htmlFor="bathroom" className="form-label">Số phòng tắm</label>
                                     <Field as="select" className="form-select" name="bathroom">
                                         <option value="">---Vui lòng chọn---</option>
                                         <option value="1">1</option>
@@ -259,8 +276,9 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="col-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="province">Tỉnh/Thành
-                                        phố:</label>
+                                    <label className="form-label" htmlFor="province">
+                                        Tỉnh/Thành phố
+                                    </label>
                                     <Field as="select" className="form-select" id="province" name="province">
                                         <option value="">---Chọn Tỉnh/Thành phố---</option>
                                         {!_.isEmpty(provinces) && provinces.map(province => (
@@ -274,7 +292,7 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="col-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="district">Quận/Huyện:</label>
+                                    <label className="form-label" htmlFor="district">Quận/Huyện</label>
                                     <Field as="select" className="form-select" id="district" name="district">
                                         <option value="">---Chọn Quận/Huyện---</option>
                                         {!_.isEmpty(districts) && districts.map(district => (
@@ -288,7 +306,7 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="col-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="ward">Phường/Xã:</label>
+                                    <label className="form-label" htmlFor="ward">Phường/Xã</label>
                                     <Field as="select" className="form-select" id="ward" name="ward">
                                         <option value="">---Chọn Phường/Xã---</option>
                                         {!_.isEmpty(wards) && wards.map(ward => (
@@ -301,42 +319,44 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="houseNumber">Địa chỉ thêm:</label>
+                                    <label className="form-label" htmlFor="houseNumber">Địa chỉ chi tiết</label>
                                     <Field className="form-control" id="houseNumber" type="text" name="houseNumber"
-                                           placeholder="Số nhà"/>
-                                    <ErrorMessage name="province" className="text-danger" component="small"/>
+                                           placeholder="Nhập địa chỉ chi tiết"/>
+                                    <ErrorMessage name="houseNumber" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="newPrice">Giá tiền mới (VNĐ/ngày):</label>
-                                    <Field className="form-control" id="newPrice" type="number" name="newPrice"
-                                           placeholder="Giá tiền mới"/>
-                                    <ErrorMessage name="newPrice" className="text-danger" component="small"/>
+                                    <label className="form-label" htmlFor="price">Giá tiền (VNĐ/ngày)</label>
+                                    <Field className="form-control" id="price" type="number" name="price"
+                                           placeholder="Nhập giá tiền"/>
+                                    <ErrorMessage name="price" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="oldPrice">Giá tiền cũ (VNĐ/ngày):</label>
-                                    <Field className="form-control" id="oldPrice" type="number" name="oldPrice"
-                                           placeholder="Giá tiền cũ"/>
-                                    <ErrorMessage name="oldPrice" className="text-danger" component="small"/>
+                                    <label className="form-label" htmlFor="oldPrice">Giảm giá (%)</label>
+                                    <Field className="form-control" id="sale" type="number" name="sale"
+                                           placeholder="Nhập % giảm giá"/>
+                                    <ErrorMessage name="sale" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    <label htmlFor="description" className="form-label">Mô tả:</label>
-                                    <Field as="textarea" type="text" className="form-control" id="description"
-                                           name="description" placeholder="Mô tả" onClick={handleShowDescription}/>
+                                    <label htmlFor="description" className="form-label">Mô tả</label>
+                                    <Field as="textarea" type="text" className="form-control" id="description" readOnly
+                                           name="description" placeholder="Click để viết bài mô tả"
+                                           onClick={handleShowDescription}/>
                                     <ErrorMessage name="description" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    <label htmlFor="facility" className="form-label">Tiện ích:</label>
-                                    <Field as="textarea" type="text" className="form-control" id="facility"
-                                           name="facility" placeholder="Tiện ích" onClick={handleShowFacility}/>
+                                    <label htmlFor="facility" className="form-label">Tiện ích</label>
+                                    <Field as="textarea" type="text" className="form-control" id="facility" readOnly
+                                           name="facility" placeholder="Click để viết bài giới thiệu các tiện ích"
+                                           onClick={handleShowFacility}/>
                                     <ErrorMessage name="facility" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    <label htmlFor="thumbnail" className="form-label">Ảnh đại diện:</label>
+                                    <label htmlFor="thumbnail" className="form-label">Ảnh đại diện</label>
                                     <input type="file" className="form-control" id="thumbnail" name="thumbnail"
                                            ref={thumbnailRef}
                                            onChange={(event) => handleThumbnailFile(event, values)}/>
@@ -344,7 +364,7 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    <label htmlFor="images" className="form-label">Ảnh thêm:</label>
+                                    <label htmlFor="images" className="form-label">Ảnh thêm</label>
                                     <input type="file" className="form-control" id="images" name="images"
                                            multiple={true}
                                            onChange={(event) => handleImagesFile(event, values)} ref={imagesRef}/>
@@ -373,9 +393,14 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="text-center my-3">
-                                    <button type="submit" className="btn btn-primary">
+                                    <button type="submit" className="btn btn-lg btn-primary me-3"
+                                            style={{minWidth: '120px'}}>
                                         {houseId ? "Cập nhật" : "Thêm nhà"}
                                     </button>
+                                    <Link to="/profile/houses-owner" className="btn btn-lg btn-secondary"
+                                    style={{minWidth: '120px'}}>
+                                        Hủy
+                                    </Link>
                                 </div>
                             </div>
 
@@ -387,7 +412,8 @@ const SaveHouse = () => {
                                 centered
                             >
                                 <TinyMCE editorRef={editorRef} handleSaveTinyMCE={handleSaveTinyMCE}
-                                         values={values} isDescription={isDescription}/>
+                                         description={description} isDescription={isDescription}
+                                         facility={facility} values={values} handleClose={handleClose}/>
                             </Modal>
                         </Form>
                     )}

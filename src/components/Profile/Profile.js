@@ -8,6 +8,10 @@ import './profile.scss';
 const Profile = () => {
 
     const account = useSelector(state => state.account);
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    })
 
     return (
         <div className="container-fluid">
@@ -15,7 +19,6 @@ const Profile = () => {
                 {!_.isEmpty(account) &&
                     <div className="row">
                         <LeftSidebar id={account.id}/>
-
                         <Outlet/>
                     </div>
                 }
