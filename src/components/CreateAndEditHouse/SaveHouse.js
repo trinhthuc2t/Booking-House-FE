@@ -10,7 +10,7 @@ import Swal from 'sweetalert2'
 import ThumbnailItem from "./ThumbnailItem";
 import ImageItem from "./ImageItem";
 import TinyMCE from "./TinyMCE";
-import {useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import {getHouseByIdAndOwnerId} from "../../service/houseService";
 import {getAllImagesByHouseId} from "../../service/imageService";
 import ImageItemEdit from "./ImageItemEdit";
@@ -34,6 +34,7 @@ const SaveHouse = () => {
     const [description, setDescription] = useState("");
     const [facility, setFacility] = useState("");
     const account = useSelector(state => state.account);
+    const navigate = useNavigate();
 
 
     const {houseId} = useParams();
@@ -76,46 +77,41 @@ const SaveHouse = () => {
     };
 
     useEffect(() => {
-        getAllProvinces().then(response => {
-            setProvinces(response.data.data);
-        }).catch(error => {
-            console.log(error)
-        })
+        const callAPI = async () => {
+            const provincesData = await getAllProvinces();
+            await setProvinces(provincesData.data.data);
 
-        if (houseId) {
-            getHouseByIdAndOwnerId(houseId, account.id).then(response => {
-                setHouse(response.data);
-                setDescription(response.data.description);
-                setFacility(response.data.facility);
-                setThumbnailURL(response.data.thumbnail);
-                setProvinceName(response.data.province);
-                setDistrictName(response.data.district);
-            }).catch(error => {
-                console.log(error);
-            })
+            if (houseId) {
+                const imagesHouseData = await getAllImagesByHouseId(houseId);
+                setImagesURLEdit(imagesHouseData.data);
 
-            getAllImagesByHouseId(houseId).then(response => {
-                setImagesURLEdit(response.data);
-            }).catch(error => {
-                console.log(error);
-            })
-        } else {
-            setHouse({
-                name: "",
-                bedroom: "",
-                bathroom: "",
-                province: "",
-                district: "",
-                ward: "",
-                houseNumber: "",
-                price: "",
-                sale: 0,
-                description: "",
-                facility: "",
-                thumbnail: "",
-                images: ""
-            })
+                const houseData = await getHouseByIdAndOwnerId(houseId, account.id);
+                setThumbnailURL(houseData.data.thumbnail);
+                setHouse(houseData.data);
+                setDescription(houseData.data.description);
+                setFacility(houseData.data.facility);
+                setProvinceName(houseData.data.province);
+                setDistrictName(houseData.data.district);
+            } else {
+                setHouse({
+                    name: "",
+                    bedroom: "",
+                    bathroom: "",
+                    province: "",
+                    district: "",
+                    ward: "",
+                    houseNumber: "",
+                    price: "",
+                    sale: 0,
+                    description: "",
+                    facility: "",
+                    thumbnail: "",
+                    images: ""
+                })
+            }
         }
+
+        callAPI();
     }, [])
 
     useEffect(() => {
@@ -181,6 +177,7 @@ const SaveHouse = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                navigate("/profile/houses-owner");
             }).catch(error => {
                 console.log(error);
                 Swal.fire({
@@ -199,6 +196,7 @@ const SaveHouse = () => {
                     showConfirmButton: false,
                     timer: 1500
                 })
+                navigate("/profile/houses-owner");
             }).catch(error => {
                 console.log(error);
                 Swal.fire({
@@ -394,9 +392,14 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="text-center my-3">
-                                    <button type="submit" className="btn btn-lg btn-primary">
+                                    <button type="submit" className="btn btn-lg btn-primary me-3"
+                                            style={{minWidth: '120px'}}>
                                         {houseId ? "Cập nhật" : "Thêm nhà"}
                                     </button>
+                                    <Link to="/profile/houses-owner" className="btn btn-lg btn-secondary"
+                                    style={{minWidth: '120px'}}>
+                                        Hủy
+                                    </Link>
                                 </div>
                             </div>
 
