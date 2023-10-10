@@ -25,6 +25,9 @@ const saveHouseSchema = Yup.object().shape({
         .min(0, 'Giảm giá phải lớn hơn hoặc bằng 0')
         .max(100, 'Giảm giá phải nhỏ hơn hoặc bằng 100')
         .required('Vui lòng không được để trống'),
+    area: Yup.number()
+        .min(1, 'Diện tích phải lớn hơn 0')
+        .required('Vui lòng không được để trống'),
     description: Yup.string()
         .required('Vui lòng không được để trống'),
     facility: Yup.string()
