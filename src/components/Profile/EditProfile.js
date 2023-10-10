@@ -89,17 +89,21 @@ const EditProfile = ({status}) => {
         })
     }
     const handleRegisterOwner = (values) => {
-
+        console.log(values);
         let data = {
             ...values,
             avatar: accountInfo.avatar,
             address: values.address,
+            province: values.province,
+            district: values.district,
+            ward: values.ward,
             frontside: identifyFront,
-            backside: identifyBack
+            backside: identifyBack,
+            account : account,
         };
         console.log(data);
-        AccountService.registerOwner(account.id, data).then((response) => {
-            toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
+        AccountService.registerOwner(data).then((response) => {
+            toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
         }).catch(function (err) {
             console.log(err);

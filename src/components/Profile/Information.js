@@ -32,7 +32,7 @@ const Information = () => {
                         <div className="col-md-12 mb-3">
                             <label className="form-label" htmlFor="address">Địa chỉ:</label>
                             <input type="text" className="form-control" id="address"
-                                   placeholder="Nhập địa chỉ" value={account.address} name="address"
+                                   placeholder="Nhập địa chỉ" value={`${account.address} - ${account.ward} - ${account.district} - ${account.province}`} name="address"
                                    readOnly={true}/>
                         </div>
                         <div className="col-md-12 mb-3">
