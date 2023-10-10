@@ -1,4 +1,6 @@
 import axios from 'axios';
+import instance from "./axiosConfig";
+
 
 const AccountService = {
 
@@ -57,9 +59,21 @@ const AccountService = {
         })
     },
 
-    registerOwner: (id ,account) => {
+    registerOwner:  (data) => {
         return new Promise( (resolve, reject) => {
-            axios.post("http://localhost:8080/api/accounts/registerOwner/" + id , account).then((response) => {
+            instance.post("http://localhost:8080/api/accounts/registerOwner" , data).then((response) => {
+                resolve(response.data);
+            }).catch(function (err) {
+                alert(err);
+                console.log(err);
+                reject(err);
+            })
+        })
+    },
+
+    getOwner : (idAccount) => {
+        return new Promise( (resolve, reject) => {
+            axios.get("http://localhost:8080/api/accounts/getByAccount/" + idAccount ).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 console.log(err);
