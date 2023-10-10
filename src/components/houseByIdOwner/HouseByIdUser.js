@@ -34,9 +34,7 @@ const HouseByIdUser = () => {
                 confirmButtonText: 'Có, thay đổi!'
             }).then((result) => {
                 if (result.isConfirmed) {
-
                     updatedHouse.status = house.status === "Đang sửa" ? "Đang trống" : "Đang sửa";
-
                     updateStatus(updatedHouse);
                 }
             });
@@ -70,8 +68,6 @@ const HouseByIdUser = () => {
 
 
     const findByOwnerIdAndNameAndStatus = (id, nameSearch, status, currentPage) => {
-        console.log(currentPage + " " + id + " " + nameSearch + " " + status)
-
         houseByIdService.findByOwnerIdAndNameAndStatus(id, nameSearch, status, currentPage)
             .then((houses) => {
                 setHouses(houses.content);
@@ -113,7 +109,6 @@ const HouseByIdUser = () => {
                                         <option value="Đang sửa">Đang sửa</option>
                                     </select>
                                 </div>
-
                                 <div className="col-md-8">
                                     <input type="text" className="form-control border-0" placeholder="Search" name=""
                                            id="" value={nameSearch} onInput={handleNameSearch}/>
@@ -169,11 +164,10 @@ const HouseByIdUser = () => {
                                                 <div className="col-md-2 d-flex justify-content-center align-items-center">
                                                     {house.status === "Đang thuê" ? (
                                                         <select
-                                                            name=""
-                                                            id=""
+                                                            disabled={true}
                                                             className="form-select border-0 btn btn-primary"
                                                             value={house.status}
-                                                            onChange={() => handleStatusChange(house)}
+                                                            onClick={() => handleStatusChange(house)}
                                                         >
                                                             <option value="Đang trống">Đang trống</option>
                                                             <option value="Đang thuê">Đang thuê</option>
@@ -186,8 +180,7 @@ const HouseByIdUser = () => {
                                                             id=""
                                                             className={`form-select border-0 ${house.status === "Đang sửa" ? "btn btn-danger" : "btn btn-warning"}`}
                                                             value={house.status}
-                                                            onChange={() => handleStatusChange(house)}
-                                                        >
+                                                            onChange={() => handleStatusChange(house)}>
                                                             <option value="Đang trống">Đang trống</option>
                                                             <option value="Đang sửa">Đang sửa</option>
                                                         </select>
