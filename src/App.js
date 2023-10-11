@@ -17,6 +17,9 @@ import ChangePassword from "./account/crud/ChangePassword";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
+import ListBooking from "./components/Booking/ListBooking";
+import Checkin from "./components/Booking/Checkin";
+import Checkout from "./components/Booking/Checkout";
 
 
 function App() {
@@ -26,6 +29,9 @@ function App() {
             {show && <NavbarComponent/>}
             <Routes>
                 <Route path={"/"} element={<HomePage/>}/>
+                <Route path={"/booking/list"} element={<ListBooking/>}/>
+                <Route path={"/booking/checkin/:id"} element={<Checkin/>}/>
+                <Route path={"/booking/checkout/:id"} element={<Checkout/>}/>
                 <Route path={"/register"} element={<Register setShow={setShow}/>}/>
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>
