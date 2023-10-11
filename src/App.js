@@ -6,20 +6,20 @@ import {Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import Register from "./components/Login-Register/register";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
-import Login from "./components/Login-Register/login";
-import ForgotPassword from "./components/Login-Register/forgot-password";
-import HouseByIdUser from "./components/houseByIdOwner/HouseByIdUser";
-import ByOwnerId from "./components/houseByIdOwner/ByOwnerId";
-import ByNameAndStatus from "./components/houseByIdOwner/ByNameAndStatus";
-import Profile from "./account/crud/Profile";
-import EditProfile from "./account/crud/EditProfile";
-import ChangePassword from "./account/crud/ChangePassword";
+import HouseByIdUser from "./components/Profile/houseByIdOwner/HouseByIdUser";
+import Profile from "./components/Profile/Profile";
+import EditProfile from "./components/Profile/EditProfile";
+import ChangePassword from "./components/Profile/ChangePassword";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
 import ListBooking from "./components/Booking/ListBooking";
 import Checkin from "./components/Booking/Checkin";
 import Checkout from "./components/Booking/Checkout";
+import Information from "./components/Profile/Information";
+import Login from "./components/Login-Register/Login";
+import ForgotPassword from "./components/Login-Register/ForgotPassword";
+import Register from "./components/Login-Register/Register";
 
 
 function App() {
@@ -37,16 +37,17 @@ function App() {
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>
                 <Route path={"/forgot"} element={<ForgotPassword/>}/>
                 <Route path="/add" element={<SaveHouse/>}/>
-                <Route path="/edit/:houseId" element={<SaveHouse/>}/>
-                <Route path={"/houses-owner"} element={<HouseByIdUser/>}>
-                    <Route path={"/houses-owner"} element={<ByOwnerId/>}/>
-                    <Route path={"/houses-owner/search/:search"} element={<ByNameAndStatus/>}/>
-                    {/*<Route path={"/edit/:id"} element={}/>*/}
+                <Route path={"/houses-owner"} element={<HouseByIdUser/>}/>
+                <Route path="/add-house" element={<SaveHouse/>}/>
+                <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
+                <Route path={"/houses-owner"} element={<HouseByIdUser/>}/>
+                <Route path={"/profile/"} element={<Profile/>}>
+                    <Route path={"edit-profile"}  element={<EditProfile status={true}/>}/>
+                    <Route path={"register-owner"}  element={<EditProfile status={false}/>}/>
+                    <Route path={"change-password"} element={<ChangePassword/>}/>
+                    <Route path={"information"} element={<Information/>}/>
+                    <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                 </Route>
-                <Route path={"/profile/:id"} element={<Profile/>}/>
-                <Route path={"/editProfile/:id"}  element={<EditProfile status={true}/>}/>
-                <Route path={"/registerOwner/:id"}  element={<EditProfile status={false}/>}/>
-                <Route path={"/changePassword/:id"} element={<ChangePassword/>}/>
             </Routes>
             <Footer/>
             <ToastContainer/>

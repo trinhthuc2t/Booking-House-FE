@@ -1,5 +1,4 @@
-import './register.css'
-import * as Yup from 'yup';
+import './register.scss';
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {Link, useNavigate} from "react-router-dom";
 import LoginRegisterService from "../../service/login-registerService";

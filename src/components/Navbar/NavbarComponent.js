@@ -32,26 +32,26 @@ const Navbar = () => {
                             :
                             <div className="d-flex align-items-center">
                                 <div className="nav-item dropdown">
-                                    <button className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                                        <img className="img-thumbnail rounded-circle me-2" src={account.avatar ? account.avatar : icon_user} alt="" width={40}/>
+                                    <button className="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <img className="img-thumbnail rounded-circle me-2" src={account.avatar ? account.avatar : icon_user} alt=""
+                                             width={40} style={{height: '40px'}}/>
                                         {account.username}
                                     </button>
 
                                     <ul className="dropdown-menu">
                                         <li className="p-1">
-                                            <Link to="/profile" className="dropdown-item nav-link">
+                                            <Link to="/profile/information" className="dropdown-item nav-link">
                                                 <i className="bi bi-person-bounding-box me-2"></i>Trang cá nhân
                                             </Link>
                                         </li>
                                         <li className="p-1">
                                             <Link to="/" className="dropdown-item nav-link" onClick={handleLogout}>
-                                                <i className="bi bi-box-arrow-in-right me-2"></i>Đăng xuất
+                                                <i className="bi bi-power me-2"></i>Đăng xuất
                                             </Link>
                                         </li>
                                     </ul>
                                 </div>
 
-                                {/* Facebook Messenger */}
                                 <div className="nav-item dropdown">
                                     <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                         <i className="bi bi-messenger"></i>
@@ -62,7 +62,6 @@ const Navbar = () => {
                                 </div>
 
 
-                                {/* Thông báo */}
                                 <div className="nav-item dropdown">
                                     <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                         <i className="bi bi-bell-fill"></i>

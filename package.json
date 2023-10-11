@@ -32,6 +32,7 @@
     "sass": "^1.68.0",
     "styled-components": "^5.3.11",
     "sweetalert2": "^11.7.31",
+    "swiper": "^10.3.1",
     "uuid": "^9.0.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.3.2"

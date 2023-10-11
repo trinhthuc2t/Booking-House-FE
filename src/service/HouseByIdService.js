@@ -2,19 +2,6 @@ import axios from 'axios';
 
 const HouseByIdService = {
 
-    getHousesByOwnerId: (ownerId, currentPage) => {
-        return new Promise((resolve, reject) => {
-            axios
-                .get('http://localhost:8080/api/houses/owner/' + ownerId + "?page=" + currentPage )
-                .then(response => {
-                    resolve(response.data);
-                })
-                .catch(function (err) {
-                    reject(err=>console.log(err))
-                });
-        })
-    },
-
     updateStatusHouse: (id, status) => {
         return new Promise((resolve, reject) => {
             axios
@@ -35,7 +22,6 @@ const HouseByIdService = {
                 .get(`http://localhost:8080/api/houses/search?page=${currentPage}&nameSearch=${nameSearch}&province=${formattedProvince}&minPrice=${minPrice}&maxPrice=${maxPrice}`)
                 .then(response => {
                     resolve(response.data);
-                    console.log(response.data);
                 })
                 .catch(function (err) {
                     reject(err => console.log(err));
@@ -43,32 +29,21 @@ const HouseByIdService = {
         });
     },
 
-    findByOwnerIdAndNameContains: (ownerId, name,currentPage) => {
+    findByOwnerIdAndNameAndStatus: (ownerId, name, status, currentPage) => {
         return new Promise((resolve, reject) => {
             axios
-                .get('http://localhost:8080/api/houses/owner/by-name/' + ownerId + "?name=" + name + "&page=" + currentPage)
+                .get(`http://localhost:8080/api/houses/owner/search/${ownerId}?name=${name}&status=${status}&page=${currentPage}`)
                 .then(response => {
                     resolve(response.data);
                 })
                 .catch(function (err) {
-                    reject(err)
+                    console.log(err)
                 });
         })
     },
 
 
-    findByOwnerIdAndStatus: (ownerId, status,currentPage) => {
-        return new Promise((resolve, reject) => {
-            axios
-                .get('http://localhost:8080/api/houses/owner/by-status/' + ownerId + "?status=" + status + "&page=" + currentPage)
-                .then(response => {
-                    resolve(response.data);
-                })
-                .catch(function (err) {
-                    reject(err)
-                });
-        })
-    },
+
 
 };
 

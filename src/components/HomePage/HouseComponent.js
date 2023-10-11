@@ -24,10 +24,14 @@ const HouseComponent = ({houses, totalPages, changePage}) => {
                                         <div className="p-4 pb-0">
                                             <h5 className="mb-2 text-center text-truncate">{house.name}</h5>
                                             <h5 className=" mb-3 color-primary text-center">
-                                                {formatCurrency(house.newPrice)} / ngày
-                                                <del className="text-secondary ms-3 fs-6">
-                                                    {formatCurrency(house.oldPrice)}
-                                                </del>
+                                                {formatCurrency(house.price - house.price * house.sale / 100)} / ngày
+                                                {house.sale ?
+                                                    <del className="text-secondary ms-3 fs-6">
+                                                        {formatCurrency(house.price)}
+                                                    </del>
+                                                    :
+                                                    null
+                                                }
                                             </h5>
                                             <p className="text-truncate">
                                                 <i className="fa fa-map-marker-alt me-2 color-primary"></i>

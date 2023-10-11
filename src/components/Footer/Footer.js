@@ -47,22 +47,22 @@ const Footer = () => {
                             <h5 className="text-white mb-4">Photo Gallery</h5>
                             <div className="row g-2 pt-2">
                                 <div className="col-4">
-                                    <img className="img-fluid rounded bg-light p-1" src="img/house/property-1.jpg" alt=""/>
+                                    <img className="img-fluid rounded bg-light p-1" src={require("../../image/property-1.jpg")} alt=""/>
                                 </div>
                                 <div className="col-4">
-                                    <img className="img-fluid rounded bg-light p-1" src="img/house/property-2.jpg" alt=""/>
+                                    <img className="img-fluid rounded bg-light p-1" src={require("../../image/property-2.jpg")} alt=""/>
                                 </div>
                                 <div className="col-4">
-                                    <img className="img-fluid rounded bg-light p-1" src="img/house/property-3.jpg" alt=""/>
+                                    <img className="img-fluid rounded bg-light p-1" src={require("../../image/property-3.jpg")} alt=""/>
                                 </div>
                                 <div className="col-4">
-                                    <img className="img-fluid rounded bg-light p-1" src="img/house/property-4.jpg" alt=""/>
+                                    <img className="img-fluid rounded bg-light p-1" src={require("../../image/property-4.jpg")} alt=""/>
                                 </div>
                                 <div className="col-4">
-                                    <img className="img-fluid rounded bg-light p-1" src="img/house/property-5.jpg" alt=""/>
+                                    <img className="img-fluid rounded bg-light p-1" src={require("../../image/property-5.jpg")} alt=""/>
                                 </div>
                                 <div className="col-4">
-                                    <img className="img-fluid rounded bg-light p-1" src="img/house/property-6.jpg" alt=""/>
+                                    <img className="img-fluid rounded bg-light p-1" src={require("../../image/property-6.jpg")} alt=""/>
                                 </div>
                             </div>
                         </div>

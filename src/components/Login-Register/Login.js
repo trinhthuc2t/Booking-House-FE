@@ -75,7 +75,7 @@ function Login({setShow}) {
                                                         <Field type={showPassword ? "text" : "password"} id="password"
                                                                name="password"
                                                                placeholder="Mật khẩu"/>
-                                                        <button className="btn bg-white text-muted"
+                                                        <button type="button" className="btn bg-white text-muted"
                                                                 onClick={toggleShowPassword}>
                                                             <span className="far fa-eye-slash"></span>
                                                         </button>
