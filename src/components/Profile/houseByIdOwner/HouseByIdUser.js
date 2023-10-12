@@ -162,7 +162,7 @@ const HouseByIdUser = () => {
                                     {house.status === "Đang thuê" ? (
                                         <select
                                             disabled={true}
-                                            className="form-select border border-primary"
+                                            className="form-select border border-primary text-primary"
                                             value={house.status}
                                             style={{minWidth: '180px'}}
                                             onChange={() => handleStatusChange(house)}
@@ -174,7 +174,7 @@ const HouseByIdUser = () => {
 
                                     ) : (
                                         <select
-                                            className={`form-select border ${house.status === "Đang sửa" ? "border-danger" : "border-warning"}`}
+                                            className={`form-select border ${house.status === "Đang sửa" ? "border-danger text-danger" : "border-warning text-warning"}`}
                                             value={house.status}
                                             onChange={() => handleStatusChange(house)}
                                         >

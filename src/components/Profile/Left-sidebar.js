@@ -1,7 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router-dom";
 
-const LeftSidebar = ({id}) => {
+const LeftSidebar = () => {
     return (
         <div className="col-3 bg-light border-end py-3">
             <aside className="left-sidebar" style={{height: '80vh'}}>
