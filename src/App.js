@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, {useState} from "react";
@@ -28,7 +28,7 @@ function App() {
                 <Route path={"/register"} element={<Register setShow={setShow}/>}/>
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>
-                <Route path={"/forgot"} element={<ForgotPassword/>}/>
+                <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
                 <Route path="/add" element={<SaveHouse/>}/>
                 <Route path={"/houses-owner"} element={<HouseByIdUser/>}/>
                 <Route path="/add-house" element={<SaveHouse/>}/>
@@ -42,7 +42,7 @@ function App() {
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                 </Route>
             </Routes>
-            <Footer/>
+            {show && <Footer/>}
             <ToastContainer/>
         </div>
     );

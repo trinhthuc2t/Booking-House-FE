@@ -113,7 +113,7 @@ const SaveHouse = () => {
             }
         }
 
-        callAPI();
+        callAPI().then();
     }, [])
 
     useEffect(() => {
@@ -373,7 +373,7 @@ const SaveHouse = () => {
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
-                                    <label htmlFor="images" className="form-label">Ảnh thêm</label>
+                                    <label htmlFor="images" className="form-label">Ảnh giới thiệu chi tiết</label>
                                     <input type="file" className="form-control" id="images" name="images"
                                            multiple={true}
                                            onChange={(event) => handleImagesFile(event, values)} ref={imagesRef}/>

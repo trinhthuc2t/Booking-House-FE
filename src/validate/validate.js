@@ -1,5 +1,6 @@
 import * as Yup from "yup";
 import LoginRegisterService from "../service/login-registerService";
+import AccountService from "../service/AccountService";
 
 const saveHouseSchema = Yup.object().shape({
     name: Yup.string()
@@ -56,7 +57,12 @@ const registerSchema = Yup.object({
             let checkUsername = await LoginRegisterService.checkUsername(value);
             return !checkUsername.data;
         }),
-    email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
+    email: Yup.string().email('Email không hợp lệ')
+        .required('Vui lòng nhập email')
+        .test('unique', 'Email đã tồn tại', async (value) => {
+            let checkEmail = await LoginRegisterService.checkEmail(value);
+            return !checkEmail.data;
+        }),
     password: Yup.string()
         .required('Mật khẩu không được bỏ trống')
         .min(5, 'Mật khẩu phải chứa ít nhất 5 kí tự')
@@ -67,6 +73,10 @@ const registerSchema = Yup.object({
     confirmPassword: Yup.string()
         .required('Vui lòng xác nhận lại mật khẩu')
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp')
+});
+
+const forgotPasswordSchema = Yup.object({
+    email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email')
 });
 
 const profileSchema = Yup.object().shape({
@@ -95,4 +105,4 @@ const profileSchema = Yup.object().shape({
         .required('Vui lòng không được để trống')
 });
 
-export {saveHouseSchema, loginSchema, registerSchema, profileSchema};
+export {saveHouseSchema, loginSchema, registerSchema, profileSchema, forgotPasswordSchema};
