@@ -127,7 +127,6 @@ const HouseByIdUser = () => {
                 </thead>
                 <tbody style={{verticalAlign: 'middle'}}>
                 {!_.isEmpty(houses) ? houses.map((house, index) => {
-                        console.log(house)
                         return (
                             <tr key={house.id} align="center">
                                 <td>

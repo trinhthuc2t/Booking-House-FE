@@ -16,10 +16,10 @@ import DatePicker, {registerLocale} from "react-datepicker";
 import {addDays, subDays, format} from 'date-fns';
 import vi from 'date-fns/locale/vi';
 import "react-datepicker/dist/react-datepicker.css";
-import {bookingHouse, getBookingsByHouseId} from "../../service/bookingService";
 import {useSelector} from "react-redux";
 import Swal from "sweetalert2";
 import {CircularProgress} from "@mui/material";
+import BookingService from "../../service/BookingService";
 
 export const HouseDetailContext = createContext();
 
@@ -80,7 +80,7 @@ const HouseDetail = () => {
             console.log(error);
         })
 
-        getBookingsByHouseId(houseId).then(response => {
+        BookingService.getBookingsByHouseId(houseId).then(response => {
             setBookings(response.data);
         }).catch(error => {
             console.log(error);
@@ -143,7 +143,7 @@ const HouseDetail = () => {
             house,
             account: {id: account.id}
         }
-        bookingHouse(data).then(response => {
+        BookingService.bookingHouse(data).then(response => {
             Swal.fire({
                 icon: 'success',
                 title: 'Đặt lịch thành công !',

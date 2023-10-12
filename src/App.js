@@ -17,6 +17,9 @@ import Login from "./components/Login-Register/Login";
 import ForgotPassword from "./components/Login-Register/ForgotPassword";
 import Register from "./components/Login-Register/Register";
 import Statistical from "./components/Profile/statistical/Statistical";
+import RegisterOwner from "./components/Profile/RegisterOwner";
+import ConfirmOwner from "./components/Profile/ConfirmOwner";
+import RentalHistory from "./components/Profile/RentalHistory";
 
 
 function App() {
@@ -35,11 +38,13 @@ function App() {
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>
                     <Route path={"edit-profile"}  element={<EditProfile status={true}/>}/>
-                    <Route path={"register-owner"}  element={<EditProfile status={false}/>}/>
+                    <Route path={"register-owner"}  element={<RegisterOwner />}/>
                     <Route path={"change-password"} element={<ChangePassword/>}/>
                     <Route path={"information"} element={<Information/>}/>
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                     <Route path={"houses-statistical"} element={<Statistical/>}/>
+                    <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
+                    <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
             </Routes>
             {show && <Footer/>}
