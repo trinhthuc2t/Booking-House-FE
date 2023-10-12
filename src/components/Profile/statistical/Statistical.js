@@ -8,10 +8,10 @@ Chart.register(...registerables);
 function MonthlyChart() {
     const currentDate = new Date().toISOString().substring(0, 10);
     const [selectedDate, setSelectedDate] = useState(currentDate);
-    const [month, setMonth] = useState();
-    const [year, setYear] = useState();
-    const [startDay, setStartDay] = useState();
-    const [endDay, setEndDay] = useState();
+    const [month, setMonth] = useState(2023);
+    const [year, setYear] = useState(0);
+    const [startDay, setStartDay] = useState(0);
+    const [endDay, setEndDay] = useState(0);
 
 
     const handleDateChange = (event) => {
@@ -60,7 +60,6 @@ function MonthlyChart() {
         setMonth(parseInt(dateParts[1]))
         setStartDay(parseInt(dateParts[2]))
         setEndDay(startDay+6)
-        console.log(month,year, startDay,endDay)
         getBookingsByOwnerWeek(1, month, year, startDay, endDay);
     }, [month, year,currentDate,startDay,endDay,selectedDate]);
 

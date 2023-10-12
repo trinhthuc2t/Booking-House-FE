@@ -21,6 +21,7 @@ import Register from "./components/Login-Register/Register";
 import Cancel from "./components/Booking/Cancel";
 
 import Statistical from "./components/Profile/statistical/Statistical";
+import SearchBooking from "./components/Profile/searchBooking/SearchBooking";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
                     <Route path={"information"} element={<Information/>}/>
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                     <Route path={"houses-statistical"} element={<Statistical/>}/>
+                    <Route path={"houses-search"} element={<SearchBooking/>}/>
                 </Route>
             </Routes>
             <Footer/>
