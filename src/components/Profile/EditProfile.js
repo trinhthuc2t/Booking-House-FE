@@ -174,7 +174,7 @@ const EditProfile = ({status}) => {
                 <div className="mt-3">
                     <div className="text-center d-flex">
                         <div className={"col-6"}>
-                            <p>Mặt trước CCCD</p>
+                            <p>Mặt trước CCCD<span className={'text-danger'}>(*)</span></p>
                             <form className='identify'
                                   onClick={() => document.querySelector("#frontsideFile").click()}>
                                 <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
@@ -191,7 +191,7 @@ const EditProfile = ({status}) => {
 
                         </div>
                         <div className="col-6">
-                            <p>Mặt sau CCCD</p>
+                            <p>Mặt sau CCCD<span className={'text-danger'}>(*)</span></p>
                             <form className='identify'
                                   onClick={() => document.querySelector("#backsideFile").click()}>
                                 <input type="file" id="backsideFile" name="backside" onChange={(event) => {
@@ -275,6 +275,7 @@ const EditProfile = ({status}) => {
                             <div className="col-md-4">
                                 {/* Select Image*/}
                                 <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
+                                    {status? <p>Ảnh đại diện</p> :  <div><span>Ảnh đại diện</span> <span className={'text-danger'}>(*)</span></div>}
                                     <img className="rounded-circle" width="300px" height="300px"
                                          src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
                                          onChange={handleValueInput}/>
@@ -285,22 +286,22 @@ const EditProfile = ({status}) => {
                                 {handleTitle()}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="lastname">Họ và tên đệm</label>
+                                        <label className="form-label" htmlFor="firstname">Họ <span className={'text-danger'}>(*)</span></label>
                                         <Field type="text" className="form-control" id="firstname"
                                                placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name={'firstname'} className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="lastname">Tên</label>
+                                        <label className="form-label" htmlFor="lastname">Tên đệm và Tên<span className={'text-danger'}>(*)</span></label>
                                         <Field type="text" className="form-control" id="lastname"
-                                               placeholder="Nhập tên" value={accountInfo.lastname}
-                                               name="firstname"
+                                               placeholder="Nhập tên đệm và tên" value={accountInfo.lastname}
+                                               name="lastname"
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name='lastname' className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="email">Email</label>
+                                        <label className="form-label" htmlFor="email">Email<span className={'text-danger'}>(*)</span></label>
                                         <Field type="text" className="form-control" id="email"
                                                placeholder="Nhập Email" value={accountInfo.email} name="email"
                                                onInput={handleValueInput}/>
@@ -308,7 +309,7 @@ const EditProfile = ({status}) => {
                                     </div>
 
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                                        <label className="form-label" htmlFor="phone">Số điện thoại<span className={'text-danger'}>(*)</span></label>
                                         <Field type="text" className="form-control" id="phone"
                                                placeholder="Nhập số điện thoại" value={accountInfo.phone}
                                                name="phone"
@@ -319,7 +320,7 @@ const EditProfile = ({status}) => {
 
                                     <div className="col-6 mb-3">
                                         <label className="form-label" htmlFor="province">
-                                            Tỉnh/thành phố
+                                            Tỉnh/thành phố<span className={'text-danger'}>(*)</span>
                                         </label>
                                         <Field as="select" className="form-select" name="province" id="province">
                                             <option value="">{accountInfo.province}</option>
@@ -334,7 +335,7 @@ const EditProfile = ({status}) => {
                                                       component="small"/>
                                     </div>
                                     <div className="col-6">
-                                        <label className="form-label" htmlFor="district">Quận/Huyện</label>
+                                        <label className="form-label" htmlFor="district">Quận/Huyện<span className={'text-danger'}>(*)</span></label>
                                         <Field as="select" className="form-select" id="district"
                                                name="district">
                                             <option value="">{accountInfo.district}</option>
@@ -349,7 +350,7 @@ const EditProfile = ({status}) => {
                                                       component="small"/>
                                     </div>
                                     <div className="col-6">
-                                        <label className="form-label" htmlFor="ward">Phường/xã</label>
+                                        <label className="form-label" htmlFor="ward">Phường/xã<span className={'text-danger'}>(*)</span></label>
                                         <Field as="select" className="form-select" id="ward"
                                                name="ward">
                                             <option value="">{accountInfo.ward}</option>
@@ -364,7 +365,7 @@ const EditProfile = ({status}) => {
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="address">
-                                            Số nhà
+                                            Địa chỉ chi tiết
                                         </label>
                                         <Field type="text" className="form-control" id="address"
                                                placeholder="Nhập địa chỉ"

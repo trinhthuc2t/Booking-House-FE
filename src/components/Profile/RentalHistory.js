@@ -84,9 +84,9 @@ const RentalHistory = () => {
                         <thead>
                         <tr>
                             <th scope="col">Tên ngôi nhà</th>
-                            <th scope="col">Địa chỉ nhà</th>
-                            <th scope="col">Ngày thuê phòng</th>
-                            <th scope="col">Ngày trả phòng</th>
+                            <th scope="col">Địa chỉ </th>
+                            <th scope="col">Ngày thuê nhà</th>
+                            <th scope="col">Ngày trả nhà</th>
                             <th scope="col">Tổng đơn</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Hành động</th>
