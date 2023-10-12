@@ -31,9 +31,9 @@ function App() {
             {show && <NavbarComponent/>}
             <Routes>
                 <Route path={"/"} element={<HomePage/>}/>
-                <Route path={"/booking/checkin/:id"} element={<Checkin/>}/>
-                <Route path={"/booking/checkout/:id"} element={<Checkout/>}/>
-                <Route path={"/booking/cancel/:id"} element={<Cancel/>}/>
+                <Route path={"/owner/checkin/:id"} element={<Checkin/>}/>
+                <Route path={"/owner/checkout/:id"} element={<Checkout/>}/>
+                <Route path={"/owner/cancel/:id"} element={<Cancel/>}/>
                 <Route path={"/register"} element={<Register setShow={setShow}/>}/>
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>

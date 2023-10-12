@@ -9,7 +9,7 @@ function Checkout(){
         axios.post("http://localhost:8080/api/bookings/checkout/" + id)
             .then((res) => {
                 console.log(res)
-                navigate("/booking/list")
+                navigate("/profile/houses-search")
             })
             .catch(err => {
                 console.log(err)

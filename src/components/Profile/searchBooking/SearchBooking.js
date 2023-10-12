@@ -13,7 +13,6 @@ const SearchBooking = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [bookings, setBookings] = useState([]);
-    const [booking, setBooking] = useState({});
     const account = useSelector(state => state.account);
     const changePage = (e, value) => {
         setCurrentPage(value)
@@ -39,6 +38,42 @@ const SearchBooking = () => {
         //     behavior: "smooth"
         // })
     }, [currentPage, nameSearch])
+    const checkStatusBooking = (bookingCheck) => {
+
+        if (bookingCheck.status === "Chờ nhận phòng") {
+            return (
+                <div className={'d-flex justify-content-between'}>
+                    <div className="btn">
+                        <Link to={"/owner/checkin/" + bookingCheck.id}>
+                            <button className="btn border border-primary text-primary" style={{width: 100}}>Check in
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="btn">
+                        <Link to={"/owner/cancel/" + bookingCheck.id}>
+                            <button className="btn border border-danger text-danger" style={{width: 80}}>Hủy</button>
+                        </Link>
+                    </div>
+                </div>
+            )
+        } else if (bookingCheck.status === "Đã huỷ") {
+            return (
+                <div className="mb-3" style={{color: "red"}}>
+                    <b>{bookingCheck.status}</b>
+                </div>
+            )
+        } else if (bookingCheck.status === "Đang ở") {
+            return (
+                <div className="mb-3">
+                    <Link to={"/owner/checkin/" + bookingCheck.id}>
+                        <button className="btn border border-primary text-primary" style={{width: 100}}>Check out
+                        </button>
+                    </Link>
+                </div>
+            )
+        }
+
+    }
 
 
     return (
@@ -113,25 +148,12 @@ const SearchBooking = () => {
                                         <b>{`${b.account.firstname} ${b.account.lastname}`}</b>
                                     </td>
                                     <td className="mb-3">
-                                        <b>{b.total}</b>
+                                        <b>{formatCurrency(b.total)}</b>
                                     </td>
 
 
-                                    <td className="mb-3" style={{width : '180px'}}>git
-                                        {b.status === "Chờ nhận phòng" ?
-                                            <div className={'d-flex justify-content-between'}>
-                                                <div className="btn" >
-                                                    <button className="btn border border-primary text-primary" style={{width:100}}>Xác nhận</button>
-                                                </div>
-                                                <div className="btn" >
-                                                    <button className="btn border border-danger text-danger" style={{width:80}}>Hủy</button>
-                                                </div>
-                                            </div>
-
-                                            : <div className="mb-3" style={{color: b.status === "Đã hủy" ? "red" : "blue"}}>
-                                                <b>{b.status}</b>
-                                            </div>}
-
+                                    <td className="mb-3" style={{width: '180px'}}>
+                                        {checkStatusBooking(b)}
                                     </td>
                                 </tr>
                             )
@@ -152,8 +174,9 @@ const SearchBooking = () => {
                     null
                 }
             </div>
-
         </div>
+
+
     );
 };
 
