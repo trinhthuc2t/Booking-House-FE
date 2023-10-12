@@ -29,10 +29,8 @@ const saveHouseSchema = Yup.object().shape({
         .min(1, 'Diện tích phải lớn hơn 0')
         .required('Vui lòng không được để trống'),
     description: Yup.string()
-        .min(10, 'Mô tả tối thiểu phải 10 kí tự')
         .required('Vui lòng không được để trống'),
     facility: Yup.string()
-        .min(10, 'Mô tả tối thiểu phải 10 kí tự')
         .required('Vui lòng không được để trống'),
     thumbnail: Yup.string()
         .required('Vui lòng không được để trống'),
@@ -58,7 +56,12 @@ const registerSchema = Yup.object({
             let checkUsername = await LoginRegisterService.checkUsername(value);
             return !checkUsername.data;
         }),
-    email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
+    email: Yup.string().email('Email không hợp lệ')
+        .required('Vui lòng nhập email')
+        .test('unique', 'Email đã tồn tại', async (value) => {
+            let checkEmail = await LoginRegisterService.checkEmail(value);
+            return !checkEmail.data;
+        }),
     password: Yup.string()
         .required('Mật khẩu không được bỏ trống')
         .min(5, 'Mật khẩu phải chứa ít nhất 5 kí tự')
@@ -69,6 +72,10 @@ const registerSchema = Yup.object({
     confirmPassword: Yup.string()
         .required('Vui lòng xác nhận lại mật khẩu')
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp')
+});
+
+const forgotPasswordSchema = Yup.object({
+    email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email')
 });
 
 const profileSchema = Yup.object().shape({
@@ -123,4 +130,4 @@ const changePasswordSchema = Yup.object().shape({
         })
 });
 
-export {saveHouseSchema, loginSchema, registerSchema, profileSchema , changePasswordSchema};
+export {saveHouseSchema, loginSchema, registerSchema, profileSchema, changePasswordSchema, forgotPasswordSchema};

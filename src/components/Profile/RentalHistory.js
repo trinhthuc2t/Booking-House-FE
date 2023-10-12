@@ -5,33 +5,31 @@ import BookingService from "../../service/BookingService";
 import {formatCurrency} from "../../service/format";
 import {Pagination} from "@mui/material";
 import {toast} from "react-toastify";
+import Swal from "sweetalert2";
 
 const RentalHistory = () => {
     const account = useSelector(state => state.account);
     const [rentalList, setRentalList] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [load ,setLoad] = useState(false);
-    const [booking , setBooking] = useState({});
+    const [load, setLoad] = useState(false);
     useEffect(() => {
         getRentalList(account.id, currentPage - 1);
-    }, [currentPage] )
+    }, [currentPage])
 
     useEffect(() => {
         getRentalList(account.id, currentPage - 1);
         setLoad(false);
-    },  [load])
+    }, [load])
     const getRentalList = (id, currentPage) => {
         BookingService.getHistoryByAccount(id, currentPage).then((response) => {
-            console.log(response.data);
-            var result = response.data.content;
+            const result = response.data.content;
 
             for (let i = 0; i < result.length; i++) {
                 result[i].startTime = convertDateFormat(result[i].startTime);
                 result[i].endTime = convertDateFormat(result[i].endTime);
 
             }
-            console.log(new Date().getDate() - result[0].startTime.split('-')[0]);
             setRentalList(result);
             setTotalPages(response.data.totalPages);
         }).catch(function (err) {
@@ -51,11 +49,29 @@ const RentalHistory = () => {
     }
     const cancelBooking = (item) => {
         BookingService.cancelBooking(item.id).then((response) => {
-            console.log(response);
-            toast.success(response, {position: "top-center", autoClose: 2000,});
+            Swal.fire({
+                icon: 'success',
+                title: 'Hủy lịch thuê thành công !',
+                showConfirmButton: false,
+                timer: 1500
+            })
             setLoad(true);
         }).catch(function (err) {
             console.log(err);
+        })
+    }
+
+    const showCancleBookingConfirm = (booking) => {
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn hủy thuê nhà?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cancelBooking(booking);
+            }
         })
     }
 
@@ -73,9 +89,10 @@ const RentalHistory = () => {
 
             }
             return (
-                <button data-bs-toggle="modal" data-bs-target="#exampleModal" className={'btn btn-danger'} onClick={() =>{
-                    setBooking(item);
-                }}>Hủy thuê</button>
+                <button className='btn btn-danger'
+                        onClick={() => showCancleBookingConfirm(item)}>
+                    Hủy thuê
+                </button>
             )
         }*/ /*else if (item.startTime.split('-')[0] - new Date().getDate() > 1 ) {
             return (
@@ -91,14 +108,13 @@ const RentalHistory = () => {
         <div className={'col-9'}>
             {!_.isEmpty(rentalList) &&
                 <div>
-                    <div className={'text-center'}>
-                        <h4>Lịch sử thuê nhà</h4>
-                    </div>
+                    <h3 className="text-uppercase text-center mb-4">Lịch sử thuê nhà</h3>
                     <table className="table">
                         <thead>
-                        <tr>
+                        <tr align="center">
+                            <th scope="col">STT</th>
                             <th scope="col">Tên ngôi nhà</th>
-                            <th scope="col">Địa chỉ </th>
+                            <th scope="col">Địa chỉ</th>
                             <th scope="col">Ngày thuê nhà</th>
                             <th scope="col">Ngày trả nhà</th>
                             <th scope="col">Tổng đơn</th>
@@ -106,16 +122,19 @@ const RentalHistory = () => {
                             <th scope="col">Hành động</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        {rentalList.map((item, ind) => {
+                        <tbody style={{verticalAlign: 'middle'}}>
+                        {rentalList.map((item, index) => {
                             return (
-                                <tr key={ind}>
-                                    <th scope="row">{item.house?.name}</th>
+                                <tr key={item.id} align="center">
+                                    <th style={{width: '40px'}}>{index + 1}</th>
+                                    <th>{item.house?.name}</th>
                                     <td>{item.house?.province}</td>
                                     <td>{item.startTime}</td>
                                     <td>{item.endTime}</td>
                                     <td>{formatCurrency(item.total)}</td>
-                                    <td>{item.status === "Đã hủy" ? <span className={'text-danger'}>{item.status}</span> : <span >{item.status}</span>}</td>
+                                    <td>{item.status === "Đã hủy" ?
+                                        <span className={'text-danger'}>{item.status}</span> :
+                                        <span>{item.status}</span>}</td>
                                     <td>
                                         {checkBookingStatus(item)}
                                     </td>
@@ -132,27 +151,6 @@ const RentalHistory = () => {
                 </div>
 
             }
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="exampleModalLabel">Xác nhận hủy thuê nhà</h1>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                           <p style={{color : "red"}}>Bạn chắc chắn muốn hủy thuê nhà</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
-                                cancelBooking(booking);
-                            }}>Xác nhận hủy</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     )

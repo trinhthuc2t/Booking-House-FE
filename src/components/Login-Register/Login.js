@@ -91,7 +91,7 @@ function Login({setShow}) {
                                                     <label htmlFor="remember" className="text-muted">
                                                         Ghi nhớ đăng nhập
                                                     </label>
-                                                    <Link to={"/forgot"} className="forgot ms-4">Quên mật khẩu?</Link>
+                                                    <Link to={"/forgot-password"} className="forgot ms-4">Quên mật khẩu?</Link>
                                                 </div>
 
                                                 <div className="text-center mt-4">
