@@ -3,6 +3,7 @@
 }
 
 .nav-bar {
+  $color-primary: rgb(0, 185, 142);
   background-color: #f1f1f1;
   .navbar-custom {
     font-size: 18px;
@@ -14,7 +15,8 @@
     }
       .nav-link {
         &:hover {
-          color: blue;
+          color: $color-primary;
+          background-color: transparent;
         }
       }
     }
