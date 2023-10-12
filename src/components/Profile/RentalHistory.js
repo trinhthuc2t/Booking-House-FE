@@ -60,15 +60,30 @@ const RentalHistory = () => {
     }
 
     const checkBookingStatus = (item) => {
-        if (item.status === "Đã hủy") {
+
+        var s = item.startTime.getMilliseconds();
+        return <div>
+            {s}
+        </div>
+      /*  if (item.status === "Đã hủy") {
             return null;
-        } else if (item.startTime.split('-')[0] - new Date().getDate() > 1) {
+        }else if(item.startTime.split('-')[2] === new Date().getFullYear()  ) {
+
+            if (item.startTime.split('-')[1] === new Date().getMonth() + 1 ) {
+
+            }
             return (
                 <button data-bs-toggle="modal" data-bs-target="#exampleModal" className={'btn btn-danger'} onClick={() =>{
                     setBooking(item);
                 }}>Hủy thuê</button>
             )
-        }
+        }*/ /*else if (item.startTime.split('-')[0] - new Date().getDate() > 1 ) {
+            return (
+                <button data-bs-toggle="modal" data-bs-target="#exampleModal" className={'btn btn-danger'} onClick={() =>{
+                    setBooking(item);
+                }}>Hủy thuê</button>
+            )
+        }*/
     }
 
 
