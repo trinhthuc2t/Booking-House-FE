@@ -20,6 +20,7 @@ import ForgotPassword from "./components/Login-Register/ForgotPassword";
 import Register from "./components/Login-Register/Register";
 import Cancel from "./components/Booking/Cancel";
 
+import Statistical from "./components/Profile/statistical/Statistical";
 
 
 function App() {
@@ -37,16 +38,15 @@ function App() {
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>
                 <Route path={"/forgot"} element={<ForgotPassword/>}/>
                 <Route path="/add" element={<SaveHouse/>}/>
-                <Route path={"/houses-owner"} element={<HouseByIdUser/>}/>
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
-                <Route path={"/houses-owner"} element={<HouseByIdUser/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>
                     <Route path={"edit-profile"}  element={<EditProfile status={true}/>}/>
                     <Route path={"register-owner"}  element={<EditProfile status={false}/>}/>
                     <Route path={"change-password"} element={<ChangePassword/>}/>
                     <Route path={"information"} element={<Information/>}/>
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
+                    <Route path={"houses-statistical"} element={<Statistical/>}/>
                 </Route>
             </Routes>
             <Footer/>
