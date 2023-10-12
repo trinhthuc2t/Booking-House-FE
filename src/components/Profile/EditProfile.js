@@ -220,7 +220,13 @@ const EditProfile = ({status}) => {
         }
     }
 
-
+    const handleTitle = () => {
+        if (status) {
+            return <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
+        } else {
+            return <h3 className="text-center mb-4 text-uppercase">Đơn đăng ký làm chủ nhà</h3>
+        }
+    }
     return (
         <div className="col-9">
             {!_.isEmpty(accountInfo) &&
@@ -276,7 +282,7 @@ const EditProfile = ({status}) => {
                                 </div>
                             </div>
                             <div className="col-md-8">
-                                <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
+                                {handleTitle()}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="lastname">Họ và tên đệm</label>
