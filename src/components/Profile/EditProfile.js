@@ -17,7 +17,6 @@ import AccountService from "../../service/AccountService";
 const EditProfile = ({status}) => {
 
     const navigate = useNavigate();
-    const {id} = useParams();
     const [accountInfo, setAccountInfo] = useState({});
     const [provinces, setProvinces] = useState([]);
     const [districts, setDistricts] = useState([]);
@@ -26,7 +25,8 @@ const EditProfile = ({status}) => {
     const [districtName, setDistrictName] = useState("");
     const [identifyFront, setIdentifyFront] = useState(null);
     const [identifyBack, setIdentifyBack] = useState(null);
-    const [fileFront, setFileFront] = useState("No selected file");
+    const [fileFront, setFileFront] = useState(null);
+    const [fileBack, setFileBack] = useState(null);
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
 
@@ -52,7 +52,6 @@ const EditProfile = ({status}) => {
             setDistrictName("");
         }
     }, [provinceName])
-
     useEffect(() => {
         if (districtName) {
             const district = districts.find(item => item.DistrictName === districtName);
@@ -70,8 +69,7 @@ const EditProfile = ({status}) => {
 
 
     const handleProfile = (values) => {
-        let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
-        let data = {...values, avatar: accountInfo.avatar, address: address};
+        let data = {...values, avatar: accountInfo.avatar};
         AccountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
@@ -79,40 +77,44 @@ const EditProfile = ({status}) => {
             account.firstname = response.firstname;
             account.lastname = response.lastname;
             account.address = response.address;
+            account.province = response.province;
+            account.district = response.district;
+            account.ward = response.ward;
             account.email = response.email;
             account.phone = response.phone;
             account.avatar = response.avatar;
             dispatch(editAccount(account));
             localStorage.setItem("account", JSON.stringify(account));
+            navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })
     }
     const handleRegisterOwner = (values) => {
-        let address = `${values.address}-${values.ward}-${values.district}-${values.province} `;
+        console.log(values);
         let data = {
             ...values,
-            avatar: accountInfo.avatar,
-            address: address,
+            id: account.id,
             frontside: identifyFront,
-            backside: identifyBack
+            backside: identifyBack,
+            status: "Chờ xác nhận",
+            account: account
         };
         console.log(data);
-        AccountService.registerOwner(id, data).then((response) => {
-            toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
+        AccountService.registerOwner(data).then((response) => {
+            toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
+            navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })
-
     }
     useEffect(() => {
         getAccountById();
     }, []);
     const getAccountById = () => {
-
         AccountService.getAccountById(account.id).then((response) => {
-            setAccountInfo(response)
+            setAccountInfo(response);
         }).catch(function (err) {
             console.log(err);
         })
@@ -142,7 +144,6 @@ const EditProfile = ({status}) => {
         toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
-                console.log(url);
                 toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
                 if (name === "frontside") {
                     setIdentifyFront(url);
@@ -155,9 +156,7 @@ const EditProfile = ({status}) => {
     const handleValueInput = (e) => {
         let {name, value} = e.target;
         setAccountInfo({...accountInfo, [name]: value});
-
     }
-
     const handleProps = () => {
         if (status) {
             return <div className="mt-2 text-center d-flex justify-content-center">
@@ -175,7 +174,7 @@ const EditProfile = ({status}) => {
                 <div className="mt-3">
                     <div className="text-center d-flex">
                         <div className={"col-6"}>
-                            <p>Mặt trước CCCD</p>
+                            <p>Mặt trước CCCD <span className={'text-danger'}>*</span></p>
                             <form className='identify'
                                   onClick={() => document.querySelector("#frontsideFile").click()}>
                                 <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
@@ -188,22 +187,26 @@ const EditProfile = ({status}) => {
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
                             </form>
+                            <span id='frontside-errors' className={'text-danger'}/>
+
                         </div>
                         <div className="col-6">
-                            <p>Mặt sau CCCD</p>
+                            <p>Mặt sau CCCD <span className={'text-danger'}>*</span></p>
                             <form className='identify'
                                   onClick={() => document.querySelector("#backsideFile").click()}>
                                 <input type="file" id="backsideFile" name="backside" onChange={(event) => {
-                                    event.target.files[0] && setFileFront(event.target.files[0].name);
-                                    uploadIdentify(event)
+                                    event.target.files[0] && setFileBack(event.target.files[0].name)
 
+                                    uploadIdentify(event)
                                 }} hidden/>
                                 {identifyBack ?
-                                    <img src={identifyBack} id="backside" width={'100%'} height={'100%'} alt={'img'}/>
+                                    <img src={identifyBack} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
                                     :
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
                             </form>
+                            <span id='backside-errors' className={'text-danger'}/>
+
                         </div>
                     </div>
 
@@ -215,8 +218,14 @@ const EditProfile = ({status}) => {
                 </div>
             )
         }
+    }
 
-
+    const handleTitle = () => {
+        if (status) {
+            return <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
+        } else {
+            return <h3 className="text-center mb-4 text-uppercase">Đơn đăng ký làm chủ nhà</h3>
+        }
     }
     return (
         <div className="col-9">
@@ -224,13 +233,13 @@ const EditProfile = ({status}) => {
                 <Formik initialValues={{
                     firstname: accountInfo.firstname,
                     lastname: accountInfo.lastname,
-                    address: accountInfo.address.split("-")[0],
+                    address: accountInfo.address,
                     email: accountInfo.email,
                     phone: accountInfo.phone,
                     avatar: accountInfo.avatar,
-                    province: accountInfo.address.split("-")[3],
-                    district: accountInfo.address.split("-")[2],
-                    ward: accountInfo.address.split("-")[1],
+                    province: accountInfo.province,
+                    district: accountInfo.district,
+                    ward: accountInfo.ward,
                     frontside: '',
                     backside: ''
                 }}
@@ -247,14 +256,26 @@ const EditProfile = ({status}) => {
                             if (status) {
                                 handleProfile(values);
                             } else {
-                                handleRegisterOwner(values);
+                                if (fileFront && fileBack) {
+                                    handleRegisterOwner(values);
+                                } else if (!fileFront && !fileBack) {
+                                    document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
+                                    document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                } else if (!fileFront) {
+                                    document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
+                                } else if (!fileBack) {
+                                    document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                }
+
                             }
                         }}>
                     {() => (
+
                         <Form className="row">
                             <div className="col-md-4">
                                 {/* Select Image*/}
                                 <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
+                                    {status? <p>Ảnh đại diện</p> :  <div><span>Ảnh đại diện </span> <span className={'text-danger'}>*</span></div>}
                                     <img className="rounded-circle" width="300px" height="300px"
                                          src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
                                          onChange={handleValueInput}/>
@@ -262,25 +283,25 @@ const EditProfile = ({status}) => {
                                 </div>
                             </div>
                             <div className="col-md-8">
-                                <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
+                                {handleTitle()}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="lastname">Họ</label>
-                                        <Field type="text" className="form-control" id="lastname"
-                                               placeholder="Nhập họ" value={accountInfo.lastname} name="lastname"
-                                               onInput={handleValueInput}/>
-                                        <ErrorMessage name={'lastname'} className="text-danger" component="small"/>
-                                    </div>
-                                    <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="firstname">Tên</label>
+                                        <label className="form-label" htmlFor="firstname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
                                         <Field type="text" className="form-control" id="firstname"
-                                               placeholder="Nhập tên" value={accountInfo.firstname}
-                                               name="firstname"
+                                               placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
                                                onInput={handleValueInput}/>
-                                        <ErrorMessage name='firstname' className="text-danger" component="small"/>
+                                        <ErrorMessage name={'firstname'} className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="email">Email</label>
+                                        <label className="form-label" htmlFor="lastname">Tên <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="lastname"
+                                               placeholder="Nhập tên đệm và tên" value={accountInfo.lastname}
+                                               name="lastname"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='lastname' className="text-danger" component="small"/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="email">Email <span className={'text-danger'}>*</span></label>
                                         <Field type="text" className="form-control" id="email"
                                                placeholder="Nhập Email" value={accountInfo.email} name="email"
                                                onInput={handleValueInput}/>
@@ -288,7 +309,7 @@ const EditProfile = ({status}) => {
                                     </div>
 
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                                        <label className="form-label" htmlFor="phone">Số điện thoại <span className={'text-danger'}>*</span></label>
                                         <Field type="text" className="form-control" id="phone"
                                                placeholder="Nhập số điện thoại" value={accountInfo.phone}
                                                name="phone"
@@ -299,12 +320,10 @@ const EditProfile = ({status}) => {
 
                                     <div className="col-6 mb-3">
                                         <label className="form-label" htmlFor="province">
-                                            Tỉnh/thành phố
+                                            Tỉnh/thành phố <span className={'text-danger'}>*</span>
                                         </label>
-                                        <Field as="select" className="form-select" name="province"
-                                               id="province">
-                                            <option
-                                                value="">{accountInfo.address.split("-")[3]}</option>
+                                        <Field as="select" className="form-select" name="province" id="province">
+                                            <option value="">{accountInfo.province}</option>
                                             {!_.isEmpty(provinces) && provinces.map(province => (
                                                 <option key={province.ProvinceID}
                                                         value={province.ProvinceName}>
@@ -316,11 +335,10 @@ const EditProfile = ({status}) => {
                                                       component="small"/>
                                     </div>
                                     <div className="col-6">
-                                        <label className="form-label" htmlFor="district">Quận/Huyện</label>
+                                        <label className="form-label" htmlFor="district">Quận/Huyện <span className={'text-danger'}>*</span></label>
                                         <Field as="select" className="form-select" id="district"
                                                name="district">
-                                            <option
-                                                value="">{accountInfo.address.split("-")[2]}</option>
+                                            <option value="">{accountInfo.district}</option>
                                             {!_.isEmpty(districts) && districts.map(district => (
                                                 <option key={district.DistrictID}
                                                         value={district.DistrictName}>
@@ -332,11 +350,10 @@ const EditProfile = ({status}) => {
                                                       component="small"/>
                                     </div>
                                     <div className="col-6">
-                                        <label className="form-label" htmlFor="ward">Phường/xã</label>
+                                        <label className="form-label" htmlFor="ward">Phường/xã <span className={'text-danger'}>*</span></label>
                                         <Field as="select" className="form-select" id="ward"
                                                name="ward">
-                                            <option
-                                                value="">{accountInfo.address.split("-")[1]}</option>
+                                            <option value="">{accountInfo.ward}</option>
                                             {!_.isEmpty(wards) && wards.map(ward => (
                                                 <option key={ward.WardCode} value={ward.WardName}>
                                                     {ward.WardName}
@@ -348,11 +365,11 @@ const EditProfile = ({status}) => {
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="address">
-                                            Số nhà
+                                            Địa chỉ chi tiết
                                         </label>
                                         <Field type="text" className="form-control" id="address"
                                                placeholder="Nhập địa chỉ"
-                                               value={accountInfo.address.split("-")[0]}
+                                               value={accountInfo.address}
                                                name="address"
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name='address' className="text-danger"

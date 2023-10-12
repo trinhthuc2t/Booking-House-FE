@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import bookingsService from "../../../service/BookingsService";
 import {Line} from "react-chartjs-2";
 import {CategoryScale, Chart, registerables} from 'chart.js';
+import BookingService from "../../../service/BookingService";
 Chart.register(CategoryScale);
 Chart.register(...registerables);
 
@@ -41,7 +41,7 @@ function MonthlyChart() {
     };
 
     const getBookingsByOwnerWeek = (id, month, year, startDay, EndDay) => {
-        bookingsService.getBookingsByOwnerWeek(id, month, year, startDay, EndDay).then((response) => {
+        BookingService.getBookingsByOwnerWeek(id, month, year, startDay, EndDay).then((response) => {
             const newDataset = [...chartData.datasets];
             newDataset[0].data = response
             setChartData({

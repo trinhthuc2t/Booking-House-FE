@@ -56,7 +56,12 @@ const registerSchema = Yup.object({
             let checkUsername = await LoginRegisterService.checkUsername(value);
             return !checkUsername.data;
         }),
-    email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email'),
+    email: Yup.string().email('Email không hợp lệ')
+        .required('Vui lòng nhập email')
+        .test('unique', 'Email đã tồn tại', async (value) => {
+            let checkEmail = await LoginRegisterService.checkEmail(value);
+            return !checkEmail.data;
+        }),
     password: Yup.string()
         .required('Mật khẩu không được bỏ trống')
         .min(5, 'Mật khẩu phải chứa ít nhất 5 kí tự')
@@ -67,6 +72,10 @@ const registerSchema = Yup.object({
     confirmPassword: Yup.string()
         .required('Vui lòng xác nhận lại mật khẩu')
         .oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp')
+});
+
+const forgotPasswordSchema = Yup.object({
+    email: Yup.string().email('Email không hợp lệ').required('Vui lòng nhập email')
 });
 
 const profileSchema = Yup.object().shape({
@@ -92,7 +101,33 @@ const profileSchema = Yup.object().shape({
     district: Yup.string()
         .required('Vui lòng không được để trống'),
     ward: Yup.string()
-        .required('Vui lòng không được để trống')
+        .required('Vui lòng không được để trống'),
+});
+const blankRegex = /[\s]/
+const changePasswordSchema = Yup.object().shape({
+
+    newPassword: Yup.string()
+        .min(6, "Mật khẩu có độ dài 5-18 ký tự!")
+        .max(18, "Mật khẩu có độ dài 5-18 ký tự!")
+        .matches(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/,
+            'Mật khẩu phải chứa chữ cái viết hoa, viết thường và ký tự số'
+        )
+        .required("Mật khẩu không được để trống")
+        .test('no-whitespance', "Mật không để trống hoặc chứa dấu cách", function (value) {
+            return !blankRegex.test(value);
+        }),
+    confirmNewPassword: Yup.string()
+        .min(5, "Mật khẩu có độ dài 6-18 ký tự!")
+        .max(18, "Mật khẩu có độ dài 6-18 ký tự!")
+        .matches(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/,
+            'Mật khẩu phải chứa chữ cái viết hoa, viết thường và ký tự số'
+        )
+        .required("Mật khẩu không được để trống")
+        .test('no-whitespance', "Mật không để trống hoặc chứa dấu cách", function (value) {
+            return !blankRegex.test(value);
+        })
 });
 
-export {saveHouseSchema, loginSchema, registerSchema, profileSchema};
+export {saveHouseSchema, loginSchema, registerSchema, profileSchema, changePasswordSchema, forgotPasswordSchema};
