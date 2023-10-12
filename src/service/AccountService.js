@@ -45,10 +45,6 @@ const AccountService = {
         })
     },
 
-    checkToken: (token) => {
-            return axios.get("http://localhost:8080/api/forgot/check-token?token=" + token);
-    },
-
     changePassWord: (account) => {
         return new Promise( (resolve, reject) => {
             instance.put("/api/accounts/changePassword/" + account.id , account).then((response) => {
