@@ -66,7 +66,6 @@ const RentalHistory = () => {
             return (
                 <button data-bs-toggle="modal" data-bs-target="#exampleModal" className={'btn btn-danger'} onClick={() =>{
                     setBooking(item);
-                    /*cancelBooking(item);*/
                 }}>Hủy thuê</button>
             )
         }
@@ -101,7 +100,7 @@ const RentalHistory = () => {
                                     <td>{item.startTime}</td>
                                     <td>{item.endTime}</td>
                                     <td>{formatCurrency(item.total)}</td>
-                                    <td>{item.status}</td>
+                                    <td>{item.status === "Đã hủy" ? <span className={'text-danger'}>{item.status}</span> : <span >{item.status}</span>}</td>
                                     <td>
                                         {checkBookingStatus(item)}
                                     </td>
@@ -123,7 +122,7 @@ const RentalHistory = () => {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            {/*<h1 className="modal-title fs-5" id="exampleModalLabel">Modal title</h1>*/}
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Xác nhận hủy thuê nhà</h1>
                             <button type="button" className="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                         </div>

@@ -70,19 +70,20 @@ const ChangePassword = () => {
                                 <Form>
                                     <div className="form-outline mb-4">
                                         <div>
-                                            <label className="form-label" htmlFor="password">Mật khẩu cũ:</label>
+                                            <label className="form-label" htmlFor="password">Mật khẩu cũ <span className={'text-danger'}>(*)</span></label>
                                         </div>
                                         <Field type="text" id="password" name="password"
                                                className="form-control form-control"
-                                               placeholder="Nhập mật khẩu cũ"
+                                               placeholder="Nhập mật khẩu hiện tại"
                                                onInput={(event) => {
                                                    setAccountInfor({...accountInfor, password: event.target.value})
                                                }}/>
+
                                     </div>
                                     <div className="form-outline mb-4">
                                         <div>
                                             <label className="form-label" htmlFor="newPassword">
-                                                Mật khẩu mới:
+                                                Mật khẩu mới <span className={'text-danger'}>(*)</span>
                                             </label>
                                         </div>
                                         <Field type="password" id="newPassword" name="newPassword"
@@ -91,16 +92,18 @@ const ChangePassword = () => {
                                         <span style={{color: 'red'}}>
                                                         <ErrorMessage name={'newPassword'}></ErrorMessage>
                                                     </span>
+                                        <div style={{color : 'grey'}}>Mật khẩu mới có dạng Abc123</div>
+
                                     </div>
                                     <div className="form-outline mb-4">
                                         <div>
                                             <label className="form-label" htmlFor="confirmNewPassword">
-                                                Xác nhận mật khẩu mới:
+                                                Xác nhận mật khẩu mới <span className={'text-danger'}>(*)</span>
                                             </label>
                                         </div>
                                         <Field type="password" id="confirmNewPassword"
                                                name="confirmNewPassword"
-                                               placeholder="Xác nhận lại mật khẩu"
+                                               placeholder="Xác nhận lại mật khẩu mới"
                                                className="form-control form-control"/>
                                         <span style={{color: 'red'}}>
                                                         <ErrorMessage name={'confirmNewPassword'}></ErrorMessage>
