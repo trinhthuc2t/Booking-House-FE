@@ -1,7 +1,7 @@
 import React from 'react';
 import {Outlet} from "react-router-dom";
 import _ from 'lodash';
-import LeftSidebar from "./LeftSidebar";
+import LeftSidebar from "./Left-sidebar";
 import {useSelector} from "react-redux";
 import './profile.scss';
 
