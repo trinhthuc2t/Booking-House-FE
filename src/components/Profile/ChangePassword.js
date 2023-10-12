@@ -1,31 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {ErrorMessage, Field, Form, Formik} from "formik";
-import * as Yup from "yup";
+
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from 'react-toastify';
 import AccountService from "../../service/AccountService";
 import {useSelector} from "react-redux";
+import {changePasswordSchema} from "../../validate/validate";
 
 const ChangePassword = () => {
 
     const navigate = useNavigate();
-    const blankRegex = /[\s]/
-    const validateSchema = Yup.object().shape({
-        newPassword: Yup.string()
-            .min(6, "Mật khẩu có độ dài 6-18 ký tự!")
-            .max(18, "Mật khẩu có độ dài 6-18 ký tự!")
-            .required("Mật khẩu không được để trống")
-            .test('no-whitespance', "Mật không để trống hoặc chứa dấu cách", function (value) {
-                return !blankRegex.test(value);
-            }),
-        confirmNewPassword: Yup.string()
-            .min(6, "Mật khẩu có độ dài 6-18 ký tự!")
-            .max(18, "Mật khẩu có độ dài 6-18 ký tự!")
-            .required("Mật khẩu không được để trống")
-            .test('no-whitespance', "Mật không để trống hoặc chứa dấu cách", function (value) {
-                return !blankRegex.test(value);
-            })
-    });
+
+
     const account = useSelector(state => state.account);
     const [accountInfor, setAccountInfor] = useState({});
 
@@ -61,7 +47,7 @@ const ChangePassword = () => {
     const editPassword = (account) => {
         AccountService.changePassWord(account).then((response) => {
             toast.success("Thay đổi mật khẩu thành công", {position: "top-center", autoClose: 1000,});
-            navigate("/profile");
+            navigate("/profile/information ");
         });
     }
     return (
@@ -77,7 +63,7 @@ const ChangePassword = () => {
                                 newPassword: '',
                                 confirmNewPassword: ''
                             }}
-                                    validationSchema={validateSchema}
+                                    validationSchema={changePasswordSchema}
                                     onSubmit={(values) => {
                                         handleChangePassword(values);
                                     }}>

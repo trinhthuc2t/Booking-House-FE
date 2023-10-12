@@ -92,5 +92,31 @@ const profileSchema = Yup.object().shape({
     ward: Yup.string()
         .required('Vui lòng không được để trống'),
 });
+const blankRegex = /[\s]/
+const changePasswordSchema = Yup.object().shape({
 
-export {addHouseSchema, loginSchema, registerSchema, profileSchema};
+    newPassword: Yup.string()
+        .min(6, "Mật khẩu có độ dài 5-18 ký tự!")
+        .max(18, "Mật khẩu có độ dài 5-18 ký tự!")
+        .matches(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/,
+            'Mật khẩu phải chứa chữ cái viết hoa, viết thường và ký tự số'
+        )
+        .required("Mật khẩu không được để trống")
+        .test('no-whitespance', "Mật không để trống hoặc chứa dấu cách", function (value) {
+            return !blankRegex.test(value);
+        }),
+    confirmNewPassword: Yup.string()
+        .min(5, "Mật khẩu có độ dài 6-18 ký tự!")
+        .max(18, "Mật khẩu có độ dài 6-18 ký tự!")
+        .matches(
+            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/,
+            'Mật khẩu phải chứa chữ cái viết hoa, viết thường và ký tự số'
+        )
+        .required("Mật khẩu không được để trống")
+        .test('no-whitespance', "Mật không để trống hoặc chứa dấu cách", function (value) {
+            return !blankRegex.test(value);
+        })
+});
+
+export {addHouseSchema, loginSchema, registerSchema, profileSchema ,changePasswordSchema};
