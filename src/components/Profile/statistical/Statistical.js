@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import bookingsService from "../../../service/BookingsService";
 import {Line} from "react-chartjs-2";
 import {CategoryScale, Chart, registerables} from 'chart.js';
-
 Chart.register(CategoryScale);
 Chart.register(...registerables);
 
@@ -62,7 +61,6 @@ function MonthlyChart() {
         setStartDay(parseInt(dateParts[2]))
         setEndDay(startDay+6)
         console.log(month,year, startDay,endDay)
-        // getBookingsByOwner(1, year);
         getBookingsByOwnerWeek(1, month, year, startDay, endDay);
     }, [month, year,currentDate,startDay,endDay,selectedDate]);
 
