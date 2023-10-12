@@ -104,6 +104,7 @@ const SaveHouse = () => {
                     houseNumber: "",
                     price: "",
                     sale: 0,
+                    area: "",
                     description: "",
                     facility: "",
                     thumbnail: "",
@@ -224,6 +225,7 @@ const SaveHouse = () => {
                         houseNumber: house.houseNumber,
                         price: house.price,
                         sale: house.sale,
+                        area: house.area,
                         description: house.description ? "Bài viết mô tả đã được lưu. Click để sửa bài viết" : "",
                         facility: house.facility ? "Bài viết giới thiệu tiện ích đã được lưu. Click để sửa bài viết" : "",
                         thumbnail: thumbnailURL ? "is valid" : "",
@@ -318,25 +320,32 @@ const SaveHouse = () => {
                                     <ErrorMessage name="ward" className="text-danger" component="small"/>
                                 </div>
 
-                                <div className="col-md-4 form-group mb-3">
+                                <div className="col-md-3 form-group mb-3">
                                     <label className="form-label" htmlFor="houseNumber">Địa chỉ chi tiết</label>
                                     <Field className="form-control" id="houseNumber" type="text" name="houseNumber"
                                            placeholder="Nhập địa chỉ chi tiết"/>
                                     <ErrorMessage name="houseNumber" className="text-danger" component="small"/>
                                 </div>
 
-                                <div className="col-md-4 form-group mb-3">
+                                <div className="col-md-3 form-group mb-3">
                                     <label className="form-label" htmlFor="price">Giá tiền (VNĐ/ngày)</label>
                                     <Field className="form-control" id="price" type="number" name="price"
                                            placeholder="Nhập giá tiền"/>
                                     <ErrorMessage name="price" className="text-danger" component="small"/>
                                 </div>
 
-                                <div className="col-md-4 form-group mb-3">
-                                    <label className="form-label" htmlFor="oldPrice">Giảm giá (%)</label>
+                                <div className="col-md-3 form-group mb-3">
+                                    <label className="form-label" htmlFor="sale">Giảm giá (%)</label>
                                     <Field className="form-control" id="sale" type="number" name="sale"
                                            placeholder="Nhập % giảm giá"/>
                                     <ErrorMessage name="sale" className="text-danger" component="small"/>
+                                </div>
+
+                                <div className="col-md-3 form-group mb-3">
+                                    <label className="form-label" htmlFor="area">Diện tích (m2)</label>
+                                    <Field className="form-control" id="area" type="number" name="area"
+                                           placeholder="Nhập diện tích"/>
+                                    <ErrorMessage name="area" className="text-danger" component="small"/>
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">
