@@ -91,10 +91,6 @@ const profileSchema = Yup.object().shape({
         .required('Vui lòng không được để trống'),
     ward: Yup.string()
         .required('Vui lòng không được để trống'),
-   /* frontside : Yup.string()
-        .required("Vui lòng chọn ảnh"),
-    backside : Yup.string()
-        .required("Vui lòng chọn ảnh")*/
 });
 
 export {addHouseSchema, loginSchema, registerSchema, profileSchema};

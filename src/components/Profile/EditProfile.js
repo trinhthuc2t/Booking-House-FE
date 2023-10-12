@@ -25,7 +25,8 @@ const EditProfile = ({status}) => {
     const [districtName, setDistrictName] = useState("");
     const [identifyFront, setIdentifyFront] = useState(null);
     const [identifyBack, setIdentifyBack] = useState(null);
-    const [fileFront, setFileFront] = useState("No selected file");
+    const [fileFront, setFileFront] = useState(null);
+    const [fileBack, setFileBack] = useState(null);
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
 
@@ -103,7 +104,7 @@ const EditProfile = ({status}) => {
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
-            navigate('/profile');
+            navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })
@@ -143,7 +144,6 @@ const EditProfile = ({status}) => {
         toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
-                console.log(url);
                 toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
                 if (name === "frontside") {
                     setIdentifyFront(url);
@@ -187,24 +187,26 @@ const EditProfile = ({status}) => {
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
                             </form>
-                            <ErrorMessage name={'frontside'} className="text-danger" component="small"/>
+                            <span id='frontside-errors' className={'text-danger'}/>
+
                         </div>
                         <div className="col-6">
                             <p>Mặt sau CCCD</p>
                             <form className='identify'
                                   onClick={() => document.querySelector("#backsideFile").click()}>
                                 <input type="file" id="backsideFile" name="backside" onChange={(event) => {
-                                    event.target.files[0] && setFileFront(event.target.files[0].name);
-                                    uploadIdentify(event)
+                                    event.target.files[0] && setFileBack(event.target.files[0].name)
 
+                                    uploadIdentify(event)
                                 }} hidden/>
                                 {identifyBack ?
-                                    <img src={identifyBack} id="backside" width={'100%'} height={'100%'} alt={'img'}/>
+                                    <img src={identifyBack} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
                                     :
                                     <MdCloudUpload color={"#1475cf"} size={60}></MdCloudUpload>
                                 }
                             </form>
-                            <ErrorMessage name={'backside'} className="text-danger" component="small"/>
+                            <span id='backside-errors' className={'text-danger'}/>
+
                         </div>
                     </div>
 
@@ -248,118 +250,128 @@ const EditProfile = ({status}) => {
                             if (status) {
                                 handleProfile(values);
                             } else {
+                                if (fileFront && fileBack) {
                                     handleRegisterOwner(values);
+                                } else if (!fileFront && !fileBack) {
+                                    document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
+                                    document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                } else if (!fileFront) {
+                                    document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
+                                } else if (!fileBack) {
+                                    document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                }
+
                             }
                         }}>
                     {() => (
 
-                         <Form className="row">
-                             <div className="col-md-4">
-                                 {/* Select Image*/}
-                                 <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
-                                     <img className="rounded-circle" width="300px" height="300px"
-                                          src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
-                                          onChange={handleValueInput}/>
-                                     <input className="mt-2 form-control" type="file" onChange={selectImage}/>
-                                 </div>
-                             </div>
-                             <div className="col-md-8">
-                                 <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
-                                 <div className="row">
-                                     <div className="col-md-6 mb-3">
-                                         <label className="form-label" htmlFor="lastname">Họ</label>
-                                         <Field type="text" className="form-control" id="lastname"
-                                                placeholder="Nhập họ" value={accountInfo.lastname} name="lastname"
-                                                onInput={handleValueInput}/>
-                                         <ErrorMessage name={'lastname'} className="text-danger" component="small"/>
-                                     </div>
-                                     <div className="col-md-6 mb-3">
-                                         <label className="form-label" htmlFor="firstname">Tên</label>
-                                         <Field type="text" className="form-control" id="firstname"
-                                                placeholder="Nhập tên" value={accountInfo.firstname}
-                                                name="firstname"
-                                                onInput={handleValueInput}/>
-                                         <ErrorMessage name='firstname' className="text-danger" component="small"/>
-                                     </div>
-                                     <div className="col-md-6 mb-3">
-                                         <label className="form-label" htmlFor="email">Email</label>
-                                         <Field type="text" className="form-control" id="email"
-                                                placeholder="Nhập Email" value={accountInfo.email} name="email"
-                                                onInput={handleValueInput}/>
-                                         <ErrorMessage name='email' className="text-danger" component="small"/>
-                                     </div>
+                        <Form className="row">
+                            <div className="col-md-4">
+                                {/* Select Image*/}
+                                <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
+                                    <img className="rounded-circle" width="300px" height="300px"
+                                         src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
+                                         onChange={handleValueInput}/>
+                                    <input className="mt-2 form-control" type="file" onChange={selectImage}/>
+                                </div>
+                            </div>
+                            <div className="col-md-8">
+                                <h3 className="text-center mb-4 text-uppercase">Sửa thông tin cá nhân</h3>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="lastname">Họ và tên đệm</label>
+                                        <Field type="text" className="form-control" id="firstname"
+                                               placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name={'firstname'} className="text-danger" component="small"/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="lastname">Tên</label>
+                                        <Field type="text" className="form-control" id="lastname"
+                                               placeholder="Nhập tên" value={accountInfo.lastname}
+                                               name="firstname"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='lastname' className="text-danger" component="small"/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="email">Email</label>
+                                        <Field type="text" className="form-control" id="email"
+                                               placeholder="Nhập Email" value={accountInfo.email} name="email"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='email' className="text-danger" component="small"/>
+                                    </div>
 
-                                     <div className="col-md-6 mb-3">
-                                         <label className="form-label" htmlFor="phone">Số điện thoại</label>
-                                         <Field type="text" className="form-control" id="phone"
-                                                placeholder="Nhập số điện thoại" value={accountInfo.phone}
-                                                name="phone"
-                                                onInput={handleValueInput}/>
-                                         <ErrorMessage name='phone' className="text-danger"
-                                                       component="small"/>
-                                     </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="phone">Số điện thoại</label>
+                                        <Field type="text" className="form-control" id="phone"
+                                               placeholder="Nhập số điện thoại" value={accountInfo.phone}
+                                               name="phone"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='phone' className="text-danger"
+                                                      component="small"/>
+                                    </div>
 
-                                     <div className="col-6 mb-3">
-                                         <label className="form-label" htmlFor="province">
-                                             Tỉnh/thành phố
-                                         </label>
-                                         <Field as="select" className="form-select" name="province" id="province">
-                                             <option value="">{accountInfo.province}</option>
-                                             {!_.isEmpty(provinces) && provinces.map(province => (
-                                                 <option key={province.ProvinceID}
-                                                         value={province.ProvinceName}>
-                                                     {province.ProvinceName}
-                                                 </option>
-                                             ))}
-                                         </Field>
-                                         <ErrorMessage name='province' className="text-danger"
-                                                       component="small"/>
-                                     </div>
-                                     <div className="col-6">
-                                         <label className="form-label" htmlFor="district">Quận/Huyện</label>
-                                         <Field as="select" className="form-select" id="district"
-                                                name="district">
-                                             <option value="">{accountInfo.district}</option>
-                                             {!_.isEmpty(districts) && districts.map(district => (
-                                                 <option key={district.DistrictID}
-                                                         value={district.DistrictName}>
-                                                     {district.DistrictName}
-                                                 </option>
-                                             ))}
-                                         </Field>
-                                         <ErrorMessage name='district' className="text-danger"
-                                                       component="small"/>
-                                     </div>
-                                     <div className="col-6">
-                                         <label className="form-label" htmlFor="ward">Phường/xã</label>
-                                         <Field as="select" className="form-select" id="ward"
-                                                name="ward">
-                                             <option value="">{accountInfo.ward}</option>
-                                             {!_.isEmpty(wards) && wards.map(ward => (
-                                                 <option key={ward.WardCode} value={ward.WardName}>
-                                                     {ward.WardName}
-                                                 </option>
-                                             ))}
-                                         </Field>
-                                         <ErrorMessage name='ward' className="text-danger"
-                                                       component="small"/>
-                                     </div>
-                                     <div className="col-md-6 mb-3">
-                                         <label className="form-label" htmlFor="address">
-                                             Số nhà
-                                         </label>
-                                         <Field type="text" className="form-control" id="address"
-                                                placeholder="Nhập địa chỉ"
-                                                value={accountInfo.address}
-                                                name="address"
-                                                onInput={handleValueInput}/>
-                                         <ErrorMessage name='address' className="text-danger"
-                                                       component="small"/>
-                                     </div>
-                                     {handleProps()}
-                                 </div>
-                             </div>
-                         </Form>
+                                    <div className="col-6 mb-3">
+                                        <label className="form-label" htmlFor="province">
+                                            Tỉnh/thành phố
+                                        </label>
+                                        <Field as="select" className="form-select" name="province" id="province">
+                                            <option value="">{accountInfo.province}</option>
+                                            {!_.isEmpty(provinces) && provinces.map(province => (
+                                                <option key={province.ProvinceID}
+                                                        value={province.ProvinceName}>
+                                                    {province.ProvinceName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name='province' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    <div className="col-6">
+                                        <label className="form-label" htmlFor="district">Quận/Huyện</label>
+                                        <Field as="select" className="form-select" id="district"
+                                               name="district">
+                                            <option value="">{accountInfo.district}</option>
+                                            {!_.isEmpty(districts) && districts.map(district => (
+                                                <option key={district.DistrictID}
+                                                        value={district.DistrictName}>
+                                                    {district.DistrictName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name='district' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    <div className="col-6">
+                                        <label className="form-label" htmlFor="ward">Phường/xã</label>
+                                        <Field as="select" className="form-select" id="ward"
+                                               name="ward">
+                                            <option value="">{accountInfo.ward}</option>
+                                            {!_.isEmpty(wards) && wards.map(ward => (
+                                                <option key={ward.WardCode} value={ward.WardName}>
+                                                    {ward.WardName}
+                                                </option>
+                                            ))}
+                                        </Field>
+                                        <ErrorMessage name='ward' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label className="form-label" htmlFor="address">
+                                            Số nhà
+                                        </label>
+                                        <Field type="text" className="form-control" id="address"
+                                               placeholder="Nhập địa chỉ"
+                                               value={accountInfo.address}
+                                               name="address"
+                                               onInput={handleValueInput}/>
+                                        <ErrorMessage name='address' className="text-danger"
+                                                      component="small"/>
+                                    </div>
+                                    {handleProps()}
+                                </div>
+                            </div>
+                        </Form>
                     )}
                 </Formik>
             }

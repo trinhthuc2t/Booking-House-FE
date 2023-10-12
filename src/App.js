@@ -18,6 +18,7 @@ import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
 import Information from "./components/Profile/Information";
 import RegisterOwner from "./components/Profile/RegisterOwner";
 import ConfirmOwner from "./components/Profile/ConfirmOwner";
+import RentalHistory from "./components/Profile/RentalHistory";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
                     <Route path={"change-password"} element={<ChangePassword/>}/>
                     <Route path={"information"} element={<Information/>}/>
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
+                    <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
             </Routes>
             <Footer/>

@@ -23,11 +23,20 @@ const ConfirmOwner = () => {
 
     const handleAgree = (value) => {
         let data = {...value, status: "Đã xác nhận"};
-        AccountService.registerOwner(data).then((response) => {
-            console.log(response);
+        AccountService.agreeRegister(data).then((response) => {  console.log(response);
             toast.success(response, {position: "top-center", autoClose: 1000,});
             setLoad(true);
         }).catch(function (err) {
+            console.log(err);
+        })
+    }
+
+    const handleRefuse = (data) => {
+        AccountService.refuseRegister(data.id).then((response)=> {
+            console.log(response);
+            toast.success(response, {position: "top-center", autoClose: 1000,});
+            setLoad(true);
+        }).catch(function (err){
             console.log(err);
         })
     }
@@ -64,7 +73,9 @@ const ConfirmOwner = () => {
                                 handleAgree(l);
                             }}>Xác nhận
                             </button>
-                            <button className={'btn btn-danger'}>Hủy</button>
+                            <button className={'btn btn-danger'} onClick={() => {
+                                handleRefuse(l);
+                            }}>Hủy</button>
                         </td>
                     </tr>
                 })}
@@ -137,7 +148,7 @@ const ConfirmOwner = () => {
                                                value={`${owner.firstname} ${owner.lastname}`} readOnly={true}/>
                                     </div>
                                     <div className={'col-6'}>
-                                        <label htmlFor="recipient-name" className="col-form-label">Họ và tên </label>
+                                        <label htmlFor="recipient-name" className="col-form-label">Địa chỉ </label>
                                         <input type="text" className="form-control" id="recipient-name"
                                                value={`${owner.address} ${owner.ward} ${owner.district} ${owner.province}`}
                                                readOnly={true}/></div>

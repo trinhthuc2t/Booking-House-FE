@@ -24,11 +24,14 @@ const RegisterOwner = () => {
             return <div className={"col-9 "}>
                 <h3>Đơn đăng ký đang chờ xác nhận</h3>
             </div>
-        }else {
+        }else if (owner.status === "Đã xác nhận"){
+            return <div className={"col-9 "}>
+                <h3>Bạn đã trở thành chủ nhà</h3>
+            </div>
+        } else {
            return <EditProfile status={false}/>
         }
     }
-
 
     return (
             checkOwner()

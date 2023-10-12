@@ -17,33 +17,33 @@ const Information = () => {
                     <h3 className="text-center mb-4 text-uppercase">Thông tin cá nhân</h3>
                     <div className="row mt-2">
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="firstname">Họ:</label>
-                            <input type="text" className="form-control" id="lastname"
-                                   placeholder="Nhập họ" value={account.lastname} name="lastname"
+                            <label className="form-label" htmlFor="firstname">Họ và tên đệm</label>
+                            <input type="text" className="form-control" id="firstname"
+                                   placeholder="Nhập họ" value={account.firstname} name="lastname"
                                    readOnly={true}/>
                         </div>
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="firstname">Tên:</label>
-                            <input type="text" className="form-control" id="firstname"
-                                   placeholder="Nhập tên" value={account.firstname} name="firstname"
+                            <label className="form-label" htmlFor="firstname">Tên</label>
+                            <input type="text" className="form-control" id="lastname"
+                                   placeholder="Nhập tên" value={account.lastname} name="firstname"
                                    readOnly={true}/>
                         </div>
                     </div>
                     <div className="row mt-3">
                         <div className="col-md-12 mb-3">
-                            <label className="form-label" htmlFor="address">Địa chỉ:</label>
+                            <label className="form-label" htmlFor="address">Địa chỉ</label>
                             <input type="text" className="form-control" id="address"
                                    placeholder="Nhập địa chỉ" value={`${account.address} - ${account.ward} - ${account.district} - ${account.province}`} name="address"
                                    readOnly={true}/>
                         </div>
                         <div className="col-md-12 mb-3">
-                            <label className="form-label" htmlFor="email">Email:</label>
+                            <label className="form-label" htmlFor="email">Email</label>
                             <input type="text" className="form-control" id="email"
                                    placeholder="Nhập Email" value={account.email} name="email"
                                    readOnly={true}/>
                         </div>
                         <div className="col-md-12 mb-3">
-                            <label className="form-label" htmlFor="phone">Số điện thoại:</label>
+                            <label className="form-label" htmlFor="phone">Số điện thoại</label>
                             <input type="text" className="form-control" id="phone"
                                    placeholder="Nhập số điện thoại" value={account.phone} name="phone"
                                    readOnly={true}/>
