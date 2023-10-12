@@ -17,6 +17,7 @@ import Login from "./components/Login-Register/Login";
 import ForgotPassword from "./components/Login-Register/ForgotPassword";
 import Register from "./components/Login-Register/Register";
 import Statistical from "./components/Profile/statistical/Statistical";
+import SearchBooking from "./components/Profile/searchBooking/SearchBooking";
 
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
                     <Route path={"information"} element={<Information/>}/>
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                     <Route path={"houses-statistical"} element={<Statistical/>}/>
+                    <Route path={"houses-search"} element={<SearchBooking/>}/>
                 </Route>
             </Routes>
             <Footer/>
