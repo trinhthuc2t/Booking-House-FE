@@ -38,13 +38,29 @@ const LeftSidebar = () => {
             )
         } else {
             return (
-                <li className="px-3 py-2">
-                    <NavLink to="/profile/houses-owner"
-                             className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                        <i className="fa-solid fa-list-check me-3"></i>
-                        Quản lý nhà cho thuê
-                    </NavLink>
-                </li>
+                <>
+                    <li className="px-3 py-2">
+                        <NavLink to="/profile/houses-owner-booking"
+                                 className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                            <i className="fa-solid fa-list-check me-3"></i>
+                            Lịch sử cho thuê nhà
+                        </NavLink>
+                    </li>
+                    <li className="px-3 py-2">
+                        <NavLink to="/profile/houses-owner"
+                                 className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                            <i className="fa-solid fa-people-roof me-3"></i>
+                            Quản lý nhà cho thuê
+                        </NavLink>
+                    </li>
+                    <li className="px-3 py-2">
+                        <NavLink to="/profile/houses-owner-revenue"
+                                 className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                            <i className="fa-solid fa-chart-line me-3"></i>
+                            Doanh thu
+                        </NavLink>
+                    </li>
+                </>
             )
         }
 
