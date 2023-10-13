@@ -5,6 +5,7 @@ import {formatCurrency} from "../../../service/format";
 import {Pagination} from "@mui/material";
 import {useSelector} from "react-redux";
 import BookingService from "../../../service/BookingService";
+import Swal from "sweetalert2";
 
 const SearchBooking = () => {
     const currentDate = new Date().toISOString().substring(0, 10);
@@ -22,6 +23,7 @@ const SearchBooking = () => {
     const [yearEnd, setYearEnd] = useState(0);
     const [monthEnd, setMonthEnd] = useState(0);
     const [dayEnd, setDayEnd] = useState(0);
+    const [isLoad, setIsLoad] = useState(false);
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
@@ -51,8 +53,8 @@ const SearchBooking = () => {
         setStatus(optionValue);
     };
 
-    const searchBookingsByOwnerId = (ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage) => {
-        BookingService.searchBookingsByOwnerId(ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage)
+    const searchBookingsByOwnerId = (ownerId, nameSearch, status, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, currentPage) => {
+        BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, currentPage)
             .then((bookings) => {
                 setBookings(bookings.content);
                 setTotalPages(bookings.totalPages);
@@ -60,38 +62,94 @@ const SearchBooking = () => {
             .catch((err) => {
                 console.log(err);
             });
-
     };
 
-
     useEffect(() => {
-        searchBookingsByOwnerId(account.id,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage-1)
+        searchBookingsByOwnerId(account.id, nameSearch, status, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, currentPage - 1)
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch,nameSearch,status,yearStart,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd])
+    }, [currentPage, nameSearch, nameSearch, status, yearStart, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, isLoad])
 
+    const handleCancleBooking = (id) => {
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn hủy thuê nhà?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                BookingService.cancelBookingAdmin(id)
+                    .then((res) => {
+                        setIsLoad(!isLoad);
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            }
+        })
+    }
+
+    const handleCheckOutBooking = (id) => {
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn thay đổi?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                BookingService.checkoutBookingAdmin(id)
+                    .then((res) => {
+                        setIsLoad(!isLoad);
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            }
+        })
+    }
+
+    const handleCheckInBooking = (id) => {
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn thay đổi?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                BookingService.checkinBookingAdmin(id)
+                    .then((res) => {
+                        setIsLoad(!isLoad);
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            }
+        })
+    }
     const checkStatusBooking = (bookingCheck) => {
-
 
         if (bookingCheck.status === "Chờ nhận phòng") {
             return (
-                <div className={'d-flex justify-content-between'}>
-                    <div className="btn">
-                        <Link to={"/owner/checkin/" + bookingCheck.id}>
-                            <button className="btn border border-primary text-primary" style={{width: 100}}>Check in
-                            </button>
-                        </Link>
-                    </div>
-                    <div className="btn">
-                        <Link to={"/owner/cancel/" + bookingCheck.id}>
-                            <button className="btn border border-danger text-danger" style={{width: 80}}>Hủy</button>
-                        </Link>
-                    </div>
+                <div className={'d-flex'}>
+                    <button onClick={() => handleCheckInBooking(bookingCheck.id)}
+                            className="btn border border-primary text-primary"
+                            style={{width: 90}}>
+                        Check in
+                    </button>
+                    <button
+                        className="btn border border-danger text-danger ms-2"
+                        onClick={() => handleCancleBooking(bookingCheck.id)}
+                        style={{width: 90}}>
+                        Hủy
+                    </button>
                 </div>
             )
-        } else if (bookingCheck.status === "Đã hủy" ) {
+        } else if (bookingCheck.status === "Đã hủy") {
             return (
                 <div className="mb-3" style={{color: "red"}}>
                     <b>{bookingCheck.status}</b>
@@ -99,14 +157,13 @@ const SearchBooking = () => {
             )
         } else if (bookingCheck.status === "Đang ở") {
             return (
-                <div className="mb-3">
-                    <Link to={"/owner/checkout/" + bookingCheck.id}>
-                        <button className="btn border border-primary text-primary" style={{width: 100}}>Check out
-                        </button>
-                    </Link>
-                </div>
+                <button className="btn border border-primary text-primary"
+                        onClick={() => handleCheckOutBooking(bookingCheck.id)}
+                        style={{width: 100}}>
+                    Check out
+                </button>
             )
-        }else if (bookingCheck.status === "Đã trả phòng") {
+        } else if (bookingCheck.status === "Đã trả phòng") {
             return (
                 <div className="mb-3" style={{color: "blue"}}>
                     <b>{bookingCheck.status}</b>
@@ -136,7 +193,8 @@ const SearchBooking = () => {
                         </div>
 
                         <div className="col-md-6">
-                            <input type="text" className="form-control border-0 py-2" placeholder="Nhập từ khóa tìm kiếm"
+                            <input type="text" className="form-control border-0 py-2"
+                                   placeholder="Nhập từ khóa tìm kiếm"
                                    name=""
                                    id="" value={nameSearch} onInput={handleNameSearch}/>
                         < /div>
@@ -163,8 +221,8 @@ const SearchBooking = () => {
                     <tr align="center" style={{fontSize: '20px'}}>
                         <th>STT</th>
                         <th>Nhà</th>
-                        <th>Ngày thuê</th>
-                        <th>Ngày trả nhà</th>
+                        {/*<th>Ngày thuê</th>
+                        <th>Ngày trả nhà</th>*/}
                         <th>Tên khác hàng</th>
                         <th style={{minWidth: '130px'}}>Tổng đơn</th>
                         <th style={{width: '150px'}}>Trạng thái</th>
@@ -187,7 +245,7 @@ const SearchBooking = () => {
                                                 <div className="text-truncate me-3"><i
                                                     className="fa fa-map-marker-alt me-2"
                                                     style={{color: "rgb(0,185,142)"}}></i>
-                                                    {b.house.address}
+                                                    {b.house.province}
                                                 </div>
                                                 <div className="text-truncate"><i
                                                     className="far fa-money-bill-alt me-2"
@@ -198,21 +256,20 @@ const SearchBooking = () => {
                                         </Link>
                                     </td>
 
-                                    <td className="mb-3">
-                                        <b>{(b.startTime)}</b>
+                                    {/*<td className="mb-3">
+                                        {(b.startTime)}
                                     </td>
                                     <td className="mb-3">
-                                        <b>{(b.endTime)}</b>
+                                        {(b.endTime)}
+                                    </td>*/}
+                                    <td className="mb-3">
+                                        {`${b.account.firstname} ${b.account.lastname}`}
                                     </td>
                                     <td className="mb-3">
-                                        <b>{`${b.account.firstname} ${b.account.lastname}`}</b>
-                                    </td>
-                                    <td className="mb-3">
-                                        <b>{formatCurrency(b.total)}</b>
+                                        {formatCurrency(b.total)}
                                     </td>
 
-
-                                    <td className="mb-3" style={{width : '180px'}}>
+                                    <td className="mb-3" style={{width: '180px'}}>
                                         {checkStatusBooking(b)}
                                     </td>
                                 </tr>
@@ -220,7 +277,7 @@ const SearchBooking = () => {
                         })
                         :
                         <tr align="center">
-                            <td colSpan="5" className="pt-3 fs-5 text-danger">Danh sách trống</td>
+                            <td colSpan="6" className="pt-3 fs-5 text-danger">Danh sách trống</td>
                         </tr>
                     }
                     </tbody>
