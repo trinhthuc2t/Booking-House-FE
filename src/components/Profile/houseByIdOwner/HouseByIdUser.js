@@ -67,6 +67,7 @@ const HouseByIdUser = () => {
         houseByIdService.findByOwnerIdAndNameAndStatus(id, nameSearch, status, currentPage)
             .then((houses) => {
                 setHouses(houses.content);
+                console.log(houses.content);
                 setTotalPages(houses.totalPages);
             })
             .catch((err) => {

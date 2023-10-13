@@ -165,7 +165,7 @@ const SearchBooking = () => {
                         <th>Nhà</th>
                         <th>Ngày thuê</th>
                         <th>Ngày trả nhà</th>
-                        <th>Tên khác hàng</th>
+                        <th>Tên khách hàng</th>
                         <th style={{minWidth: '130px'}}>Tổng đơn</th>
                         <th style={{width: '150px'}}>Trạng thái</th>
                     </tr>

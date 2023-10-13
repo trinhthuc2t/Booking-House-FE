@@ -10,7 +10,7 @@ const BookingService = {
     },
     getBookingsByOwnerWeek: (ownerId, month, year, startDay, endDay) => {
         return new Promise((resolve, reject) => {
-            axios
+            instance
                 .get(`http://localhost:8080/api/bookings/${ownerId}/week?month=${month}&year=${year}&startDay=${startDay}&endDay=${endDay}`)
                 .then(response => {
                     resolve(response.data);
