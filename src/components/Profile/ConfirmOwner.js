@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import AccountService from "../../service/AccountService";
 import {toast} from "react-toastify";
 import _ from 'lodash';
+import Swal from "sweetalert2";
+import BookingService from "../../service/BookingService";
 
 const ConfirmOwner = () => {
     const [listRegister, setListRegister] = useState([]);
@@ -10,7 +12,6 @@ const ConfirmOwner = () => {
 
     useEffect(() => {
         getListRegister();
-        setLoad(false);
     }, [load])
     const getListRegister = () => {
         AccountService.getListRegisterOwner().then((response) => {
@@ -22,22 +23,40 @@ const ConfirmOwner = () => {
 
     const handleAgree = (value) => {
         let data = {...value, status: "Đã xác nhận"};
-        AccountService.agreeRegister(data).then((response) => {
-            console.log(response);
-            toast.success(response, {position: "top-center", autoClose: 1000,});
-            setLoad(true);
-        }).catch(function (err) {
-            console.log(err);
+        Swal.fire({
+            title: 'Xác nhận thay đổi?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                AccountService.agreeRegister(data).then((response) => {
+                    toast.success(response, {position: "top-center", autoClose: 1000,});
+                    setLoad(!load);
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            }
         })
     }
 
     const handleRefuse = (data) => {
-        AccountService.refuseRegister(data.id).then((response) => {
-            console.log(response);
-            toast.success(response, {position: "top-center", autoClose: 1000,});
-            setLoad(true);
-        }).catch(function (err) {
-            console.log(err);
+        Swal.fire({
+            title: 'Xác nhận thay đổi?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                AccountService.refuseRegister(data.id).then((response) => {
+                    toast.success(response, {position: "top-center", autoClose: 1000,});
+                    setLoad(!load);
+                }).catch(function (err) {
+                    console.log(err);
+                })
+            }
         })
     }
 
