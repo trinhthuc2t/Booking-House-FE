@@ -2,10 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import _ from 'lodash';
 import BookingService from "../../service/BookingService";
-import {formatCurrency} from "../../service/format";
+import {convertDateFormat, formatCurrency} from "../../service/format";
 import {Pagination} from "@mui/material";
 import Swal from "sweetalert2";
-import {format} from "date-fns";
 
 const RentalHistory = () => {
     const account = useSelector(state => state.account);
@@ -24,6 +23,7 @@ const RentalHistory = () => {
     const getRentalList = (id, currentPage) => {
         BookingService.getHistoryByAccount(id, currentPage).then((response) => {
             const result = response.data.content;
+            console.log(result)
             setRentalList(result);
             setTotalPages(response.data.totalPages);
         }).catch(function (err) {
@@ -34,9 +34,6 @@ const RentalHistory = () => {
         setCurrentPage(value);
     }
 
-    const convertDateFormat = (input) => {
-        return format(new Date(input), "dd/MM/yyyy HH:mm");
-    }
     const cancelBooking = (item) => {
         BookingService.cancelBooking(item.id).then((response) => {
             Swal.fire({
@@ -81,7 +78,8 @@ const RentalHistory = () => {
     const checkBookingStatus = (item) => {
         if (item.status === "Đã hủy") {
             return null;
-        } else if (new Date(item.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
+        } else if ((new Date(item.startTime) - new Date() > (1000 * 60 * 60 * 24))
+            && item.status === 'Chờ nhận phòng') {
             return (
                 <button className='btn btn-danger'
                         onClick={() => showCancelBookingConfirm(item)}>

@@ -81,7 +81,7 @@ const AccountService = {
         return await instance.get("/api/accounts/getRegisterOwner");
     },
     agreeRegister :  async (data) => {
-        return await instance.get("/api/accounts/agreeRegister" , data);
+        return await instance.post("/api/accounts/agreeRegister" , data);
     },
     refuseRegister : async (idOwner) => {
         return await instance.get("/api/accounts/refuseRegister/" + idOwner);

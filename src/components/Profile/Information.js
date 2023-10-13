@@ -3,6 +3,7 @@ import {useSelector} from "react-redux";
 import image_default from '../../image/user-image.png';
 
 const Information = () => {
+    
     const account = useSelector(state => state.account);
     return (
         <div className="col-9">
