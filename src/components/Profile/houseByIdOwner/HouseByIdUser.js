@@ -92,6 +92,7 @@ const HouseByIdUser = () => {
         })
     }, [currentPage, house, status, nameSearch])
 
+
     return (
         <div className="col-9">
             <h3 className="text-uppercase text-center mb-5">Danh sách nhà cho thuê</h3>
@@ -128,6 +129,7 @@ const HouseByIdUser = () => {
                 </thead>
                 <tbody style={{verticalAlign: 'middle'}}>
                 {!_.isEmpty(houses) ? houses.map((house, index) => {
+                        console.log(house)
                         return (
                             <tr key={house.id} align="center">
                                 <td>

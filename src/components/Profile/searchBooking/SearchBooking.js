@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import _ from "lodash";
-import {formatCurrency} from "../../../service/format";
+import {convertDateFormat, formatCurrency} from "../../../service/format";
 import {Pagination} from "@mui/material";
 import {useSelector} from "react-redux";
 import BookingService from "../../../service/BookingService";
 import Swal from "sweetalert2";
 
 const SearchBooking = () => {
-    const currentDate = new Date().toISOString().substring(0, 10);
-    const [selectedDateStart, setSelectedDateStart] = useState(currentDate);
-    const [selectedDateEnd, setSelectedDateEnd] = useState(currentDate);
+    const [selectedDateStart, setSelectedDateStart] = useState(null);
+    const [selectedDateEnd, setSelectedDateEnd] = useState(null);
     const [status, setStatus] = useState("");
     const [nameSearch, setNameSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -30,18 +29,30 @@ const SearchBooking = () => {
     const handleDateChange = (event) => {
         const selectedDate = event.target.value;
         setSelectedDateStart(selectedDate)
-        const dateParts = selectedDate.split('-');
-        setYearStart(parseInt(dateParts[0]))
-        setMonthStart(parseInt(dateParts[1]))
-        setDayStart(parseInt(dateParts[2]))
+        if(selectedDate) {
+            const dateParts = selectedDate.split('-');
+            setYearStart(parseInt(dateParts[0]))
+            setMonthStart(parseInt(dateParts[1]))
+            setDayStart(parseInt(dateParts[2]))
+        } else {
+            setYearStart(0);
+            setMonthStart(0);
+            setDayStart(0);
+        }
     };
     const handleDateChangeEnd = (event) => {
         const selectedDate = event.target.value;
         setSelectedDateEnd(selectedDate)
-        const dateParts = selectedDate.split('-');
-        setYearEnd(parseInt(dateParts[0]))
-        setMonthEnd(parseInt(dateParts[1]))
-        setDayEnd(parseInt(dateParts[2]))
+        if(selectedDate) {
+            const dateParts = selectedDate.split('-');
+            setYearEnd(parseInt(dateParts[0]))
+            setMonthEnd(parseInt(dateParts[1]))
+            setDayEnd(parseInt(dateParts[2]))
+        } else {
+            setYearEnd(0);
+            setMonthEnd(0);
+            setDayEnd(0);
+        }
     };
 
     const handleNameSearch = (event) => {
@@ -221,10 +232,10 @@ const SearchBooking = () => {
                     <tr align="center" style={{fontSize: '20px'}}>
                         <th>STT</th>
                         <th>Nhà</th>
-                        {/*<th>Ngày thuê</th>
-                        <th>Ngày trả nhà</th>*/}
-                        <th>Tên khác hàng</th>
-                        <th style={{minWidth: '130px'}}>Tổng đơn</th>
+                        <th>Ngày thuê</th>
+                        <th>Ngày trả nhà</th>
+                        {/*<th>Tên khác hàng</th>
+                        <th style={{minWidth: '130px'}}>Tổng đơn</th>*/}
                         <th style={{width: '150px'}}>Trạng thái</th>
                     </tr>
                     </thead>
@@ -256,18 +267,18 @@ const SearchBooking = () => {
                                         </Link>
                                     </td>
 
-                                    {/*<td className="mb-3">
-                                        {(b.startTime)}
+                                    <td className="mb-3">
+                                        {convertDateFormat(b.startTime)}
                                     </td>
                                     <td className="mb-3">
-                                        {(b.endTime)}
-                                    </td>*/}
-                                    <td className="mb-3">
+                                        {convertDateFormat(b.endTime)}
+                                    </td>
+                                    {/*<td className="mb-3">
                                         {`${b.account.firstname} ${b.account.lastname}`}
                                     </td>
                                     <td className="mb-3">
                                         {formatCurrency(b.total)}
-                                    </td>
+                                    </td>*/}
 
                                     <td className="mb-3" style={{width: '180px'}}>
                                         {checkStatusBooking(b)}
