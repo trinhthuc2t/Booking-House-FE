@@ -41,7 +41,6 @@ function App() {
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow} />}/>
                 <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
-                <Route path="/add" element={<SaveHouse/>}/>
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>

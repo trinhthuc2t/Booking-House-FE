@@ -20,7 +20,7 @@ const Footer = () => {
     return (
         <>
             {/*Footer Start*/}
-            <div className="container-fluid bg-dark text-white-50 pt-5 mt-5 footer">
+            <div className="container-fluid bg-dark text-white-50 pt-2 mt-5 footer">
                 <div className="container py-5">
                     <div className="row g-5">
                         <div className="col-6">

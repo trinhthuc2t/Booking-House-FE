@@ -21,8 +21,8 @@ const RegisterOwner = () => {
 
     const checkOwner = () => {
         if (owner.status === "Chờ xác nhận" ){
-            return <div className={"col-9 text-center "}>
-                <h1 >Đơn đăng ký làm chủ nhà</h1>
+            return <div className={"col-9 text-center"}>
+                <h3 className="text-uppercase mb-4">Đơn đăng ký làm chủ nhà</h3>
                 <div style={{color : 'blue'}}>Đơn đăng ký đang chờ xác nhận</div>
             </div>
         }else if (owner.status === "Đã xác nhận"){
