@@ -142,6 +142,25 @@ const SearchBooking = () => {
             }
         })
     }
+    const waitOwnerConfirmBooking = (id) => {
+        Swal.fire({
+            title: 'Bạn chắc chắn muốn thay đổi?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Xác nhận',
+            cancelButtonText: 'Đóng',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                BookingService.waitOwnerConfirmBooking(id)
+                    .then((res) => {
+                        setIsLoad(!isLoad);
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    });
+            }
+        })
+    }
     const checkStatusBooking = (bookingCheck) => {
 
         if (bookingCheck.status === "Chờ nhận phòng") {
@@ -149,7 +168,7 @@ const SearchBooking = () => {
                 <div className={'d-flex'}>
                     <button onClick={() => handleCheckInBooking(bookingCheck.id)}
                             className="btn border border-primary text-primary"
-                            style={{width: 90}}>
+                            style={{width: 110}}>
                         Check in
                     </button>
                     <button
@@ -170,7 +189,7 @@ const SearchBooking = () => {
             return (
                 <button className="btn border border-primary text-primary"
                         onClick={() => handleCheckOutBooking(bookingCheck.id)}
-                        style={{width: 100}}>
+                        style={{width: 110}}>
                     Check out
                 </button>
             )
@@ -183,9 +202,9 @@ const SearchBooking = () => {
         }else  {
             return (
                 <div className={'d-flex'}>
-                    <button onClick={() => handleCheckInBooking(bookingCheck.id)}
+                    <button onClick={() => waitOwnerConfirmBooking(bookingCheck.id)}
                             className="btn border border-primary text-primary"
-                            style={{width: 90}}>
+                            style={{width: 110}}>
                         Chấp nhận
                     </button>
                     <button

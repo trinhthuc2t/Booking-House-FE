@@ -44,6 +44,9 @@ const BookingService = {
     cancelBookingAdmin: (idBooking) => {
         return instance.post("/api/bookings/cancel/" + idBooking);
     },
+    waitOwnerConfirmBooking: (idBooking) => {
+        return instance.post("/api/bookings/wait/" + idBooking);
+    },
     checkinBookingAdmin: (idBooking) => {
         return instance.post("/api/bookings/checkin/" + idBooking);
     },
