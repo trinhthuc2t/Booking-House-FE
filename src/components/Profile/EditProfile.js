@@ -13,6 +13,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {profileSchema} from "../../validate/validate";
 import {editAccount} from "../../redux/actions";
 import AccountService from "../../service/AccountService";
+import image_default from "../../image/user-image.png";
 
 const EditProfile = ({status}) => {
 
@@ -91,7 +92,7 @@ const EditProfile = ({status}) => {
         })
     }
     const handleRegisterOwner = (values) => {
-        console.log(values);
+
         let data = {
             ...values,
             id: account.id,
@@ -256,9 +257,10 @@ const EditProfile = ({status}) => {
                             if (status) {
                                 handleProfile(values);
                             } else {
-                                if (fileFront && fileBack) {
+                                if (fileFront && fileBack ) {
+                                    console.log(values.avatar);
                                     handleRegisterOwner(values);
-                                } else if (!fileFront && !fileBack) {
+                                } else if (!fileFront && !fileBack ) {
                                     document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
                                     document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
                                 } else if (!fileFront) {
@@ -277,7 +279,7 @@ const EditProfile = ({status}) => {
                                 <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
                                     {status? <p>Ảnh đại diện</p> :  <div><span>Ảnh đại diện </span> <span className={'text-danger'}>*</span></div>}
                                     <img className="rounded-circle" width="300px" height="300px"
-                                         src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
+                                         src={accountInfo.avatar ? accountInfo.avatar : image_default} alt="avatar" id="image" name="avatar"
                                          onChange={handleValueInput}/>
                                     <input className="mt-2 form-control" type="file" onChange={selectImage}/>
                                 </div>
