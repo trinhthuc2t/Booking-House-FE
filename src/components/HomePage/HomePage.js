@@ -22,9 +22,7 @@ const HomePage = () => {
         houseByIdService.getAllHouseByPriceAndProvince(currentPage, nameSearch, province, minPrice, maxPrice)
             .then((houses) => {
                 setHouses(houses.content);
-                console.log(houses);
                 setTotalPages(houses.totalPages);
-                console.log(province)
             })
             .catch((err) => {
                 console.log(err);

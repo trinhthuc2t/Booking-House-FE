@@ -136,10 +136,10 @@ const HouseDetail = () => {
         if (!validateBooking()) return;
         setIsLoading(true);
         const data = {
-            startTime: format(new Date(startDate),"yyy-MM-dd'T'HH:mm:ss"),
-            endTime: format(new Date(endDate),"yyy-MM-dd'T'HH:mm:ss"),
+            startTime: format(new Date(startDate),"yyyy-MM-dd'T'HH:mm:ss"),
+            endTime: format(new Date(endDate),"yyyy-MM-dd'T'HH:mm:ss"),
             total: (house.price - house.price * house.sale / 100) * getTotalDays(),
-            status: 'Đang chờ',
+            status: 'Chờ nhận phòng',
             house,
             account: {id: account.id}
         }
@@ -240,7 +240,7 @@ const HouseDetail = () => {
                         </p>
 
                         <div className="d-flex align-items-center mb-4 pt-2">
-                            <button className="btn btn-house px-3 py-2 btn-buy"
+                            <button className="btn btn-house px-3 py-2"
                                     onClick={handleShowModal}>
                                 <i className="bi bi-cart-plus me-2"></i>Thuê ngay
                             </button>

@@ -64,27 +64,29 @@ function Register({setShow}) {
                                                     <label className="form-label" htmlFor="username">Tên đăng nhập <span
                                                         className="text-danger">*</span></label>
                                                     <Field type="text" id="username" name="username"
-                                                           placeholder="Tên đăng nhập"
+                                                           placeholder="Ví dụ: user"
                                                            className="form-control form-control py-2"/>
                                                     <ErrorMessage name="username" className="text-danger mt-1"
                                                                   component="div"/>
                                                     {!errors.username &&
-                                                    <small className="mt-1 text-secondary">Tên đăng nhập không được chứa
-                                                        kí tự đặc biệt. Ví dụ: user</small>
+                                                        <small className="mt-1 text-secondary">
+                                                            Tên đăng nhập không được chứa kí tự đặc biệt
+                                                        </small>
                                                     }
                                                 </div>
 
                                                 <div className="form-outline mb-2">
                                                     <label className="form-label" htmlFor="email">Email <span
                                                         className="text-danger">*</span></label>
-                                                    <Field type="email" id="email" name="email" placeholder="Email"
+                                                    <Field type="email" id="email" name="email"
+                                                           placeholder="Ví dụ: user@gmail.com"
                                                            className="form-control form-control py-2"/>
                                                     <ErrorMessage name="email" className="text-danger mt-1"
                                                                   component="div"/>
                                                     {!errors.email &&
-                                                    <small className="mt-1 text-secondary">
-                                                        Email phải đúng định dạng email. Ví dụ: user@gmail.com
-                                                    </small>
+                                                        <small className="mt-1 text-secondary">
+                                                            Email phải đúng định dạng email
+                                                        </small>
                                                     }
                                                 </div>
 
@@ -93,13 +95,14 @@ function Register({setShow}) {
                                                         Mật khẩu <span className="text-danger">*</span>
                                                     </label>
                                                     <Field type="password" id="password" name="password"
-                                                           placeholder="Mật khẩu"
+                                                           placeholder="Ví dụ: User12"
                                                            className="form-control form-control py-2"/>
                                                     <ErrorMessage name="password" className="text-danger mt-1"
                                                                   component="div"/>
                                                     {!errors.password &&
                                                         <small className="mt-1 text-secondary">
-                                                            Mật khẩu ít nhất 5 kí tự, chứa chữ cái viết hoa, viết thường và ký tự số
+                                                            Mật khẩu ít nhất 6 kí tự, chứa chữ cái viết hoa, viết thường
+                                                            và ký tự số
                                                         </small>
                                                     }
                                                 </div>
@@ -109,7 +112,7 @@ function Register({setShow}) {
                                                         Xác nhận lại mật khẩu <span className="text-danger">*</span>
                                                     </label>
                                                     <Field type="password" id="confirmPassword" name="confirmPassword"
-                                                           placeholder="Xác nhận mật khẩu"
+                                                           placeholder="Xác nhận lại mật khẩu"
                                                            className="form-control form-control py-2"/>
                                                     <ErrorMessage name="confirmPassword" className="text-danger mt-1"
                                                                   component="div"/>
@@ -131,7 +134,6 @@ function Register({setShow}) {
                                             </Form>
                                         )}
                                     </Formik>
-
                                 </div>
                             </div>
                         </div>

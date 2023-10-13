@@ -4,8 +4,8 @@ import _ from 'lodash';
 import BookingService from "../../service/BookingService";
 import {formatCurrency} from "../../service/format";
 import {Pagination} from "@mui/material";
-import {toast} from "react-toastify";
 import Swal from "sweetalert2";
+import {format} from "date-fns";
 
 const RentalHistory = () => {
     const account = useSelector(state => state.account);
@@ -35,11 +35,7 @@ const RentalHistory = () => {
     }
 
     const convertDateFormat = (input) => {
-        let parts = input.split('T');
-        let datePart = parts[0];
-        let dateSegments = datePart.split('-');
-        let newDate = `${dateSegments[2]}-${dateSegments[1]}-${dateSegments[0]}`;
-        return `${newDate}`
+        return format(new Date(input), "dd/MM/yyyy HH:mm");
     }
     const cancelBooking = (item) => {
         BookingService.cancelBooking(item.id).then((response) => {
@@ -68,10 +64,10 @@ const RentalHistory = () => {
                     cancelBooking(booking);
                 }
             })
-        }else if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
+        } else if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
             Swal.fire({
-                title: 'Thời gian hủy nhỏ hơn 2 ngày tính tới ngày thuê nhà , bạn sẽ chịu khoản phí 10% tiền thuê nhà',
-                icon: 'warning',
+                title: 'Thời gian hủy nhỏ hơn 2 ngày tính tới ngày thuê nhà, bạn sẽ chịu khoản phí 10% tiền thuê nhà',
+                icon: 'error',
                 showCancelButton: true,
                 confirmButtonText: 'Xác nhận',
                 cancelButtonText: 'Đóng',
@@ -83,11 +79,9 @@ const RentalHistory = () => {
         }
     }
     const checkBookingStatus = (item) => {
-        console.log(item.startTime);
-        console.log(new Date() -  new Date(item.startTime));
         if (item.status === "Đã hủy") {
             return null;
-        } else if ( new Date(item.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
+        } else if (new Date(item.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
             return (
                 <button className='btn btn-danger'
                         onClick={() => showCancelBookingConfirm(item)}>
@@ -98,24 +92,23 @@ const RentalHistory = () => {
     }
     return (
         <div className={'col-9'}>
-            {!_.isEmpty(rentalList) &&
-                <div>
-                    <h3 className="text-uppercase text-center mb-4">Lịch sử thuê nhà</h3>
-                    <table className="table">
-                        <thead>
-                        <tr align="center">
-                            <th scope="col">STT</th>
-                            <th scope="col">Tên ngôi nhà</th>
-                            <th scope="col">Địa chỉ</th>
-                            <th scope="col">Ngày thuê nhà</th>
-                            <th scope="col">Ngày trả nhà</th>
-                            <th scope="col">Tổng đơn</th>
-                            <th scope="col">Trạng thái</th>
-                            <th scope="col">Hành động</th>
-                        </tr>
-                        </thead>
-                        <tbody style={{verticalAlign: 'middle'}}>
-                        {rentalList.map((item, index) => {
+            <div>
+                <h3 className="text-uppercase text-center mb-4">Lịch sử thuê nhà</h3>
+                <table className="table">
+                    <thead>
+                    <tr align="center">
+                        <th scope="col">STT</th>
+                        <th scope="col">Tên ngôi nhà</th>
+                        <th scope="col">Địa chỉ</th>
+                        <th scope="col">Ngày thuê nhà</th>
+                        <th scope="col">Ngày trả nhà</th>
+                        <th scope="col">Tổng đơn</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody style={{verticalAlign: 'middle'}}>
+                    {!_.isEmpty(rentalList) ? rentalList.map((item, index) => {
                             return (
                                 <tr key={item.id} align="center">
                                     <th style={{width: '40px'}}>{index + 1}</th>
@@ -132,18 +125,26 @@ const RentalHistory = () => {
                                     </td>
                                 </tr>
                             )
-                        })}
-                        </tbody>
-                    </table>
-                    <span className={'text-danger'}>* Lưu ý : Bạn chỉ có thể hủy thuê nhà trước ngày thuê nhà ít nhất 2 ngày. </span>
-                    <div className="col-12 mt-5 d-flex justify-content-center">
-                        <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
-                                    onChange={changePage} color="primary"/>
-                    </div>
+                        })
+                        :
+                        <tr align="center">
+                            <td colSpan="8" className="pt-3 fs-5 text-danger">Danh sách trống</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                <span className={'text-danger'}>* Lưu ý : Bạn chỉ có thể hủy thuê nhà trước ngày thuê nhà ít nhất 2 ngày. </span>
+                {!_.isEmpty(rentalList) ?
+                <div className="col-12 mt-5 d-flex justify-content-center">
+                    <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
+                                onChange={changePage} color="primary"/>
                 </div>
-            }
+                    :
+                    null
+                }
+            </div>
         </div>
-    )
+    );
 };
 
 export default RentalHistory;
