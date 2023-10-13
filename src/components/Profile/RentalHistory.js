@@ -24,12 +24,6 @@ const RentalHistory = () => {
     const getRentalList = (id, currentPage) => {
         BookingService.getHistoryByAccount(id, currentPage).then((response) => {
             const result = response.data.content;
-
-            for (let i = 0; i < result.length; i++) {
-                result[i].startTime = convertDateFormat(result[i].startTime);
-                result[i].endTime = convertDateFormat(result[i].endTime);
-
-            }
             setRentalList(result);
             setTotalPages(response.data.totalPages);
         }).catch(function (err) {
@@ -61,34 +55,47 @@ const RentalHistory = () => {
         })
     }
 
-    const showCancleBookingConfirm = (booking) => {
-        Swal.fire({
-            title: 'Bạn chắc chắn muốn hủy thuê nhà?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Xác nhận',
-            cancelButtonText: 'Đóng',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                cancelBooking(booking);
-            }
-        })
+    const showCancelBookingConfirm = (booking) => {
+        if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 48)) {
+            Swal.fire({
+                title: 'Bạn chắc chắn muốn hủy thuê nhà?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Đóng',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    cancelBooking(booking);
+                }
+            })
+        }else if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
+            Swal.fire({
+                title: 'Thời gian hủy nhỏ hơn 2 ngày tính tới ngày thuê nhà , bạn sẽ chịu khoản phí 10% tiền thuê nhà',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xác nhận',
+                cancelButtonText: 'Đóng',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    cancelBooking(booking);
+                }
+            })
+        }
     }
-
     const checkBookingStatus = (item) => {
+        console.log(item.startTime);
+        console.log(new Date() -  new Date(item.startTime));
         if (item.status === "Đã hủy") {
             return null;
-        } else if (item.startTime.split('-')[0] - new Date().getDate() > 1) {
+        } else if ( new Date(item.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
             return (
                 <button className='btn btn-danger'
-                        onClick={() => showCancleBookingConfirm(item)}>
+                        onClick={() => showCancelBookingConfirm(item)}>
                     Hủy thuê
                 </button>
             )
         }
     }
-
-
     return (
         <div className={'col-9'}>
             {!_.isEmpty(rentalList) &&
@@ -114,8 +121,8 @@ const RentalHistory = () => {
                                     <th style={{width: '40px'}}>{index + 1}</th>
                                     <th>{item.house?.name}</th>
                                     <td>{item.house?.province}</td>
-                                    <td>{item.startTime}</td>
-                                    <td>{item.endTime}</td>
+                                    <td>{convertDateFormat(item.startTime)}</td>
+                                    <td>{convertDateFormat(item.endTime)}</td>
                                     <td>{formatCurrency(item.total)}</td>
                                     <td>{item.status === "Đã hủy" ?
                                         <span className={'text-danger'}>{item.status}</span> :
@@ -134,12 +141,9 @@ const RentalHistory = () => {
                                     onChange={changePage} color="primary"/>
                     </div>
                 </div>
-
             }
         </div>
-
     )
-        ;
 };
 
 export default RentalHistory;

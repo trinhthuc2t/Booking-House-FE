@@ -27,7 +27,7 @@ const LeftSidebar = () => {
                  </>
              )
          }else if (account.role.name === "ROLE_USER"){
-             return <>
+             return (
                  <li className="px-3 py-2">
                      <NavLink to="/profile/register-owner"
                               className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
@@ -35,14 +35,7 @@ const LeftSidebar = () => {
                          Đăng ký làm chủ nhà
                      </NavLink>
                  </li>
-                 <li className="px-3 py-2">
-                     <NavLink to="/profile/houses-owner"
-                              className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                         <i className="fa-solid fa-list-check me-3"></i>
-                         Quản lý nhà cho thuê
-                     </NavLink>
-                 </li>
-             </>
+             )
          } else {
              return (
                  <>
