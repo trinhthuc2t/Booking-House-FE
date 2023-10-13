@@ -31,6 +31,7 @@ const HouseByIdService = {
 
     findByOwnerIdAndNameAndStatus: (ownerId, name, status, currentPage) => {
         return new Promise((resolve, reject) => {
+            console.log("http://localhost:8080/api/houses/owner/search/${ownerId}?name=${name}&status=${status}&page=${currentPage}")
             axios
                 .get(`http://localhost:8080/api/houses/owner/search/${ownerId}?name=${name}&status=${status}&page=${currentPage}`)
                 .then(response => {

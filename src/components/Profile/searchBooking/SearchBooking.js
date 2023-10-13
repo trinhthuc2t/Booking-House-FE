@@ -7,38 +7,70 @@ import {useSelector} from "react-redux";
 import bookingsService from "../../../service/BookingsService";
 
 const SearchBooking = () => {
-
+    const currentDate = new Date().toISOString().substring(0, 10);
+    const [selectedDateStart, setSelectedDateStart] = useState(currentDate);
+    const [selectedDateEnd, setSelectedDateEnd] = useState(currentDate);
     const [status, setStatus] = useState("");
     const [nameSearch, setNameSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [bookings, setBookings] = useState([]);
-    const [booking, setBooking] = useState({});
     const account = useSelector(state => state.account);
+    const [yearStart, setYearStart] = useState(0);
+    const [monthStart, setMonthStart] = useState(0);
+    const [dayStart, setDayStart] = useState(0);
+    const [yearEnd, setYearEnd] = useState(0);
+    const [monthEnd, setMonthEnd] = useState(0);
+    const [dayEnd, setDayEnd] = useState(0);
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
+    const handleDateChange = (event) => {
+        const selectedDate = event.target.value;
+        setSelectedDateStart(selectedDate)
+        const dateParts = selectedDate.split('-');
+        setYearStart(parseInt(dateParts[0]))
+        setMonthStart(parseInt(dateParts[1]))
+        setDayStart(parseInt(dateParts[2]))
+    };
+    const handleDateChangeEnd = (event) => {
+        const selectedDate = event.target.value;
+        setSelectedDateEnd(selectedDate)
+        const dateParts = selectedDate.split('-');
+        setYearEnd(parseInt(dateParts[0]))
+        setMonthEnd(parseInt(dateParts[1]))
+        setDayEnd(parseInt(dateParts[2]))
+    };
 
+    const handleNameSearch = (event) => {
+        const nameSearch = event.target.value;
+        setNameSearch(nameSearch);
+    };
+    const handleOptionChange = (event) => {
+        const optionValue = event.target.value;
+        setStatus(optionValue);
+    };
 
-    const getAllBookingByOwnerId = (id) => {
-        bookingsService.getAllBookingByOwnerId(id)
-            .then((booking) => {
-                setBookings(booking.content);
-                setTotalPages(booking.totalPages);
+    const searchBookingsByOwnerId = (ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage) => {
+        bookingsService.searchBookingsByOwnerId(ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage)
+            .then((bookings) => {
+                setBookings(bookings.content);
+                setTotalPages(bookings.totalPages);
             })
             .catch((err) => {
                 console.log(err);
             });
+
     };
 
 
     useEffect(() => {
-        getAllBookingByOwnerId(account.id, currentPage - 1);
-        // window.scrollTo({
-        //     top: 0,
-        //     behavior: "smooth"
-        // })
-    }, [currentPage, nameSearch])
+        searchBookingsByOwnerId(account.id,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage-1)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [currentPage, nameSearch,nameSearch,status,yearStart,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd])
 
 
     return (
@@ -48,15 +80,34 @@ const SearchBooking = () => {
                 <div className="mb-3 py-4 px-3"
                      style={{backgroundColor: "rgb(0,185,142)"}}>
                     <div className="row g-2">
-                        <div className="col-md-4">
-                            <select className="form-select py-2 border-0" value={status}>
+                        <div className="col-md-2">
+                            <select className="form-select py-2 border-0" value={status}
+                                    onChange={handleOptionChange}>
                                 <option value="">Tất cả</option>
-                                <option value="Đang trống">Đang trống</option>
-                                <option value="Đang thuê">Đang thuê</option>
-                                <option value="Đang sửa">Đang sửa</option>
+                                <option value="Chờ nhận phòng">Chờ nhận phòng</option>
+                                <option value="Đã trả phòng">Đã trả phòng</option>
+                                <option value="Đã hủy">Đã hủy</option>
+                                <option value="Đang ở">Đang ở</option>
                             </select>
                         </div>
 
+                        <div className="col-md-6">
+                            <input type="text" className="form-control border-0 py-2" placeholder="Nhập từ khóa tìm kiếm"
+                                   name=""
+                                   id="" value={nameSearch} onInput={handleNameSearch}/>
+                        < /div>
+                        <div className="col-2">
+                            <div className="input-group">
+                                <input type="date" className="form-control" value={selectedDateStart}
+                                       onChange={handleDateChange}/>
+                            </div>
+                        </div>
+                        <div className="col-2">
+                            <div className="input-group">
+                                <input type="date" className="form-control" value={selectedDateEnd}
+                                       onChange={handleDateChangeEnd}/>
+                            </div>
+                        </div>
                         <div className="col-md-8">
 
                         < /div>
@@ -113,11 +164,11 @@ const SearchBooking = () => {
                                         <b>{`${b.account.firstname} ${b.account.lastname}`}</b>
                                     </td>
                                     <td className="mb-3">
-                                        <b>{b.total}</b>
+                                        <b>{formatCurrency(b.total)}</b>
                                     </td>
 
 
-                                    <td className="mb-3" style={{width : '180px'}}>git
+                                    <td className="mb-3" style={{width : '180px'}}>
                                         {b.status === "Chờ nhận phòng" ?
                                             <div className={'d-flex justify-content-between'}>
                                                 <div className="btn" >
