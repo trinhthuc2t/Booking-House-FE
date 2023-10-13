@@ -139,7 +139,7 @@ const HouseDetail = () => {
             startTime: format(new Date(startDate),"yyyy-MM-dd'T'HH:mm:ss"),
             endTime: format(new Date(endDate),"yyyy-MM-dd'T'HH:mm:ss"),
             total: (house.price - house.price * house.sale / 100) * getTotalDays(),
-            status: 'Chờ nhận phòng',
+            status: 'Chờ xác nhận',
             house,
             account: {id: account.id}
         }

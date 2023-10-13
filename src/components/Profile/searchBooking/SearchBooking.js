@@ -163,12 +163,29 @@ const SearchBooking = () => {
                     Check out
                 </button>
             )
-        } else if (bookingCheck.status === "Đã trả phòng") {
+        }else if (bookingCheck.status === "Đã trả phòng") {
             return (
                 <div className="mb-3" style={{color: "blue"}}>
                     <b>{bookingCheck.status}</b>
                 </div>
             )
+        }else  {
+            return (
+                <div className={'d-flex'}>
+                    <button onClick={() => handleCheckInBooking(bookingCheck.id)}
+                            className="btn border border-primary text-primary"
+                            style={{width: 90}}>
+                        Chấp nhận
+                    </button>
+                    <button
+                        className="btn border border-danger text-danger ms-2"
+                        onClick={() => handleCancleBooking(bookingCheck.id)}
+                        style={{width: 90}}>
+                        Hủy
+                    </button>
+                </div>
+            )
+
         }
 
     }
@@ -189,6 +206,7 @@ const SearchBooking = () => {
                                 <option value="Đã trả phòng">Đã trả phòng</option>
                                 <option value="Đã hủy">Đã hủy</option>
                                 <option value="Đang ở">Đang ở</option>
+                                <option value="Chờ xác nhận">Chờ xác nhận</option>
                             </select>
                         </div>
 
