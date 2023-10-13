@@ -64,7 +64,7 @@ const registerSchema = Yup.object({
         }),
     password: Yup.string()
         .required('Mật khẩu không được bỏ trống')
-        .min(5, 'Mật khẩu phải chứa ít nhất 5 kí tự')
+        .min(6, 'Mật khẩu phải chứa ít nhất 6 kí tự')
         .matches(
             /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/,
             'Mật khẩu phải chứa chữ cái viết hoa, viết thường và ký tự số'

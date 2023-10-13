@@ -100,7 +100,6 @@ const EditProfile = ({status}) => {
             status: "Chờ xác nhận",
             account: account
         };
-        console.log(data);
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
@@ -277,7 +276,7 @@ const EditProfile = ({status}) => {
                                 <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
                                     {status? <p>Ảnh đại diện</p> :  <div><span>Ảnh đại diện </span> <span className={'text-danger'}>*</span></div>}
                                     <img className="rounded-circle" width="300px" height="300px"
-                                         src={accountInfo.avatar} alt="avatar" id="image" name="avatar"
+                                         src={accountInfo.avatar} alt="" id="image" name="avatar"
                                          onChange={handleValueInput}/>
                                     <input className="mt-2 form-control" type="file" onChange={selectImage}/>
                                 </div>
@@ -286,19 +285,19 @@ const EditProfile = ({status}) => {
                                 {handleTitle()}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="firstname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
-                                        <Field type="text" className="form-control" id="firstname"
-                                               placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
+                                        <label className="form-label" htmlFor="lastname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="lastname"
+                                               placeholder="Nhập họ" value={accountInfo.firstname} name="lastname"
                                                onInput={handleValueInput}/>
                                         <ErrorMessage name={'firstname'} className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="lastname">Tên <span className={'text-danger'}>*</span></label>
-                                        <Field type="text" className="form-control" id="lastname"
+                                        <label className="form-label" htmlFor="firstname">Tên <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="firstname"
                                                placeholder="Nhập tên đệm và tên" value={accountInfo.lastname}
-                                               name="lastname"
+                                               name="firstname"
                                                onInput={handleValueInput}/>
-                                        <ErrorMessage name='lastname' className="text-danger" component="small"/>
+                                        <ErrorMessage name='firstname' className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="email">Email <span className={'text-danger'}>*</span></label>

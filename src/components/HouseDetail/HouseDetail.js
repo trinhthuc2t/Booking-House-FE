@@ -136,10 +136,10 @@ const HouseDetail = () => {
         if (!validateBooking()) return;
         setIsLoading(true);
         const data = {
-            startTime: format(new Date(startDate),"yyy-MM-dd'T'HH:mm:ss"),
-            endTime: format(new Date(endDate),"yyy-MM-dd'T'HH:mm:ss"),
+            startTime: format(new Date(startDate),"yyyy-MM-dd'T'HH:mm:ss"),
+            endTime: format(new Date(endDate),"yyyy-MM-dd'T'HH:mm:ss"),
             total: (house.price - house.price * house.sale / 100) * getTotalDays(),
-            status: 'Đang chờ',
+            status: 'Chờ nhận phòng',
             house,
             account: {id: account.id}
         }

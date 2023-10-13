@@ -7,55 +7,46 @@ const LeftSidebar = () => {
     const account = useSelector(state => state.account);
 
     const checkRole = () => {
-         if (account.role.name === "ROLE_ADMIN") {
-             return(
-                 <>
-                     <li className="px-3 py-2">
-                         <NavLink to="/profile/confirm-owner"
-                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                             <i className="fa-solid fa-chevron-up me-3"></i>
-                             Danh sách đăng ký làm chủ nhà
-                         </NavLink>
-                     </li>
-                     <li className="px-3 py-2">
-                         <NavLink to="/"
-                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                             <i className="fa-solid fa-list me-3"></i>
-                             Danh sách chủ nhà
-                         </NavLink>
-                     </li>
-                 </>
-             )
-         }else if (account.role.name === "ROLE_USER"){
-             return <>
-                 <li className="px-3 py-2">
-                     <NavLink to="/profile/register-owner"
-                              className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                         <i className="fa-solid fa-chevron-up me-3"></i>
-                         Đăng ký làm chủ nhà
-                     </NavLink>
-                 </li>
-                 <li className="px-3 py-2">
-                     <NavLink to="/profile/houses-owner"
-                              className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                         <i className="fa-solid fa-list-check me-3"></i>
-                         Quản lý nhà cho thuê
-                     </NavLink>
-                 </li>
-             </>
-         } else {
-             return (
-                 <>
-                     <li className="px-3 py-2">
-                         <NavLink to="/profile/houses-owner"
-                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                             <i className="fa-solid fa-list-check me-3"></i>
-                             Quản lý nhà cho thuê
-                         </NavLink>
-                     </li>
-                 </>
-             )
-         }
+        if (account.role.name === "ROLE_ADMIN") {
+            return (
+                <>
+                    <li className="px-3 py-2">
+                        <NavLink to="/profile/confirm-owner"
+                                 className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                            <i className="fa-solid fa-chevron-up me-3"></i>
+                            Danh sách đăng ký làm chủ nhà
+                        </NavLink>
+                    </li>
+                    <li className="px-3 py-2">
+                        <NavLink to="/"
+                                 className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                            <i className="fa-solid fa-list me-3"></i>
+                            Danh sách chủ nhà
+                        </NavLink>
+                    </li>
+                </>
+            )
+        } else if (account.role.name === "ROLE_USER") {
+            return (
+                <li className="px-3 py-2">
+                    <NavLink to="/profile/register-owner"
+                             className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                        <i className="fa-solid fa-chevron-up me-3"></i>
+                        Đăng ký làm chủ nhà
+                    </NavLink>
+                </li>
+            )
+        } else {
+            return (
+                <li className="px-3 py-2">
+                    <NavLink to="/profile/houses-owner"
+                             className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                        <i className="fa-solid fa-list-check me-3"></i>
+                        Quản lý nhà cho thuê
+                    </NavLink>
+                </li>
+            )
+        }
 
     }
 
