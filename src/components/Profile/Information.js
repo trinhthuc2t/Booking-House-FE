@@ -1,16 +1,16 @@
 import React from 'react';
 import {useSelector} from "react-redux";
+import image_default from '../../image/user-image.png';
 
 const Information = () => {
     const account = useSelector(state => state.account);
-    console.log(account.province);
     return (
         <div className="col-9">
             <div className="row">
                 <div className="col-md-4">
                     <div className="d-flex flex-column align-items-center text-center px-3 mt-5">
                         <img className="rounded-circle" width="300px" height="300px"
-                             src={account.avatar} alt="avatar" id="image" name="avatar"/>
+                             src={account.avatar ? account.avatar : image_default} alt="" id="image" name="avatar"/>
                     </div>
                 </div>
                 <div className="col-md-8">

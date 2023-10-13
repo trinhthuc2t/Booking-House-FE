@@ -13,7 +13,7 @@ const LeftSidebar = () => {
                     <li className="px-3 py-2">
                         <NavLink to="/profile/confirm-owner"
                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                            <i className="fa-solid fa-chevron-up me-3"></i>
+                            <i className="fa-solid fa-address-book me-3"></i>
                             Danh sách đăng ký làm chủ nhà
                         </NavLink>
                     </li>
@@ -31,7 +31,7 @@ const LeftSidebar = () => {
                 <li className="px-3 py-2">
                     <NavLink to="/profile/register-owner"
                              className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                        <i className="fa-solid fa-chevron-up me-3"></i>
+                        <i className="fa-solid fa-house-user me-3"></i>
                         Đăng ký làm chủ nhà
                     </NavLink>
                 </li>
@@ -82,7 +82,7 @@ const LeftSidebar = () => {
                             <li className="px-3 py-2">
                                 <NavLink to="/profile/rental-history"
                                          className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
-                                    <i className="fa-solid fa-bars me-3"></i>
+                                    <i className="fa-solid fa-rectangle-list me-3"></i>
                                     <span className="hide-menu">Lịch sử thuê nhà</span>
                                 </NavLink>
                             </li>

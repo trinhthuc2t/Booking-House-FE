@@ -240,7 +240,7 @@ const HouseDetail = () => {
                         </p>
 
                         <div className="d-flex align-items-center mb-4 pt-2">
-                            <button className="btn btn-house px-3 py-2 btn-buy"
+                            <button className="btn btn-house px-3 py-2"
                                     onClick={handleShowModal}>
                                 <i className="bi bi-cart-plus me-2"></i>Thuê ngay
                             </button>
