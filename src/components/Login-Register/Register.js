@@ -55,53 +55,81 @@ function Register({setShow}) {
                                         initialValues={initialValues}
                                         validationSchema={registerSchema}
                                         onSubmit={values => {
-                                            handleSubmit(values)}
+                                            handleSubmit(values)
+                                        }
                                         }>
-                                        <Form>
+                                        {({errors}) => (
+                                            <Form>
+                                                <div className="form-outline mb-2">
+                                                    <label className="form-label" htmlFor="username">Tên đăng nhập <span
+                                                        className="text-danger">*</span></label>
+                                                    <Field type="text" id="username" name="username"
+                                                           placeholder="Tên đăng nhập"
+                                                           className="form-control form-control py-2"/>
+                                                    <ErrorMessage name="username" className="text-danger mt-1"
+                                                                  component="div"/>
+                                                    {!errors.username &&
+                                                    <small className="mt-1 text-secondary">Tên đăng nhập không được chứa
+                                                        kí tự đặc biệt. Ví dụ: user</small>
+                                                    }
+                                                </div>
 
-                                            <div className="form-outline mb-2">
-                                                <label className="form-label" htmlFor="username">Tên đăng nhập:</label>
-                                                <Field type="text" id="username" name="username" placeholder="Tên đăng nhập"
-                                                       className="form-control form-control py-2"/>
-                                                <ErrorMessage name="username" className="text-danger mt-1" component="div"/>
-                                            </div>
+                                                <div className="form-outline mb-2">
+                                                    <label className="form-label" htmlFor="email">Email <span
+                                                        className="text-danger">*</span></label>
+                                                    <Field type="email" id="email" name="email" placeholder="Email"
+                                                           className="form-control form-control py-2"/>
+                                                    <ErrorMessage name="email" className="text-danger mt-1"
+                                                                  component="div"/>
+                                                    {!errors.email &&
+                                                    <small className="mt-1 text-secondary">
+                                                        Email phải đúng định dạng email. Ví dụ: user@gmail.com
+                                                    </small>
+                                                    }
+                                                </div>
 
-                                            <div className="form-outline mb-2">
-                                                <label className="form-label" htmlFor="email">Email:</label>
-                                                <Field type="email" id="email" name="email" placeholder="Email"
-                                                       className="form-control form-control py-2"/>
-                                                <ErrorMessage name="email" className="text-danger mt-1" component="div"/>
-                                            </div>
+                                                <div className="form-outline mb-2">
+                                                    <label className="form-label" htmlFor="password">
+                                                        Mật khẩu <span className="text-danger">*</span>
+                                                    </label>
+                                                    <Field type="password" id="password" name="password"
+                                                           placeholder="Mật khẩu"
+                                                           className="form-control form-control py-2"/>
+                                                    <ErrorMessage name="password" className="text-danger mt-1"
+                                                                  component="div"/>
+                                                    {!errors.password &&
+                                                        <small className="mt-1 text-secondary">
+                                                            Mật khẩu ít nhất 5 kí tự, chứa chữ cái viết hoa, viết thường và ký tự số
+                                                        </small>
+                                                    }
+                                                </div>
 
-                                            <div className="form-outline mb-2">
-                                                <label className="form-label" htmlFor="form3Example4cg">Mật khẩu:</label>
-                                                <Field type="password" id="password" name="password" placeholder="Mật khẩu"
-                                                       className="form-control form-control py-2"/>
-                                                <ErrorMessage name="password" className="text-danger mt-1" component="div"/>
-                                            </div>
+                                                <div className="form-outline mb-2">
+                                                    <label className="form-label" htmlFor="confirmPassword">
+                                                        Xác nhận lại mật khẩu <span className="text-danger">*</span>
+                                                    </label>
+                                                    <Field type="password" id="confirmPassword" name="confirmPassword"
+                                                           placeholder="Xác nhận mật khẩu"
+                                                           className="form-control form-control py-2"/>
+                                                    <ErrorMessage name="confirmPassword" className="text-danger mt-1"
+                                                                  component="div"/>
+                                                </div>
 
-                                            <div className="form-outline mb-2">
-                                                <label className="form-label" htmlFor="confirmPassword">
-                                                    Xác nhận lại mật khẩu:
-                                                </label>
-                                                <Field type="password" id="confirmPassword" name="confirmPassword" placeholder="Xác nhận mật khẩu"
-                                                       className="form-control form-control py-2"/>
-                                                <ErrorMessage name="confirmPassword" className="text-danger mt-1" component="div"/>
-                                            </div>
+                                                <div className="d-flex justify-content-center mt-3">
+                                                    <button type="submit" className="btn btn-success btn-lg">
+                                                        Đăng ký
+                                                    </button>
+                                                </div>
 
-                                            <div className="d-flex justify-content-center mt-3">
-                                                <button type="submit" className="btn btn-success btn-lg">
-                                                    Đăng ký
-                                                </button>
-                                            </div>
-
-                                            <div className="text-center text-muted mt-3 mb-2">
-                                                Bạn đã có tài khoản?
-                                                <Link to={"/login"} className="fw-bold ms-2" style={{color: '#00B98EFF'}}>
-                                                    <u>Đăng nhập</u>
-                                                </Link>
-                                            </div>
-                                        </Form>
+                                                <div className="text-center text-muted mt-3 mb-2">
+                                                    Bạn đã có tài khoản?
+                                                    <Link to={"/login"} className="fw-bold ms-2"
+                                                          style={{color: '#00B98EFF'}}>
+                                                        <u>Đăng nhập</u>
+                                                    </Link>
+                                                </div>
+                                            </Form>
+                                        )}
                                     </Formik>
 
                                 </div>

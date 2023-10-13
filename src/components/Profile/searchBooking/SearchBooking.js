@@ -4,7 +4,7 @@ import _ from "lodash";
 import {formatCurrency} from "../../../service/format";
 import {Pagination} from "@mui/material";
 import {useSelector} from "react-redux";
-import bookingsService from "../../../service/BookingsService";
+import BookingService from "../../../service/BookingService";
 
 const SearchBooking = () => {
     const currentDate = new Date().toISOString().substring(0, 10);
@@ -52,7 +52,7 @@ const SearchBooking = () => {
     };
 
     const searchBookingsByOwnerId = (ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage) => {
-        bookingsService.searchBookingsByOwnerId(ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage)
+        BookingService.searchBookingsByOwnerId(ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd,currentPage)
             .then((bookings) => {
                 setBookings(bookings.content);
                 setTotalPages(bookings.totalPages);
@@ -71,6 +71,50 @@ const SearchBooking = () => {
             behavior: "smooth"
         })
     }, [currentPage, nameSearch,nameSearch,status,yearStart,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd])
+
+    const checkStatusBooking = (bookingCheck) => {
+
+
+        if (bookingCheck.status === "Chờ nhận phòng") {
+            return (
+                <div className={'d-flex justify-content-between'}>
+                    <div className="btn">
+                        <Link to={"/owner/checkin/" + bookingCheck.id}>
+                            <button className="btn border border-primary text-primary" style={{width: 100}}>Check in
+                            </button>
+                        </Link>
+                    </div>
+                    <div className="btn">
+                        <Link to={"/owner/cancel/" + bookingCheck.id}>
+                            <button className="btn border border-danger text-danger" style={{width: 80}}>Hủy</button>
+                        </Link>
+                    </div>
+                </div>
+            )
+        } else if (bookingCheck.status === "Đã hủy" ) {
+            return (
+                <div className="mb-3" style={{color: "red"}}>
+                    <b>{bookingCheck.status}</b>
+                </div>
+            )
+        } else if (bookingCheck.status === "Đang ở") {
+            return (
+                <div className="mb-3">
+                    <Link to={"/owner/checkout/" + bookingCheck.id}>
+                        <button className="btn border border-primary text-primary" style={{width: 100}}>Check out
+                        </button>
+                    </Link>
+                </div>
+            )
+        }else if (bookingCheck.status === "Đã trả phòng") {
+            return (
+                <div className="mb-3" style={{color: "blue"}}>
+                    <b>{bookingCheck.status}</b>
+                </div>
+            )
+        }
+
+    }
 
 
     return (
@@ -169,20 +213,7 @@ const SearchBooking = () => {
 
 
                                     <td className="mb-3" style={{width : '180px'}}>
-                                        {b.status === "Chờ nhận phòng" ?
-                                            <div className={'d-flex justify-content-between'}>
-                                                <div className="btn" >
-                                                    <button className="btn border border-primary text-primary" style={{width:100}}>Xác nhận</button>
-                                                </div>
-                                                <div className="btn" >
-                                                    <button className="btn border border-danger text-danger" style={{width:80}}>Hủy</button>
-                                                </div>
-                                            </div>
-
-                                            : <div className="mb-3" style={{color: b.status === "Đã hủy" ? "red" : "blue"}}>
-                                                <b>{b.status}</b>
-                                            </div>}
-
+                                        {checkStatusBooking(b)}
                                     </td>
                                 </tr>
                             )
@@ -203,7 +234,6 @@ const SearchBooking = () => {
                     null
                 }
             </div>
-
         </div>
     );
 };

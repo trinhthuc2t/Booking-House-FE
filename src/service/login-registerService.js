@@ -14,6 +14,10 @@ class LoginRegisterService{
     static checkUsername(username){
         return axios.get("http://localhost:8080/api/login/check-username?username=" + username)
     }
+
+    static checkEmail(email){
+        return axios.get("http://localhost:8080/api/login/check-email?email=" + email)
+    }
     static sendPassword(email){
         return axios.post("http://localhost:8080/api/forgot", email)
     }

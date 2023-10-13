@@ -122,7 +122,7 @@ const HouseByIdUser = () => {
                     <th>Nhà</th>
                     <th style={{minWidth: '130px'}}>Doanh thu</th>
                     <th style={{width: '150px'}}>Trạng thái</th>
-                    <th style={{width: '150px'}}>Hành động</th>
+                    <th style={{minWidth: '150px'}}>Hành động</th>
                 </tr>
                 </thead>
                 <tbody style={{verticalAlign: 'middle'}}>
@@ -132,17 +132,18 @@ const HouseByIdUser = () => {
                                 <td>
                                     <h5>{index + 1}</h5>
                                 </td>
-                                <td>
+                                <td className="text-truncate">
                                     <Link to={`/house-detail/${house.id}`} className="nav-link d-flex align-items-center">
                                         <img className="flex-shrink-0 img-fluid border rounded"
                                              src={house.thumbnail} alt=""
                                              style={{width: 80, height: 80}}/>
                                         <div className="d-flex flex-column text-start ps-4">
                                             <h5 className="text-truncate">{house.name}</h5>
-                                            <div className="text-truncate me-3"><i
-                                                className="fa fa-map-marker-alt me-2"
-                                                style={{color: "rgb(0,185,142)"}}></i>
-                                                {house.address}
+                                            <div className="me-3">
+                                                <i className="fa fa-map-marker-alt me-2"
+                                                style={{color: "rgb(0,185,142)"}}>
+                                                </i>
+                                                {house.province}
                                             </div>
                                             <div className="text-truncate"><i
                                                 className="far fa-money-bill-alt me-2"
@@ -162,6 +163,7 @@ const HouseByIdUser = () => {
                                             disabled={true}
                                             className="form-select border border-primary text-primary"
                                             value={house.status}
+                                            style={{minWidth: '180px'}}
                                             onChange={() => handleStatusChange(house)}
                                         >
                                             <option value="Đang trống">Đang trống</option>
@@ -182,9 +184,7 @@ const HouseByIdUser = () => {
                                 </td>
 
                                 <td className="mb-3">
-                                    <Link to={`/edit-house/${house.id}`} className="btn"
-                                          style={{backgroundColor: "rgb(0,185,142)", color: "white"}}
-                                          href="">
+                                    <Link to={`/edit-house/${house.id}`} className="btn btn-house">
                                         Sửa thông tin
                                     </Link>
                                 </td>
