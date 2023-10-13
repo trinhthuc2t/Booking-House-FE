@@ -23,7 +23,8 @@ const ConfirmOwner = () => {
 
     const handleAgree = (value) => {
         let data = {...value, status: "Đã xác nhận"};
-        AccountService.agreeRegister(data).then((response) => {  console.log(response);
+        AccountService.agreeRegister(data).then((response) => {
+            console.log(response);
             toast.success(response, {position: "top-center", autoClose: 1000,});
             setLoad(true);
         }).catch(function (err) {
@@ -92,7 +93,6 @@ const ConfirmOwner = () => {
                 <h3> Danh sách đăng ký làm chủ nhà</h3>
             </div>
 
-
             {checkListRegister()}
             <div className="modal fade  modal-xl" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
@@ -112,7 +112,7 @@ const ConfirmOwner = () => {
                                             <label htmlFor="recipient-name" className="col-form-label">Ảnh </label>
                                         </div>
                                         <div className={'d-flex justify-content-center'}>
-                                            <img src={owner.account?.avatar} className="form-control"
+                                            <img src={owner.avatar} className="form-control"
                                                  id="recipient-name" alt={'avatar'}
                                                  style={{width: '200px', height: '200px'}}/>
                                         </div>

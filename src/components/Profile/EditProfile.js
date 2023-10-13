@@ -29,7 +29,7 @@ const EditProfile = ({status}) => {
     const [fileBack, setFileBack] = useState(null);
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
-
+    const [avatarOwner , setAvatarOwner] = useState('');
     useEffect(() => {
         getAllProvinces().then(response => {
             setProvinces(response.data.data);
@@ -98,13 +98,14 @@ const EditProfile = ({status}) => {
             frontside: identifyFront,
             backside: identifyBack,
             status: "Chờ xác nhận",
-            account: account
+            account: account,
+            avatar : avatarOwner === '' ? accountInfo.avatar : avatarOwner
         };
-        console.log(data);
+        console.log(data.avatar);
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
             console.log(response);
-            navigate('/profile/information');
+          //  navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })
@@ -126,6 +127,7 @@ const EditProfile = ({status}) => {
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
                 setAccountInfo({...accountInfo, avatar: url});
+                setAvatarOwner(url);
                 toast.success("Tải ảnh thành công", {position: "top-center", autoClose: 2000,});
                 var output = document.getElementById('image');
                 output.src = URL.createObjectURL(event.target.files[0]);
