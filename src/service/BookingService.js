@@ -53,6 +53,7 @@ const BookingService = {
     checkoutBookingAdmin: (idBooking) => {
         return instance.post("/api/bookings/checkout/" + idBooking);
     },
+
 };
 
 

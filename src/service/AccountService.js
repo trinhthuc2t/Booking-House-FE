@@ -1,4 +1,5 @@
 import instance from "./axiosConfig";
+import axios from "axios";
 const AccountService = {
 
     findAdmins: () => {
@@ -55,7 +56,7 @@ const AccountService = {
         })
     },
 
-    registerOwner:  (data) => {
+    registerOwner: async (data) => {
         return new Promise( (resolve, reject) => {
             instance.post("/api/accounts/registerOwner" , data).then((response) => {
                 resolve(response.data);
@@ -86,6 +87,17 @@ const AccountService = {
     refuseRegister : async (idOwner) => {
         return await instance.get("/api/accounts/refuseRegister/" + idOwner);
     },
+
+    findByRoleId : async (roleId,nameSearch, currentPage) => {
+        return await instance.get(`/api/accounts/by-role?roleId=${roleId}&nameSearch=${nameSearch}&page=${currentPage}`);
+    },
+    blockAccount: (accId) => {
+        return instance.get("/api/accounts/block/" + accId);
+    },
+    unblockAccount: (accId) => {
+        return instance.get("/api/accounts/unBlock/" + accId);
+    },
+
 
 
 

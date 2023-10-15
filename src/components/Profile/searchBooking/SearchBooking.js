@@ -115,6 +115,12 @@ const SearchBooking = () => {
                 BookingService.checkoutBookingAdmin(id)
                     .then((res) => {
                         setIsLoad(!isLoad);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Trạng thái đã được cập nhật thành công !',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
                     })
                     .catch(err => {
                         console.log(err)
@@ -135,6 +141,13 @@ const SearchBooking = () => {
                 BookingService.checkinBookingAdmin(id)
                     .then((res) => {
                         setIsLoad(!isLoad);
+                        setIsLoad(!isLoad);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Trạng thái đã được cập nhật thành công !',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
                     })
                     .catch(err => {
                         console.log(err)
@@ -154,6 +167,12 @@ const SearchBooking = () => {
                 BookingService.waitOwnerConfirmBooking(id)
                     .then((res) => {
                         setIsLoad(!isLoad);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Trạng thái đã được cập nhật thành công !',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
                     })
                     .catch(err => {
                         console.log(err)
@@ -162,7 +181,6 @@ const SearchBooking = () => {
         })
     }
     const checkStatusBooking = (bookingCheck) => {
-
         if (bookingCheck.status === "Chờ nhận phòng") {
             return (
                 <div className={'d-flex'}>
@@ -182,21 +200,21 @@ const SearchBooking = () => {
         } else if (bookingCheck.status === "Đã hủy") {
             return (
                 <div className="mb-3" style={{color: "red"}}>
-                    <b>{bookingCheck.status}</b>
+                    <b  className="btn border border-danger text-danger" style={{width: 200}}>{bookingCheck.status}</b>
                 </div>
             )
         } else if (bookingCheck.status === "Đang ở") {
             return (
                 <button className="btn border border-primary text-primary"
                         onClick={() => handleCheckOutBooking(bookingCheck.id)}
-                        style={{width: 110}}>
+                        style={{width: 200}}>
                     Check out
                 </button>
             )
         }else if (bookingCheck.status === "Đã trả phòng") {
             return (
                 <div className="mb-3" style={{color: "blue"}}>
-                    <b>{bookingCheck.status}</b>
+                    <b className="btn border border-success text-success" style={{width: 200}}>{bookingCheck.status}</b>
                 </div>
             )
         }else  {
@@ -210,7 +228,7 @@ const SearchBooking = () => {
                     <button
                         className="btn border border-danger text-danger ms-2"
                         onClick={() => handleCancleBooking(bookingCheck.id)}
-                        style={{width: 90}}>
+                        style={{width: 80}}>
                         Hủy
                     </button>
                 </div>
