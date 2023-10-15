@@ -20,7 +20,6 @@ const ListAccount = () => {
     const [roleId, setRoleId] = useState(0);
     const [nameSearch, setNameSearch] = useState("");
     const [isLoad, setIsLoad] = useState(false);
-    const [status, setStaus] = useState(false);
     const [lgShow, setLgShow] = useState(false);
 
     const changePage = (e, value) => {
@@ -72,7 +71,6 @@ const ListAccount = () => {
         for (let i = 0; i < bookings.length; i++) {
             totalBooking += bookings[i].total;
         }
-        console.log(totalBooking)
         return totalBooking;
     };
 
@@ -133,7 +131,7 @@ const ListAccount = () => {
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch, roleId])
+    }, [currentPage, nameSearch, roleId,isLoad])
 
     const checkStatusAccount = (acc) => {
         if (acc.role.id !== 1) {
@@ -311,10 +309,19 @@ const ListAccount = () => {
                                     <tr align="center">
                                         <td colSpan="6" className="pt-3 fs-5 text-danger">Danh sách trống</td>
                                     </tr>
+
                                 }
 
                                 </tbody>
                             </Table>
+                            {!_.isEmpty(accounts) ?
+                                <div className="col-12 mt-5 d-flex justify-content-center">
+                                    <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
+                                                onChange={changePage} color="primary"/>
+                                </div>
+                                :
+                                null
+                            }
                         </div>
                     </div>
 

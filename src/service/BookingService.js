@@ -1,5 +1,4 @@
 import instance from "./axiosConfig";
-import axios from "axios";
 
 const BookingService = {
     getHistoryByAccount: async (id, currentPage = 0) => {
@@ -27,11 +26,20 @@ const BookingService = {
     bookingHouse: (booking) => {
         return instance.post('/api/bookings', booking);
     },
-    searchBookingsByOwnerId: (ownerId,nameSearch,status,yearStart,monthStart,dayStart,yearEnd,monthEnd,dayEnd, currentPage) => {
+
+
+
+    searchBookingsByOwnerId: (ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage) => {
+        const requestData = {
+            ownerId: ownerId,
+            nameSearch: nameSearch,
+            status: status,
+            selectedDateStart: selectedDateStart,
+            selectedDateEnd: selectedDateEnd,
+        };
         return new Promise((resolve, reject) => {
-            const formattedStatus = status.replace(/\s/g, "_");
             instance
-                .get(`http://localhost:8080/api/bookings/${ownerId}/search?nameSearch=${nameSearch}&status=${formattedStatus}&yearStart=${yearStart}&monthStart=${monthStart}&dayStart=${dayStart}&yearEnd=${yearEnd}&monthEnd=${monthEnd}&dayEnd=${dayEnd}&page=${currentPage}`)
+                .post(`http://localhost:8080/api/bookings/${ownerId}/search?page=${currentPage}`, requestData)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -40,6 +48,8 @@ const BookingService = {
                 });
         });
     },
+
+
 
     cancelBookingAdmin: (idBooking) => {
         return instance.post("/api/bookings/cancel/" + idBooking);

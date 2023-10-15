@@ -10,49 +10,45 @@ import Swal from "sweetalert2";
 const SearchBooking = () => {
     const [selectedDateStart, setSelectedDateStart] = useState(null);
     const [selectedDateEnd, setSelectedDateEnd] = useState(null);
+    const [valueDateStart, setValueDateStart] = useState(null);
+    const [valueDateEnd, setValueDateEnd] = useState(null);
     const [status, setStatus] = useState("");
     const [nameSearch, setNameSearch] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [bookings, setBookings] = useState([]);
     const account = useSelector(state => state.account);
-    const [yearStart, setYearStart] = useState(0);
-    const [monthStart, setMonthStart] = useState(0);
-    const [dayStart, setDayStart] = useState(0);
-    const [yearEnd, setYearEnd] = useState(0);
-    const [monthEnd, setMonthEnd] = useState(0);
-    const [dayEnd, setDayEnd] = useState(0);
     const [isLoad, setIsLoad] = useState(false);
+
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
+    const changeDate = (selectedDate) => {
+        const dateTime = new Date(selectedDate);
+        dateTime.setHours(12);
+        dateTime.setMinutes(0);
+        dateTime.setSeconds(0);
+
+        const formattedDatetime = dateTime.toISOString().slice(0, 16); // Chuyển đổi Date thành chuỗi datetime-local
+
+        return formattedDatetime;
+    }
+
     const handleDateChange = (event) => {
         const selectedDate = event.target.value;
-        setSelectedDateStart(selectedDate)
-        if(selectedDate) {
-            const dateParts = selectedDate.split('-');
-            setYearStart(parseInt(dateParts[0]))
-            setMonthStart(parseInt(dateParts[1]))
-            setDayStart(parseInt(dateParts[2]))
-        } else {
-            setYearStart(0);
-            setMonthStart(0);
-            setDayStart(0);
-        }
+        setValueDateStart(selectedDate)
+        const formattedDatetime = changeDate(selectedDate);
+        setSelectedDateStart(formattedDatetime);
+
     };
+
     const handleDateChangeEnd = (event) => {
         const selectedDate = event.target.value;
-        setSelectedDateEnd(selectedDate)
-        if(selectedDate) {
-            const dateParts = selectedDate.split('-');
-            setYearEnd(parseInt(dateParts[0]))
-            setMonthEnd(parseInt(dateParts[1]))
-            setDayEnd(parseInt(dateParts[2]))
-        } else {
-            setYearEnd(0);
-            setMonthEnd(0);
-            setDayEnd(0);
-        }
+        setValueDateEnd(selectedDate)
+        const formattedDatetime = changeDate(selectedDate);
+        setSelectedDateEnd(formattedDatetime)
+
+
     };
 
     const handleNameSearch = (event) => {
@@ -64,8 +60,8 @@ const SearchBooking = () => {
         setStatus(optionValue);
     };
 
-    const searchBookingsByOwnerId = (ownerId, nameSearch, status, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, currentPage) => {
-        BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, currentPage)
+    const searchBookingsByOwnerId = (ownerId, nameSearch,status, selectedDateStart,selectedDateEnd, currentPage) => {
+        BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, selectedDateStart,selectedDateEnd, currentPage)
             .then((bookings) => {
                 setBookings(bookings.content);
                 setTotalPages(bookings.totalPages);
@@ -76,12 +72,12 @@ const SearchBooking = () => {
     };
 
     useEffect(() => {
-        searchBookingsByOwnerId(account.id, nameSearch, status, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, currentPage - 1)
+        searchBookingsByOwnerId(account.id, nameSearch, status, selectedDateStart,selectedDateEnd, currentPage - 1)
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch, nameSearch, status, yearStart, yearStart, monthStart, dayStart, yearEnd, monthEnd, dayEnd, isLoad])
+    }, [currentPage, nameSearch, nameSearch,selectedDateStart,selectedDateEnd, status, isLoad])
 
     const handleCancleBooking = (id) => {
         Swal.fire({
@@ -140,7 +136,6 @@ const SearchBooking = () => {
             if (result.isConfirmed) {
                 BookingService.checkinBookingAdmin(id)
                     .then((res) => {
-                        setIsLoad(!isLoad);
                         setIsLoad(!isLoad);
                         Swal.fire({
                             icon: 'success',
@@ -266,13 +261,13 @@ const SearchBooking = () => {
                         < /div>
                         <div className="col-2">
                             <div className="input-group">
-                                <input type="date" className="form-control" value={selectedDateStart}
+                                <input type="date" className="form-control" value={valueDateStart}
                                        onChange={handleDateChange}/>
                             </div>
                         </div>
                         <div className="col-2">
                             <div className="input-group">
-                                <input type="date" className="form-control" value={selectedDateEnd}
+                                <input type="date" className="form-control" value={valueDateEnd}
                                        onChange={handleDateChangeEnd}/>
                             </div>
                         </div>
