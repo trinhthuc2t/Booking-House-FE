@@ -4,10 +4,10 @@ import {Table} from "reactstrap";
 import _ from "lodash";
 import {Pagination} from "@mui/material";
 import Swal from "sweetalert2";
-import {Modal} from "react-bootstrap";
+import {Button, Modal} from "react-bootstrap";
 import BookingService from "../../../service/BookingService";
 import {Link} from "react-router-dom";
-import {convertDateFormat} from "../../../service/format";
+import {convertDateFormat,  formatCurrency} from "../../../service/format";
 
 
 const ListAccount = () => {
@@ -17,7 +17,7 @@ const ListAccount = () => {
     const [account, setAccount] = useState({});
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [roleId, setRoleId] = useState(0);
+    const [roleName, setRoleName] = useState("ALL");
     const [nameSearch, setNameSearch] = useState("");
     const [isLoad, setIsLoad] = useState(false);
     const [lgShow, setLgShow] = useState(false);
@@ -27,19 +27,15 @@ const ListAccount = () => {
     }
     const handleOptionChange = (event) => {
         const optionValue = event.target.value;
-        setRoleId(optionValue);
+        setRoleName(optionValue);
     };
     const handleNameSearch = (event) => {
         const nameSearch = event.target.value;
         setNameSearch(nameSearch);
     };
 
-    const formatCurrency = (price) => {
-        return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(price);
-    }
-
-    const findByRoleId = (roleId, nameSearch, currentPage) => {
-        AccountService.findByRoleId(roleId, nameSearch, currentPage)
+    const findByRoleName = (roleName, nameSearch, currentPage) => {
+        AccountService.findByRoleName(roleName, nameSearch, currentPage)
             .then((accounts) => {
                 setAccounts(accounts.data.content);
                 setTotalPages(accounts.data.totalPages);
@@ -50,8 +46,7 @@ const ListAccount = () => {
     };
     const accountDetail = (acc) => {
         setAccount(acc);
-        findByAccountId(acc.id)
-
+        findByAccountId(acc.id);
     }
     const findByAccountId = (accountId) => {
         BookingService.getHistoryByAccount(accountId)
@@ -126,21 +121,21 @@ const ListAccount = () => {
     }
 
     useEffect(() => {
-        findByRoleId(roleId, nameSearch, currentPage - 1);
+        findByRoleName(roleName, nameSearch, currentPage - 1);
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch, roleId,isLoad])
+    }, [currentPage, nameSearch, roleName, isLoad])
 
     const checkStatusAccount = (acc) => {
-        if (acc.role.id !== 1) {
+        if (acc.role.name !== "ROLE_ADMIN") {
             if (acc.status === "Bị khóa") {
                 return (
                     <button
                         onClick={() => handleUnBlockAccount(acc.id)}
                         className="btn border border-danger text-danger"
-                        style={{width: 110}}>
+                        style={{width: '100px'}}>
                         Mở khóa
                     </button>
                 )
@@ -148,8 +143,8 @@ const ListAccount = () => {
                 return (
                     <button
                         onClick={() => handleBlockAccount(acc.id)}
-                        className="btn border border-primary text-primary"
-                        style={{width: 110}}>
+                        className="btn border border-secondary text-secondary"
+                        style={{width: '100px'}}>
                         Khóa
                     </button>
                 )
@@ -161,7 +156,7 @@ const ListAccount = () => {
                 <button
                     // onClick={() => handleBlockAccount(acc.id)}
                     className="btn border border-warning text-bg-warning"
-                    style={{width: 110}}>
+                    style={{width: '100px'}}>
                     Admin
                 </button>
             )
@@ -178,10 +173,10 @@ const ListAccount = () => {
                     <div className="col-md-4">
                         <select className="form-select py-2 border-0"
                                 onChange={handleOptionChange}>
-                            <option value="0">Tất cả</option>
-                            <option value="1">Admin</option>
-                            <option value="2">Chủ nhà</option>
-                            <option value="3">Người dùng</option>
+                            <option value="ALL">Tất cả</option>
+                            <option value="ROLE_ADMIN">Admin</option>
+                            <option value="ROLE_OWNER">Chủ nhà</option>
+                            <option value="ROLE_USER">Người dùng</option>
                         </select>
                     </div>
 
@@ -196,27 +191,32 @@ const ListAccount = () => {
             </div>
             <Table hover>
                 <thead>
-                <tr className="align-content-center">
+                <tr align="center">
                     <th>STT</th>
-                    <th>Họ và tên</th>
-                    <th>Số điện thoại</th>
+                    <th>Tài khoản</th>
+                    <th>Email</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody style={{verticalAlign: 'middle'}}>
                 {!_.isEmpty(accounts) ?
                     accounts.map((acc, index) => {
                         return (
-                            <tr key={index}>
+                            <tr key={index} align="center">
                                 <td>{index + 1}</td>
-                                <td onClick={() => accountDetail(acc)}>{acc.firstname} {acc.lastname} {acc.id}</td>
-                                <td>{acc.phone}</td>
+                                <td>{acc.username}</td>
+                                <td>{acc.email}</td>
                                 <td>{acc.status}</td>
-                                <td className="mb-3" style={{width: '180px'}}>
+                                <td className="d-flex justify-content-center">
+                                    <button
+                                        onClick={() => accountDetail(acc)}
+                                        className="btn border border-primary text-primary me-3"
+                                        style={{width: '100px'}}>
+                                        Chi tiết
+                                    </button>
                                     {checkStatusAccount(acc)}
                                 </td>
-
                             </tr>
                         )
                     }) :
@@ -245,25 +245,33 @@ const ListAccount = () => {
                             <img src={account.avatar} alt="Chưa có avatar" height={200} width={200}/>
                         </div>
                         <div className="col-7">
-                            <Table hover style={{fontSize: 25}}>
-                                <tr className="align-content-center">
-                                    <th>Tên tài khoản: </th>
+                            <Table hover>
+                                <tr>
+                                    <th>Tên tài khoản:</th>
                                     <td>{account.username}</td>
                                 </tr>
-                                <tr className="align-content-center">
-                                    <th>Họ và tên: </th>
-                                    <td>{account.firstname} {account.lastname}</td>
+                                <tr>
+                                    <th>Họ và tên:</th>
+                                    <td>{account.lastname} {account.firstname}</td>
                                 </tr>
-                                <tr className="align-content-center">
-                                    <th>Số điện thoại: </th>
+                                <tr>
+                                    <th>Email:</th>
+                                    <td>{account.email}</td>
+                                </tr>
+                                <tr>
+                                    <th>Địa chỉ:</th>
+                                    <td>{account.address}</td>
+                                </tr>
+                                <tr>
+                                    <th>Số điện thoại:</th>
                                     <td>{account.phone}</td>
                                 </tr>
-                                <tr className="align-content-center">
-                                    <th>Trạng thái: </th>
+                                <tr>
+                                    <th>Trạng thái:</th>
                                     <td>{account.status}</td>
                                 </tr>
-                                <tr className="align-content-center">
-                                    <th>Số tiền đã tiêu: </th>
+                                <tr>
+                                    <th>Số tiền đã tiêu:</th>
                                     <td>{formatCurrency(totalBooking)}</td>
                                 </tr>
                             </Table>
@@ -287,7 +295,7 @@ const ListAccount = () => {
                                         return (
                                             <tr key={b.id} align="center">
                                                 <td>
-                                                    <h5>{index + 1}</h5>
+                                                    {index + 1}
                                                 </td>
                                                 <td>
                                                     <Link to={`/house-detail/${b.id}`} className="nav-link">
@@ -300,8 +308,9 @@ const ListAccount = () => {
                                                 </td>
                                                 <td className="mb-3">
                                                     {convertDateFormat(b.endTime)}
-                                                </td><td className="mb-3">
-                                                    {b.total}
+                                                </td>
+                                                <td className="mb-3">
+                                                    {formatCurrency(b.total)}
                                                 </td>
                                             </tr>
                                         )
@@ -315,7 +324,7 @@ const ListAccount = () => {
                                 </tbody>
                             </Table>
                             {!_.isEmpty(accounts) ?
-                                <div className="col-12 mt-5 d-flex justify-content-center">
+                                <div className="col-12 mt-3 d-flex justify-content-center">
                                     <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
                                                 onChange={changePage} color="primary"/>
                                 </div>
@@ -324,9 +333,13 @@ const ListAccount = () => {
                             }
                         </div>
                     </div>
-
-
                 </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" className="py-2 px-3"
+                            onClick={() => setLgShow(false)}>
+                        Đóng
+                    </Button>
+                </Modal.Footer>
             </Modal>
             {!_.isEmpty(accounts) ?
                 <div className="col-12 mt-5 d-flex justify-content-center">
@@ -336,10 +349,7 @@ const ListAccount = () => {
                 :
                 null
             }
-
-
         </div>
-
     );
 };
 

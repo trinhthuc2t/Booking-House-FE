@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import _ from "lodash";
-import {convertDateFormat, formatCurrency} from "../../../service/format";
+import {convertDateFormat, formatCurrency, getTotalDays} from "../../../service/format";
 import {Pagination} from "@mui/material";
 import {useSelector} from "react-redux";
 import BookingService from "../../../service/BookingService";
 import Swal from "sweetalert2";
+import {Button, Modal} from "react-bootstrap";
 
 const SearchBooking = () => {
     const [selectedDateStart, setSelectedDateStart] = useState(null);
@@ -19,19 +20,27 @@ const SearchBooking = () => {
     const [bookings, setBookings] = useState([]);
     const account = useSelector(state => state.account);
     const [isLoad, setIsLoad] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [bookingDetail, setBookingDetail] = useState({})
 
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
     const changeDate = (selectedDate) => {
-        const dateTime = new Date(selectedDate);
-        dateTime.setHours(12);
-        dateTime.setMinutes(0);
-        dateTime.setSeconds(0);
+        const dateParts = selectedDate.split("-");
+        const year = parseInt(dateParts[0]);
+        const month = parseInt(dateParts[1]);
+        const day = parseInt(dateParts[2]);
 
-        const formattedDatetime = dateTime.toISOString().slice(0, 16); // Chuyển đổi Date thành chuỗi datetime-local
+        if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+            const dateTime = new Date(year, month - 1, day);
+            dateTime.setMinutes(0);
+            dateTime.setSeconds(0);
 
-        return formattedDatetime;
+            return dateTime.toISOString().slice(0, 16);
+        } else {
+            return "";
+        }
     }
 
     const handleDateChange = (event) => {
@@ -60,8 +69,8 @@ const SearchBooking = () => {
         setStatus(optionValue);
     };
 
-    const searchBookingsByOwnerId = (ownerId, nameSearch,status, selectedDateStart,selectedDateEnd, currentPage) => {
-        BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, selectedDateStart,selectedDateEnd, currentPage)
+    const searchBookingsByOwnerId = (ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage) => {
+        BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage)
             .then((bookings) => {
                 setBookings(bookings.content);
                 setTotalPages(bookings.totalPages);
@@ -72,12 +81,12 @@ const SearchBooking = () => {
     };
 
     useEffect(() => {
-        searchBookingsByOwnerId(account.id, nameSearch, status, selectedDateStart,selectedDateEnd, currentPage - 1)
+        searchBookingsByOwnerId(account.id, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage - 1)
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch, nameSearch,selectedDateStart,selectedDateEnd, status, isLoad])
+    }, [currentPage, nameSearch, nameSearch, selectedDateStart, selectedDateEnd, status, isLoad])
 
     const handleCancleBooking = (id) => {
         Swal.fire({
@@ -181,21 +190,21 @@ const SearchBooking = () => {
                 <div className={'d-flex'}>
                     <button onClick={() => handleCheckInBooking(bookingCheck.id)}
                             className="btn border border-primary text-primary"
-                            style={{width: 110}}>
+                            style={{width: 100}}>
                         Check in
                     </button>
                     <button
                         className="btn border border-danger text-danger ms-2"
                         onClick={() => handleCancleBooking(bookingCheck.id)}
-                        style={{width: 90}}>
+                        style={{width: 100}}>
                         Hủy
                     </button>
                 </div>
             )
         } else if (bookingCheck.status === "Đã hủy") {
             return (
-                <div className="mb-3" style={{color: "red"}}>
-                    <b  className="btn border border-danger text-danger" style={{width: 200}}>{bookingCheck.status}</b>
+                <div style={{color: "red"}}>
+                    <b className="btn border border-danger text-danger" style={{width: 200}}>{bookingCheck.status}</b>
                 </div>
             )
         } else if (bookingCheck.status === "Đang ở") {
@@ -206,13 +215,13 @@ const SearchBooking = () => {
                     Check out
                 </button>
             )
-        }else if (bookingCheck.status === "Đã trả phòng") {
+        } else if (bookingCheck.status === "Đã trả phòng") {
             return (
-                <div className="mb-3" style={{color: "blue"}}>
+                <div style={{color: "blue"}}>
                     <b className="btn border border-success text-success" style={{width: 200}}>{bookingCheck.status}</b>
                 </div>
             )
-        }else  {
+        } else {
             return (
                 <div className={'d-flex'}>
                     <button onClick={() => waitOwnerConfirmBooking(bookingCheck.id)}
@@ -233,6 +242,10 @@ const SearchBooking = () => {
 
     }
 
+    const handleBookingDetail = (booking) => {
+        setBookingDetail(booking);
+        setShowModal(true);
+    }
 
     return (
         <div className="col-9">
@@ -241,9 +254,9 @@ const SearchBooking = () => {
                 <div className="mb-3 py-4 px-3"
                      style={{backgroundColor: "rgb(0,185,142)"}}>
                     <div className="row g-2">
-                        <div className="col-md-2">
+                        <div className="col-md-3">
                             <select className="form-select py-2 border-0" value={status}
-                                    onChange={handleOptionChange}>
+                                    onChange={handleOptionChange} style={{minWidth: '200px'}}>
                                 <option value="">Tất cả</option>
                                 <option value="Chờ nhận phòng">Chờ nhận phòng</option>
                                 <option value="Đã trả phòng">Đã trả phòng</option>
@@ -253,12 +266,12 @@ const SearchBooking = () => {
                             </select>
                         </div>
 
-                        <div className="col-md-6">
+                        <div className="col-md-5">
                             <input type="text" className="form-control border-0 py-2"
                                    placeholder="Nhập từ khóa tìm kiếm"
                                    name=""
                                    id="" value={nameSearch} onInput={handleNameSearch}/>
-                        < /div>
+                        </div>
                         <div className="col-2">
                             <div className="input-group">
                                 <input type="date" className="form-control" value={valueDateStart}
@@ -271,22 +284,18 @@ const SearchBooking = () => {
                                        onChange={handleDateChangeEnd}/>
                             </div>
                         </div>
-                        <div className="col-md-8">
-
-                        < /div>
                     </div>
                 </div>
 
                 <table className="table">
                     <thead>
-                    <tr align="center" style={{fontSize: '20px'}}>
+                    <tr align="center">
                         <th>STT</th>
                         <th>Nhà</th>
                         <th>Ngày thuê</th>
                         <th>Ngày trả nhà</th>
-                        {/*<th>Tên khác hàng</th>
-                        <th style={{minWidth: '130px'}}>Tổng đơn</th>*/}
                         <th style={{width: '150px'}}>Trạng thái</th>
+                        <th>Hành động</th>
                     </tr>
                     </thead>
                     <tbody style={{verticalAlign: 'middle'}}>
@@ -317,21 +326,21 @@ const SearchBooking = () => {
                                         </Link>
                                     </td>
 
-                                    <td className="mb-3">
+                                    <td>
                                         {convertDateFormat(b.startTime)}
                                     </td>
-                                    <td className="mb-3">
+                                    <td>
                                         {convertDateFormat(b.endTime)}
                                     </td>
-                                    {/*<td className="mb-3">
-                                        {`${b.account.firstname} ${b.account.lastname}`}
-                                    </td>
-                                    <td className="mb-3">
-                                        {formatCurrency(b.total)}
-                                    </td>*/}
 
-                                    <td className="mb-3" style={{width: '180px'}}>
+                                    <td style={{width: '180px'}}>
                                         {checkStatusBooking(b)}
+                                    </td>
+                                    <td>
+                                        <button className="btn border-primary text-primary"
+                                                onClick={() => handleBookingDetail(b)}>
+                                            Chi tiết
+                                        </button>
                                     </td>
                                 </tr>
                             )
@@ -352,6 +361,82 @@ const SearchBooking = () => {
                     null
                 }
             </div>
+
+            <Modal
+                size="lg"
+                centered
+                show={showModal}
+                onHide={() => setShowModal(false)}
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        Chi tiết lịch thuê
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {!_.isEmpty(bookingDetail) &&
+                        <div className="px-4">
+                            <div className="row">
+                                <div className="col-6">
+                                    <h5 className="mb-3">Thông tin nhà cho thuê</h5>
+                                    <p className="mb-2">
+                                        <span className="fw-medium">Tên nhà:</span> {bookingDetail.house?.name}
+                                    </p>
+                                    <p className="mb-2">
+                                        <span
+                                            className="fw-medium">Chủ nhà:</span> {bookingDetail.house?.owner.username}
+                                    </p>
+                                    <p>
+                                        <span className="fw-medium">Địa chỉ:</span> {bookingDetail.house?.address}
+                                    </p>
+                                    <p><span className="fw-medium">Ảnh:</span></p>
+                                    <img src={bookingDetail.house?.thumbnail} alt="Chưa có avatar" height={200}
+                                         width={200}/>
+                                </div>
+                                <div className="col-6">
+                                    <h5 className="mb-3">Thông tin khách thuê</h5>
+                                    <p className="mb-2">
+                                        <span
+                                            className="fw-medium">Tên tài khoản:</span> {bookingDetail.account?.username}
+                                    </p>
+                                    <p className="mb-2">
+                                    <span
+                                        className="fw-medium">Họ và tên:</span> {bookingDetail.account?.lastname} {bookingDetail.account?.firstname}
+                                    </p>
+                                    <p className="mb-2">
+                                        <span className="fw-medium">Email:</span> {bookingDetail.account?.email}
+                                    </p>
+                                    <p className="mb-2">
+                                        <span className="fw-medium">Địa chỉ:</span> {bookingDetail.account?.address}
+                                    </p>
+                                    <p className="mb-2">
+                                        <span className="fw-medium">Số điện thoại:</span> {bookingDetail.account?.phone}
+                                    </p>
+                                    <p className="mb-2">
+                                    <span
+                                        className="fw-medium">Thời gian thuê: </span>
+                                        {getTotalDays(new Date(bookingDetail.startTime), new Date(bookingDetail.endTime))} ngày
+                                        (Từ {convertDateFormat(bookingDetail.startTime)} đến {convertDateFormat(bookingDetail.endTime)})
+                                    </p>
+                                    <p className="mb-2">
+                                        <span
+                                            className="fw-medium">Tổng tiền:</span> {formatCurrency(bookingDetail.total)}
+                                    </p>
+                                    <p className="mb-2">
+                                        <span className="fw-medium">Trạng thái:</span> {bookingDetail.status}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" className="py-2 px-3"
+                            onClick={() => setShowModal(false)}>
+                        Đóng
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 };

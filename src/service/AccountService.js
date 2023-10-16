@@ -1,5 +1,5 @@
 import instance from "./axiosConfig";
-import axios from "axios";
+
 const AccountService = {
 
     findAdmins: () => {
@@ -9,13 +9,13 @@ const AccountService = {
                     resolve(response.data);
                 })
                 .catch(function (err) {
-                    reject(err=>console.log(err))
+                    reject(err => console.log(err))
                 });
         })
     },
 
     getAccountById: (id) => {
-        return new Promise( (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             instance.get("/api/accounts/getById/" + id).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
@@ -24,9 +24,9 @@ const AccountService = {
         })
     },
 
-    editAccount: (id , account) => {
-        return new Promise( (resolve, reject) => {
-            instance.put("/api/accounts/" + id , account).then((response) => {
+    editAccount: (id, account) => {
+        return new Promise((resolve, reject) => {
+            instance.put("/api/accounts/" + id, account).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 reject(err);
@@ -36,8 +36,8 @@ const AccountService = {
     },
 
     checkPassword: (account) => {
-        return new Promise( (resolve, reject) => {
-            instance.post("/api/accounts/checkPassword/" + account.id , account).then((response) => {
+        return new Promise((resolve, reject) => {
+            instance.post("/api/accounts/checkPassword/" + account.id, account).then((response) => {
                 resolve(response.data);
                 console.log(response.data);
             }).catch(function (err) {
@@ -47,8 +47,8 @@ const AccountService = {
     },
 
     changePassWord: (account) => {
-        return new Promise( (resolve, reject) => {
-            instance.put("/api/accounts/changePassword/" + account.id , account).then((response) => {
+        return new Promise((resolve, reject) => {
+            instance.put("/api/accounts/changePassword/" + account.id, account).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 console.log(err);
@@ -57,8 +57,8 @@ const AccountService = {
     },
 
     registerOwner: async (data) => {
-        return new Promise( (resolve, reject) => {
-            instance.post("/api/accounts/registerOwner" , data).then((response) => {
+        return new Promise((resolve, reject) => {
+            instance.post("/api/accounts/registerOwner", data).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 alert(err);
@@ -68,9 +68,9 @@ const AccountService = {
         })
     },
 
-    getOwner : (idAccount) => {
-        return new Promise( (resolve, reject) => {
-            instance.get("/api/accounts/getByAccount/" + idAccount ).then((response) => {
+    getOwner: (idAccount) => {
+        return new Promise((resolve, reject) => {
+            instance.get("/api/accounts/getByAccount/" + idAccount).then((response) => {
                 resolve(response.data);
             }).catch(function (err) {
                 console.log(err);
@@ -78,18 +78,18 @@ const AccountService = {
             })
         })
     },
-    getListRegisterOwner :  async () => {
+    getListRegisterOwner: async () => {
         return await instance.get("/api/accounts/getRegisterOwner");
     },
-    agreeRegister :  async (data) => {
-        return await instance.post("/api/accounts/agreeRegister" , data);
+    agreeRegister: async (data) => {
+        return await instance.post("/api/accounts/agreeRegister", data);
     },
-    refuseRegister : async (idOwner) => {
+    refuseRegister: async (idOwner) => {
         return await instance.get("/api/accounts/refuseRegister/" + idOwner);
     },
 
-    findByRoleId : async (roleId,nameSearch, currentPage) => {
-        return await instance.get(`/api/accounts/by-role?roleId=${roleId}&nameSearch=${nameSearch}&page=${currentPage}`);
+    findByRoleName: async (roleName, nameSearch, currentPage) => {
+        return await instance.get(`/api/accounts/by-role?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}`);
     },
     blockAccount: (accId) => {
         return instance.get("/api/accounts/block/" + accId);
@@ -97,12 +97,5 @@ const AccountService = {
     unblockAccount: (accId) => {
         return instance.get("/api/accounts/unBlock/" + accId);
     },
-
-
-
-
-
-
-
 }
 export default AccountService;
