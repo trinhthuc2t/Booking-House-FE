@@ -24,14 +24,22 @@ const SearchBooking = () => {
         setCurrentPage(value)
     }
     const changeDate = (selectedDate) => {
-        const dateTime = new Date(selectedDate);
-        dateTime.setHours(12);
-        dateTime.setMinutes(0);
-        dateTime.setSeconds(0);
+        const dateParts = selectedDate.split("-");
+        const year = parseInt(dateParts[0]);
+        const month = parseInt(dateParts[1]);
+        const day = parseInt(dateParts[2]);
 
-        const formattedDatetime = dateTime.toISOString().slice(0, 16); // Chuyển đổi Date thành chuỗi datetime-local
+        if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+            const dateTime = new Date(year, month - 1, day);
+            dateTime.setMinutes(0);
+            dateTime.setSeconds(0);
 
-        return formattedDatetime;
+            const formattedDatetime = dateTime.toISOString().slice(0, 16);
+            return formattedDatetime;
+        } else {
+
+            return "";
+        }
     }
 
     const handleDateChange = (event) => {
@@ -39,6 +47,7 @@ const SearchBooking = () => {
         setValueDateStart(selectedDate)
         const formattedDatetime = changeDate(selectedDate);
         setSelectedDateStart(formattedDatetime);
+        console.log(selectedDate)
 
     };
 
@@ -63,8 +72,8 @@ const SearchBooking = () => {
     const searchBookingsByOwnerId = (ownerId, nameSearch,status, selectedDateStart,selectedDateEnd, currentPage) => {
         BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, selectedDateStart,selectedDateEnd, currentPage)
             .then((bookings) => {
-                setBookings(bookings.content);
-                setTotalPages(bookings.totalPages);
+                setBookings(bookings.data.content);
+                setTotalPages(bookings.data.totalPages);
             })
             .catch((err) => {
                 console.log(err);

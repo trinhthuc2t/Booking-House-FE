@@ -10,7 +10,7 @@ const BookingService = {
     getBookingsByOwnerWeek: (ownerId, month, year, startDay, endDay) => {
         return new Promise((resolve, reject) => {
             instance
-                .get(`http://localhost:8080/api/bookings/${ownerId}/week?month=${month}&year=${year}&startDay=${startDay}&endDay=${endDay}`)
+                .get(`/api/bookings/${ownerId}/week?month=${month}&year=${year}&startDay=${startDay}&endDay=${endDay}`)
                 .then(response => {
                     resolve(response.data);
                 })
@@ -37,16 +37,9 @@ const BookingService = {
             selectedDateStart: selectedDateStart,
             selectedDateEnd: selectedDateEnd,
         };
-        return new Promise((resolve, reject) => {
-            instance
-                .post(`http://localhost:8080/api/bookings/${ownerId}/search?page=${currentPage}`, requestData)
-                .then(response => {
-                    resolve(response.data);
-                })
-                .catch(error => {
-                    reject(error);
-                });
-        });
+        return instance
+            .post(`/api/bookings/${ownerId}/search?page=${currentPage}`, requestData)
+
     },
 
 
