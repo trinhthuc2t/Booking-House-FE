@@ -42,9 +42,6 @@ const HouseByIdService = {
         })
     },
 
-
-
-
 };
 
 

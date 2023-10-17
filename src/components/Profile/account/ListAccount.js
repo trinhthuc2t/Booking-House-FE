@@ -49,7 +49,7 @@ const ListAccount = () => {
         findByAccountId(acc.id);
     }
     const findByAccountId = (accountId) => {
-        BookingService.getHistoryByAccount(accountId)
+        BookingService.getHistoryByAccount(accountId )
             .then((bookings) => {
                 setBookings(bookings.data.content)
                 setTotalBooking(totalBookingByAcc(bookings.data.content));

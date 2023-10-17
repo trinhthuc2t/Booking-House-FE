@@ -2,11 +2,12 @@ import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import _ from "lodash";
 import {convertDateFormat, formatCurrency, getTotalDays} from "../../../service/format";
-import {Pagination} from "@mui/material";
+import {CircularProgress, Pagination} from "@mui/material";
 import {useSelector} from "react-redux";
 import BookingService from "../../../service/BookingService";
 import Swal from "sweetalert2";
 import {Button, Modal} from "react-bootstrap";
+import {cancelBookingOwner} from "../../../service/ownerService";
 
 const SearchBooking = () => {
     const [selectedDateStart, setSelectedDateStart] = useState(null);
@@ -21,7 +22,8 @@ const SearchBooking = () => {
     const account = useSelector(state => state.account);
     const [isLoad, setIsLoad] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const [bookingDetail, setBookingDetail] = useState({})
+    const [bookingDetail, setBookingDetail] = useState({});
+    const [isProgressing, setIsProgressing] = useState(false);
 
     const changePage = (e, value) => {
         setCurrentPage(value)
@@ -48,7 +50,6 @@ const SearchBooking = () => {
         setValueDateStart(selectedDate)
         const formattedDatetime = changeDate(selectedDate);
         setSelectedDateStart(formattedDatetime);
-        console.log(selectedDate)
 
     };
 
@@ -71,8 +72,8 @@ const SearchBooking = () => {
     const searchBookingsByOwnerId = (ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage) => {
         BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage)
             .then((bookings) => {
-                setBookings(bookings.data.content);
-                setTotalPages(bookings.data.totalPages);
+                setBookings(bookings.content);
+                setTotalPages(bookings.totalPages);
             })
             .catch((err) => {
                 console.log(err);
@@ -87,22 +88,55 @@ const SearchBooking = () => {
         })
     }, [currentPage, nameSearch, nameSearch, selectedDateStart, selectedDateEnd, status, isLoad])
 
-    const handleCancleBooking = (id) => {
+    const handleCancelBooking = (id) => {
         Swal.fire({
-            title: 'Bạn chắc chắn muốn hủy thuê nhà?',
+            title: 'Bạn chắc chắn muốn hủy thuê nhà của khách?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
             cancelButtonText: 'Đóng',
         }).then((result) => {
             if (result.isConfirmed) {
-                BookingService.cancelBookingAdmin(id)
-                    .then((res) => {
-                        setIsLoad(!isLoad);
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    });
+                Swal.fire({
+                    title: 'Nhập lý do hủy thuê',
+                    input: 'text',
+                    inputAttributes: {
+                        autocapitalize: 'off'
+                    },
+                    showCancelButton: true,
+                    cancelButtonText: 'Đóng',
+                    confirmButtonText: 'Gửi',
+                    preConfirm: (value) => {
+                        if (!value) {
+                            Swal.showValidationMessage('Vui lòng không để trống')
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        setIsProgressing(true);
+                        cancelBookingOwner(id, {message: result.value})
+                            .then((res) => {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Hủy lịch thành công !',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then();
+                                setIsLoad(!isLoad);
+                                setIsProgressing(false);
+                            })
+                            .catch(err => {
+                                console.log(err);
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Hủy lịch thất bại !',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                }).then();
+                                setIsProgressing(false);
+                            });
+                    }
+                })
             }
         })
     }
@@ -124,7 +158,7 @@ const SearchBooking = () => {
                             title: 'Trạng thái đã được cập nhật thành công !',
                             showConfirmButton: false,
                             timer: 1000
-                        })
+                        }).then();
                     })
                     .catch(err => {
                         console.log(err)
@@ -167,15 +201,17 @@ const SearchBooking = () => {
             cancelButtonText: 'Đóng',
         }).then((result) => {
             if (result.isConfirmed) {
+                setIsProgressing(true);
                 BookingService.waitOwnerConfirmBooking(id)
                     .then((res) => {
                         setIsLoad(!isLoad);
                         Swal.fire({
                             icon: 'success',
-                            title: 'Trạng thái đã được cập nhật thành công !',
+                            title: 'Xác nhận lịch thuê thành công !',
                             showConfirmButton: false,
-                            timer: 1000
-                        })
+                            timer: 1500
+                        }).then();
+                        setIsProgressing(false);
                     })
                     .catch(err => {
                         console.log(err)
@@ -189,21 +225,21 @@ const SearchBooking = () => {
                 <div className={'d-flex'}>
                     <button onClick={() => handleCheckInBooking(bookingCheck.id)}
                             className="btn border border-primary text-primary"
-                            style={{width: 110}}>
+                            style={{width: 100}}>
                         Check in
                     </button>
                     <button
                         className="btn border border-danger text-danger ms-2"
-                        onClick={() => handleCancleBooking(bookingCheck.id)}
-                        style={{width: 90}}>
+                        onClick={() => handleCancelBooking(bookingCheck.id)}
+                        style={{width: 100}}>
                         Hủy
                     </button>
                 </div>
             )
         } else if (bookingCheck.status === "Đã hủy") {
             return (
-                <div className="mb-3" style={{color: "red"}}>
-                    <b  className="btn border border-danger text-danger" style={{width: 200}}>{bookingCheck.status}</b>
+                <div style={{color: "red"}}>
+                    <b className="text-danger" style={{width: 200}}>{bookingCheck.status}</b>
                 </div>
             )
         } else if (bookingCheck.status === "Đang ở") {
@@ -217,7 +253,7 @@ const SearchBooking = () => {
         } else if (bookingCheck.status === "Đã trả phòng") {
             return (
                 <div style={{color: "blue"}}>
-                    <b className="btn border border-success text-success" style={{width: 200}}>{bookingCheck.status}</b>
+                    <b className="text-success" style={{width: 200}}>{bookingCheck.status}</b>
                 </div>
             )
         } else {
@@ -230,7 +266,7 @@ const SearchBooking = () => {
                     </button>
                     <button
                         className="btn border border-danger text-danger ms-2"
-                        onClick={() => handleCancleBooking(bookingCheck.id)}
+                        onClick={() => handleCancelBooking(bookingCheck.id)}
                         style={{width: 80}}>
                         Hủy
                     </button>
@@ -436,6 +472,13 @@ const SearchBooking = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            {isProgressing &&
+                <div
+                    className="w-100 h-100 position-fixed top-0 start-0 d-flex justify-content-center align-items-center"
+                    style={{background: 'rgba(0,0,0,0.4)'}}>
+                    <CircularProgress color="success"/>
+                </div>
+            }
         </div>
     );
 };

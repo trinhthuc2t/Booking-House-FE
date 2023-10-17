@@ -5,17 +5,20 @@ import _ from "lodash";
 import {Pagination} from "@mui/material";
 import Swal from "sweetalert2";
 import {Button, Modal} from "react-bootstrap";
-import {convertDateFormat, formatCurrency} from "../../../service/format";
+import {formatCurrency} from "../../../service/format";
 import HouseByIdService from "../../../service/HouseByIdService";
 import {Link} from "react-router-dom";
 
 
 const ListOwner = () => {
     const [accounts, setAccounts] = useState([]);
+    const [houses, setHouses] = useState([]);
     const [revenue, setRevenue] = useState([]);
     const [account, setAccount] = useState({});
     const [totalPages, setTotalPages] = useState(0);
+    const [totalPagesMd, setTotalPagesMd] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
+    const [currentPageMd, setCurrentPageMd] = useState(1);
     const [status, setStatus] = useState("ALL");
     const [nameSearch, setNameSearch] = useState("");
     const [isLoad, setIsLoad] = useState(false);
@@ -23,6 +26,9 @@ const ListOwner = () => {
     const roleName = "ROLE_OWNER";
     const changePage = (e, value) => {
         setCurrentPage(value)
+    }
+    const changePageMd = (e, value) => {
+        setCurrentPageMd(value)
     }
     const handleOptionChange = (event) => {
         const optionValue = event.target.value;
@@ -43,13 +49,17 @@ const ListOwner = () => {
                 console.log(err);
             });
     };
+
+
     const accountDetail = (acc) => {
         setAccount(acc);
-        findByAccountId(acc.id, "", "", 0);
+        findByAccountId(acc.id, "", "", currentPageMd - 1);
     }
-    const findByAccountId = (ownerId, name, status, currentPage) => {
-        HouseByIdService.findByOwnerIdAndNameAndStatus(ownerId, name, status, currentPage)
+    const findByAccountId = (ownerId, name, status, currentPageMd) => {
+        HouseByIdService.findByOwnerIdAndNameAndStatus(ownerId, name, status, currentPageMd)
             .then((houses) => {
+                setHouses(houses.content)
+                setTotalPagesMd(houses.totalPages)
                 setRevenue(getRevenue(houses.content));
                 setLgShow(true);
             })
@@ -123,7 +133,7 @@ const ListOwner = () => {
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch, status, isLoad])
+    }, [currentPage, currentPageMd, nameSearch, houses, status, isLoad])
 
     const checkStatusAccount = (acc) => {
         if (acc.status === "Bị khóa") {
@@ -148,7 +158,6 @@ const ListOwner = () => {
     }
 
     return (
-
         <div className="col-9">
             <h3 className="text-uppercase text-center mb-5">Danh sách người dùng</h3>
             <div className="mb-3 py-4 px-3"
@@ -169,10 +178,10 @@ const ListOwner = () => {
                                placeholder="Nhập từ khóa tìm kiếm"
                                name=""
                                id="" value={nameSearch} onInput={handleNameSearch}/>
-                    < /div>
-
+                    </div>
                 </div>
             </div>
+
             <Table hover>
                 <thead>
                 <tr align="center">
@@ -260,9 +269,55 @@ const ListOwner = () => {
                                 </tr>
                             </Table>
                         </div>
-                    </div>
-                    <div className="row">
-                        <Link to={"/houses-owner"}><h2 className="text-md-center">Lịch sử thuê nhà</h2></Link>
+                        <div className="row">
+                            <h2 className="text-md-center">Danh sach nhà</h2>
+                            <Table hover>
+                                <thead>
+                                <tr align="center" style={{fontSize: '20px'}}>
+                                    <th>STT</th>
+                                    <th>Căn nhà</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Giá thuê</th>
+                                    <th>Doanh thu</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {!_.isEmpty(houses) ?
+                                    houses.map((h, index) => {
+                                        return (
+                                            <tr key={index} align="center">
+                                                <td>
+                                                    {index + 1}
+                                                </td>
+                                                <td>
+                                                    <Link to={`/house-detail/${h.id}`} className="nav-link">
+                                                        <h5>{h.name}</h5>
+                                                    </Link>
+                                                </td>
+                                                <td>{h.province}</td>
+                                                <td>{h.price}</td>
+                                                <td>{h.revenue}</td>
+                                            </tr>
+                                        )
+                                    }) :
+                                    <tr align="center">
+                                        <td colSpan="6" className="pt-3 fs-5 text-danger">Danh sách trống</td>
+                                    </tr>
+
+                                }
+
+                                </tbody>
+                            </Table>
+                            {!_.isEmpty(houses) ?
+                                <div className="col-12 mt-3 d-flex justify-content-center">
+                                    <Pagination count={totalPagesMd} size="large" variant="outlined" shape="rounded"
+                                                onChange={changePageMd} color="primary"/>
+                                </div>
+                                :
+                                null
+                            }
+
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
