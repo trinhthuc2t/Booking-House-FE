@@ -10,4 +10,8 @@ const editHouse = (data) =>{
     return instance.post(`${API_URL}/edit-house`, data);
 }
 
-export {createHouse, editHouse};
+const cancelBookingOwner = (idBooking, message) => {
+    return instance.post(`${API_URL}/cancel-booking/${idBooking}`, message);
+}
+
+export {createHouse, editHouse, cancelBookingOwner};
