@@ -53,14 +53,14 @@ const ListOwner = () => {
 
     const accountDetail = (acc) => {
         setAccount(acc);
-        findByAccountId(acc.id, "", "", currentPageMd - 1);
+        getHousesByAccountId(acc.id);
     }
     const findByAccountId = (ownerId, name, status, currentPageMd) => {
         HouseByIdService.findByOwnerIdAndNameAndStatus(ownerId, name, status, currentPageMd)
             .then((houses) => {
                 setHouses(houses.content)
                 setTotalPagesMd(houses.totalPages)
-                getHousesByAccountId(ownerId)
+                setRevenue(getRevenue(houses.content));
                 setLgShow(true);
             })
             .catch((err) => {
@@ -70,6 +70,7 @@ const ListOwner = () => {
     const getHousesByAccountId = (ownerId) => {
         HouseByIdService.findByOwnerId(ownerId)
             .then((houses) => {
+                setHouses(houses)
                 setRevenue(getRevenue(houses));
                 setLgShow(true);
             })
@@ -138,7 +139,6 @@ const ListOwner = () => {
     }
 
     useEffect(() => {
-        getHousesByAccountId(account.id)
         findByRoleName(roleName, nameSearch, status, currentPage - 1);
         window.scrollTo({
             top: 0,
