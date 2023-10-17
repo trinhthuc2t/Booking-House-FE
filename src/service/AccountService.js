@@ -87,7 +87,6 @@ const AccountService = {
     refuseRegister: async (idOwner) => {
         return await instance.get("/api/accounts/refuseRegister/" + idOwner);
     },
-
     findByRoleName: async (roleName, nameSearch, currentPage) => {
         return await instance.get(`/api/accounts/by-role?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}`);
     },
