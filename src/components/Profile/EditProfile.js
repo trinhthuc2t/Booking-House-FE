@@ -288,19 +288,19 @@ const EditProfile = ({status}) => {
                                 {handleTitle()}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="firstname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
-                                        <Field type="text" className="form-control" id="firstname"
-                                               placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
+                                        <label className="form-label" htmlFor="lastname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="lastname"
+                                               placeholder="Nhập họ" value={accountInfo.lastname} name="lastname"
                                                onInput={handleValueInput}/>
-                                        <ErrorMessage name={'firstname'} className="text-danger" component="small"/>
+                                        <ErrorMessage name={'lastname'} className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="lastname">Tên <span className={'text-danger'}>*</span></label>
-                                        <Field type="text" className="form-control" id="lastname"
-                                               placeholder="Nhập tên đệm và tên" value={accountInfo.lastname}
-                                               name="lastname"
+                                        <label className="form-label" htmlFor="firstname">Tên <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="firstname"
+                                               placeholder="Nhập tên đệm và tên" value={accountInfo.firstname}
+                                               name="firstname"
                                                onInput={handleValueInput}/>
-                                        <ErrorMessage name='lastname' className="text-danger" component="small"/>
+                                        <ErrorMessage name='firstname' className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="email">Email <span className={'text-danger'}>*</span></label>
