@@ -53,9 +53,9 @@ const Navbar = () => {
                                 </div>
 
                                 <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    <Link to="/chat" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                                         <i className="bi bi-messenger"></i>
-                                    </a>
+                                    </Link>
                                     <div className="dropdown-menu rounded-0 m-0 custom-dropdown">
                                         <a className="dropdown-item">Người gửi+ đã gửi tin nhắn cho b</a>
                                     </div>

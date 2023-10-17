@@ -22,6 +22,7 @@ import RegisterOwner from "./components/Profile/RegisterOwner";
 import ConfirmOwner from "./components/Profile/ConfirmOwner";
 import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
+import ChatBox from "./components/ChatBox/ChatBox";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
+                <Route path="/chat" element={<ChatBox/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>
                     <Route path={"edit-profile"} element={<EditProfile status={true}/>}/>
                     <Route path={"register-owner"} element={<RegisterOwner/>}/>
