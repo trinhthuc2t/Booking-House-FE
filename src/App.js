@@ -1,7 +1,7 @@
 import './App.scss';
-import { ToastContainer } from 'react-toastify';
+import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
@@ -34,13 +34,13 @@ function App() {
                 <Route path={"/"} element={<HomePage/>}/>
                 <Route path={"/register"} element={<Register setShow={setShow}/>}/>
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
-                <Route path={"/login"} element={<Login setShow={setShow} />}/>
+                <Route path={"/login"} element={<Login setShow={setShow}/>}/>
                 <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>
-                    <Route path={"edit-profile"}  element={<EditProfile status={true}/>}/>
-                    <Route path={"register-owner"}  element={<RegisterOwner />}/>
+                    <Route path={"edit-profile"} element={<EditProfile status={true}/>}/>
+                    <Route path={"register-owner"} element={<RegisterOwner/>}/>
                     <Route path={"change-password"} element={<ChangePassword/>}/>
                     <Route path={"information"} element={<Information/>}/>
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
