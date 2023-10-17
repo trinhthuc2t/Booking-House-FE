@@ -5,37 +5,36 @@ import _ from "lodash";
 import {Pagination} from "@mui/material";
 import Swal from "sweetalert2";
 import {Button, Modal} from "react-bootstrap";
-import BookingService from "../../../service/BookingService";
+import {convertDateFormat, formatCurrency} from "../../../service/format";
+import HouseByIdService from "../../../service/HouseByIdService";
 import {Link} from "react-router-dom";
-import {convertDateFormat,  formatCurrency} from "../../../service/format";
 
 
-const ListAccount = () => {
+const ListOwner = () => {
     const [accounts, setAccounts] = useState([]);
-    const [bookings, setBookings] = useState([]);
-    const [totalBooking, setTotalBooking] = useState([]);
+    const [revenue, setRevenue] = useState([]);
     const [account, setAccount] = useState({});
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [roleName, setRoleName] = useState("ALL");
+    const [status, setStatus] = useState("ALL");
     const [nameSearch, setNameSearch] = useState("");
     const [isLoad, setIsLoad] = useState(false);
     const [lgShow, setLgShow] = useState(false);
-
+    const roleName = "ROLE_OWNER";
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
     const handleOptionChange = (event) => {
         const optionValue = event.target.value;
-        setRoleName(optionValue);
+        setStatus(optionValue);
     };
     const handleNameSearch = (event) => {
         const nameSearch = event.target.value;
         setNameSearch(nameSearch);
     };
 
-    const findByRoleName = (roleName, nameSearch, currentPage) => {
-        AccountService.findByRoleName(roleName, nameSearch, currentPage)
+    const findByRoleName = (roleName, nameSearch, status, currentPage) => {
+        AccountService.findByRoleName(roleName, nameSearch, status, currentPage)
             .then((accounts) => {
                 setAccounts(accounts.data.content);
                 setTotalPages(accounts.data.totalPages);
@@ -46,14 +45,12 @@ const ListAccount = () => {
     };
     const accountDetail = (acc) => {
         setAccount(acc);
-        findByAccountId(acc.id);
+        findByAccountId(acc.id, "", "", 0);
     }
-    const findByAccountId = (accountId) => {
-        BookingService.getHistoryByAccount(accountId)
-            .then((bookings) => {
-                setBookings(bookings.data.content)
-                setTotalBooking(totalBookingByAcc(bookings.data.content));
-                console.log(bookings.data)
+    const findByAccountId = (ownerId, name, status, currentPage) => {
+        HouseByIdService.findByOwnerIdAndNameAndStatus(ownerId, name, status, currentPage)
+            .then((houses) => {
+                setRevenue(getRevenue(houses.content));
                 setLgShow(true);
             })
             .catch((err) => {
@@ -61,12 +58,12 @@ const ListAccount = () => {
             });
     };
 
-    const totalBookingByAcc = (bookings) => {
-        let totalBooking = 0;
-        for (let i = 0; i < bookings.length; i++) {
-            totalBooking += bookings[i].total;
+    const getRevenue = (houses) => {
+        let revenue = 0;
+        for (let i = 0; i < houses.length; i++) {
+            revenue += houses[i].revenue;
         }
-        return totalBooking;
+        return revenue;
     };
 
     const handleBlockAccount = (id) => {
@@ -121,43 +118,30 @@ const ListAccount = () => {
     }
 
     useEffect(() => {
-        findByRoleName(roleName, nameSearch, currentPage - 1);
+        findByRoleName(roleName, nameSearch, status, currentPage - 1);
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch, roleName, isLoad])
+    }, [currentPage, nameSearch, status, isLoad])
 
     const checkStatusAccount = (acc) => {
-        if (acc.role.name !== "ROLE_ADMIN") {
-            if (acc.status === "Bị khóa") {
-                return (
-                    <button
-                        onClick={() => handleUnBlockAccount(acc.id)}
-                        className="btn border border-danger text-danger"
-                        style={{width: '100px'}}>
-                        Mở khóa
-                    </button>
-                )
-            } else {
-                return (
-                    <button
-                        onClick={() => handleBlockAccount(acc.id)}
-                        className="btn border border-secondary text-secondary"
-                        style={{width: '100px'}}>
-                        Khóa
-                    </button>
-                )
-
-            }
-
+        if (acc.status === "Bị khóa") {
+            return (
+                <button
+                    onClick={() => handleUnBlockAccount(acc.id)}
+                    className="btn border border-danger text-danger"
+                    style={{width: '100px'}}>
+                    Mở khóa
+                </button>
+            )
         } else {
             return (
                 <button
-                    // onClick={() => handleBlockAccount(acc.id)}
-                    className="btn border border-warning text-bg-warning"
+                    onClick={() => handleBlockAccount(acc.id)}
+                    className="btn border border-secondary text-secondary"
                     style={{width: '100px'}}>
-                    Admin
+                    Khóa
                 </button>
             )
         }
@@ -174,9 +158,9 @@ const ListAccount = () => {
                         <select className="form-select py-2 border-0"
                                 onChange={handleOptionChange}>
                             <option value="ALL">Tất cả</option>
-                            <option value="ROLE_ADMIN">Admin</option>
-                            <option value="ROLE_OWNER">Chủ nhà</option>
-                            <option value="ROLE_USER">Người dùng</option>
+                            <option value="Bị khóa">Bị khóa</option>
+                            <option value="Đang hoạt động">Đang hoạt động</option>
+                            <option value="Chờ xác nhận">Chờ xác nhận</option>
                         </select>
                     </div>
 
@@ -189,7 +173,6 @@ const ListAccount = () => {
 
                 </div>
             </div>
-
             <Table hover>
                 <thead>
                 <tr align="center">
@@ -272,67 +255,14 @@ const ListAccount = () => {
                                     <td>{account.status}</td>
                                 </tr>
                                 <tr>
-                                    <th>Số tiền đã tiêu:</th>
-                                    <td>{formatCurrency(totalBooking)}</td>
+                                    <th>Tổng doanh thu</th>
+                                    <td>{formatCurrency(revenue)}</td>
                                 </tr>
                             </Table>
                         </div>
-                        <div className="row">
-                            <h2 className="text-md-center">Lịch sử thuê nhà</h2>
-                            <Table hover>
-                                <thead>
-                                <tr align="center" style={{fontSize: '20px'}}>
-                                    <th>STT</th>
-                                    <th>Căn nhà</th>
-                                    <th>Ngày thuê</th>
-                                    <th>Ngày trả</th>
-                                    <th>Tổng tiền</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {!_.isEmpty(bookings) ?
-                                    bookings.map((b, index) => {
-                                        console.log(bookings)
-                                        return (
-                                            <tr key={b.id} align="center">
-                                                <td>
-                                                    {index + 1}
-                                                </td>
-                                                <td>
-                                                    <Link to={`/house-detail/${b.id}`} className="nav-link">
-                                                        <h5>{b.house.name}</h5>
-                                                    </Link>
-                                                </td>
-
-                                                <td className="mb-3">
-                                                    {convertDateFormat(b.startTime)}
-                                                </td>
-                                                <td className="mb-3">
-                                                    {convertDateFormat(b.endTime)}
-                                                </td>
-                                                <td className="mb-3">
-                                                    {formatCurrency(b.total)}
-                                                </td>
-                                            </tr>
-                                        )
-                                    }) :
-                                    <tr align="center">
-                                        <td colSpan="6" className="pt-3 fs-5 text-danger">Danh sách trống</td>
-                                    </tr>
-
-                                }
-
-                                </tbody>
-                            </Table>
-                            {!_.isEmpty(accounts) ?
-                                <div className="col-12 mt-3 d-flex justify-content-center">
-                                    <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
-                                                onChange={changePage} color="primary"/>
-                                </div>
-                                :
-                                null
-                            }
-                        </div>
+                    </div>
+                    <div className="row">
+                        <Link to={"/houses-owner"}><h2 className="text-md-center">Lịch sử thuê nhà</h2></Link>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
@@ -354,4 +284,4 @@ const ListAccount = () => {
     );
 };
 
-export default ListAccount;
+export default ListOwner;

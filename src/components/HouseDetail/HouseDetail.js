@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {formatCurrency} from "../../service/format";
+import {formatCurrency, getTotalDays} from "../../service/format";
 import StarsReview from "./StarsReview";
 import Description from "./Description";
 import Review from "./Review";
@@ -185,11 +185,6 @@ const HouseDetail = () => {
         }
     }
 
-    const getTotalDays = () => {
-        if (!startDate || !endDate) return 0;
-        return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
-    }
-
     return (
         <HouseDetailContext.Provider value={{house, reviews}}>
             <div className="container-fluid py-5 container-house-detail">
@@ -299,7 +294,7 @@ const HouseDetail = () => {
                                             </div>
                                             <div className="total-price pt-4">
                                                 <h4 className="mb-3">Chi tiết lịch đặt:</h4>
-                                                <p className="fs-6 fw-medium">Thời gian thuê: {getTotalDays()} ngày</p>
+                                                <p className="fs-6 fw-medium">Thời gian thuê: {getTotalDays(startDate, endDate)} ngày</p>
                                                 <p className="fs-6 fw-medium">
                                                     Đơn
                                                     giá: {formatCurrency(house.price - house.price * house.sale / 100)} /
