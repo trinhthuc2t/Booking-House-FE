@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useState} from 'react';
-import {formatCurrency} from "../../service/format";
+import {formatCurrency, getTotalDays} from "../../service/format";
 import StarsReview from "./StarsReview";
 import Description from "./Description";
 import Review from "./Review";
@@ -18,8 +18,8 @@ import vi from 'date-fns/locale/vi';
 import "react-datepicker/dist/react-datepicker.css";
 import {useSelector} from "react-redux";
 import Swal from "sweetalert2";
-import {CircularProgress} from "@mui/material";
 import BookingService from "../../service/BookingService";
+import {CircularProgress} from "@mui/material";
 
 export const HouseDetailContext = createContext();
 
@@ -28,7 +28,7 @@ registerLocale("vi", vi);
 const HouseDetail = () => {
     const [showDesc, setShowDesc] = useState('desc');
     const [house, setHouse] = useState({});
-    const [reviews, setReviews] = useState([]);
+    const [reviews, setReviews] = useState({});
     const [images, setImages] = useState([]);
     const [avgRating, setAvgRating] = useState(0);
     const [showModal, setShowModal] = useState(false);
@@ -38,7 +38,9 @@ const HouseDetail = () => {
     const [errorEndDate, setErrorEndDate] = useState("");
     const [bookings, setBookings] = useState([]);
     const [validate, setValidate] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isRender, setIsRender] = useState(false);
+    const [isProgressing, setIsProgressing] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
     const account = useSelector(state => state.account);
 
     const handleCloseModal = () => {
@@ -49,7 +51,16 @@ const HouseDetail = () => {
         setErrorStartDate('');
         setErrorEndDate('');
     }
-    const handleShowModal = () => {
+    const handleShowModal = (house) => {
+        if (house.status === "Đang sửa") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Nhà đang được bảo trì !',
+                text: 'Vui lòng quay lại sau',
+                showConfirmButton: true,
+            }).then();
+            return;
+        }
         setShowModal(true);
     }
 
@@ -58,12 +69,6 @@ const HouseDetail = () => {
     useEffect(() => {
         getHouseById(houseId).then(response => {
             setHouse(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-
-        getAllReviewsByHouseId(houseId).then(response => {
-            setReviews(response.data);
         }).catch(error => {
             console.log(error);
         })
@@ -80,17 +85,31 @@ const HouseDetail = () => {
             console.log(error);
         })
 
-        BookingService.getBookingsByHouseId(houseId).then(response => {
-            setBookings(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
     }, [])
+
+    useEffect(() => {
+        getAllReviewsByHouseId(houseId, currentPage - 1).then(response => {
+            setReviews(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [currentPage])
+
+    const changePage = (e, value) => {
+        setCurrentPage(value);
+    }
+
+    useEffect(() => {
+        BookingService.getBookingsByHouseId(houseId).then(response => {
+            setBookings(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [isRender])
 
     const excludeBookingRange = (bookings) => {
         return bookings.map(booking => {
@@ -134,23 +153,24 @@ const HouseDetail = () => {
 
     const handleBooking = () => {
         if (!validateBooking()) return;
-        setIsLoading(true);
         const data = {
-            startTime: format(new Date(startDate),"yyyy-MM-dd'T'HH:mm:ss"),
-            endTime: format(new Date(endDate),"yyyy-MM-dd'T'HH:mm:ss"),
-            total: (house.price - house.price * house.sale / 100) * getTotalDays(),
+            startTime: format(new Date(startDate), "yyyy-MM-dd'T'HH:mm:ss"),
+            endTime: format(new Date(endDate), "yyyy-MM-dd'T'HH:mm:ss"),
+            total: (house.price - house.price * house.sale / 100) * getTotalDays(startDate, endDate),
             status: 'Chờ xác nhận',
             house,
             account: {id: account.id}
         }
+        setIsProgressing(true);
         BookingService.bookingHouse(data).then(response => {
             Swal.fire({
                 icon: 'success',
                 title: 'Đặt lịch thành công !',
-                showConfirmButton: false,
-                timer: 1500
-            })
-            setIsLoading(false);
+                text: 'Vui lòng chờ chủ nhà xác nhận',
+                showConfirmButton: true,
+            }).then();
+            setIsProgressing(false);
+            setIsRender(!isRender);
             handleCloseModal();
         }).catch(error => {
             console.log(error);
@@ -159,8 +179,7 @@ const HouseDetail = () => {
                 title: 'Đặt lịch thất bại !',
                 showConfirmButton: false,
                 timer: 1500
-            })
-            setIsLoading(false);
+            }).then();
         })
     }
 
@@ -185,13 +204,8 @@ const HouseDetail = () => {
         }
     }
 
-    const getTotalDays = () => {
-        if (!startDate || !endDate) return 0;
-        return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
-    }
-
     return (
-        <HouseDetailContext.Provider value={{house, reviews}}>
+        <HouseDetailContext.Provider value={{house, reviews, changePage}}>
             <div className="container-fluid py-5 container-house-detail">
                 <div className="row px-xl-5">
                     <div className="col-lg-6 pb-5">
@@ -208,7 +222,7 @@ const HouseDetail = () => {
                                     className={`fw-semibold me-2 fs-5 ${avgRating ? "" : "d-none"}`}>{avgRating}</span>
                                 <StarsReview rating={avgRating}/>
                             </div>
-                            <small>({reviews.length} nhận xét)</small>
+                            <small>({reviews.totalElements} nhận xét)</small>
                         </div>
                         <h3 className="fw-normal mb-4 text-danger">
                             {formatCurrency(house.price - house.price * house.sale / 100)} / ngày
@@ -241,7 +255,7 @@ const HouseDetail = () => {
 
                         <div className="d-flex align-items-center mb-4 pt-2">
                             <button className="btn btn-house px-3 py-2"
-                                    onClick={handleShowModal}>
+                                    onClick={() => handleShowModal(house)}>
                                 <i className="bi bi-cart-plus me-2"></i>Thuê ngay
                             </button>
 
@@ -299,14 +313,15 @@ const HouseDetail = () => {
                                             </div>
                                             <div className="total-price pt-4">
                                                 <h4 className="mb-3">Chi tiết lịch đặt:</h4>
-                                                <p className="fs-6 fw-medium">Thời gian thuê: {getTotalDays()} ngày</p>
+                                                <p className="fs-6 fw-medium">Thời gian
+                                                    thuê: {getTotalDays(startDate, endDate)} ngày</p>
                                                 <p className="fs-6 fw-medium">
                                                     Đơn
                                                     giá: {formatCurrency(house.price - house.price * house.sale / 100)} /
                                                     ngày
                                                 </p>
                                                 <p className="fs-6 fw-medium">Thành
-                                                    tiền: {formatCurrency((house.price - house.price * house.sale / 100) * getTotalDays())}</p>
+                                                    tiền: {formatCurrency((house.price - house.price * house.sale / 100) * getTotalDays(startDate, endDate))}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -319,11 +334,12 @@ const HouseDetail = () => {
                                         Xác nhận
                                     </Button>
                                 </Modal.Footer>
-                                {isLoading &&
-                                <div className="w-100 h-100 position-absolute top-0 start-0 d-flex justify-content-center align-items-center"
-                                     style={{background: 'rgba(0,0,0,0.4)'}}>
-                                    <CircularProgress color="success" />
-                                </div>
+                                {isProgressing &&
+                                    <div
+                                        className="w-100 h-100 position-fixed top-0 start-0 d-flex justify-content-center align-items-center"
+                                        style={{background: 'rgba(0,0,0,0.4)'}}>
+                                        <CircularProgress color="success"/>
+                                    </div>
                                 }
                             </Modal>
                         </div>
@@ -337,7 +353,7 @@ const HouseDetail = () => {
                             <span className={`nav-item nav-link ${showDesc === 'facility' ? 'active' : ''}`}
                                   onClick={() => setShowDesc('facility')}>Tiện ích</span>
                             <span className={`nav-item nav-link ${showDesc === 'review' ? 'active' : ''}`}
-                                  onClick={() => setShowDesc('review')}>Nhận xét ({reviews.length})</span>
+                                  onClick={() => setShowDesc('review')}>Nhận xét ({reviews.totalElements})</span>
                         </div>
                         <div className="tab-content">
                             {showDesc === 'desc' ?

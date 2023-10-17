@@ -36,14 +36,15 @@ function MonthlyChart() {
             const daysUntilSunday = dayOfWeek;
             selectedDate.setDate(selectedDate.getDate() - daysUntilSunday);
         }
-
         setSelectedDate(selectedDate.toISOString().substring(0, 10));
     };
 
     const getBookingsByOwnerWeek = (id, month, year, startDay, EndDay) => {
-        BookingService.getBookingsByOwnerWeek(id, month, year, startDay, EndDay).then((response) => {
+        BookingService.getBookingsByOwnerWeek(id, month, year, startDay, EndDay)
+            .then((response) => {
+                console.log(response.data)
             const newDataset = [...chartData.datasets];
-            newDataset[0].data = response
+            newDataset[0].data = response.data
             setChartData({
                 ...chartData, datasets: newDataset,
             });

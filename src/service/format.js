@@ -12,4 +12,9 @@ const convertDateFormat = (input) => {
   return format(new Date(input), "dd/MM/yyyy HH:mm");
 }
 
-export {formatCurrency, formatDate, convertDateFormat};
+const getTotalDays = (startDate, endDate) => {
+  if (!startDate || !endDate) return 0;
+  return Math.round((endDate - startDate) / (1000 * 60 * 60 * 24));
+}
+
+export {formatCurrency, formatDate, convertDateFormat, getTotalDays};

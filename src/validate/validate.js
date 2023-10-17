@@ -123,4 +123,17 @@ const changePasswordSchema = Yup.object().shape({
         .oneOf([Yup.ref('newPassword'), null], 'Mật khẩu không khớp')
 });
 
-export {saveHouseSchema, loginSchema, registerSchema, profileSchema, changePasswordSchema, forgotPasswordSchema};
+const reviewSchema = Yup.object().shape({
+    comment: Yup.string()
+        .required('Vui lòng không được để trống')
+});
+
+export {
+    saveHouseSchema,
+    loginSchema,
+    registerSchema,
+    profileSchema,
+    changePasswordSchema,
+    forgotPasswordSchema,
+    reviewSchema
+};

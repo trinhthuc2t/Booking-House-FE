@@ -18,15 +18,15 @@ const Information = () => {
                     <h3 className="text-center mb-4 text-uppercase">Thông tin cá nhân</h3>
                     <div className="row mt-2">
                         <div className="col-md-6">
-                            <label className="form-label" htmlFor="firstname">Họ và tên đệm</label>
-                            <input type="text" className="form-control" id="firstname"
-                                   placeholder="Nhập họ" value={account.firstname} name="lastname"
+                            <label className="form-label" htmlFor="lastname">Họ và tên đệm</label>
+                            <input type="text" className="form-control" id="lastname"
+                                   placeholder="Nhập họ" value={account.lastname} name="lastname"
                                    readOnly={true}/>
                         </div>
                         <div className="col-md-6">
                             <label className="form-label" htmlFor="firstname">Tên</label>
-                            <input type="text" className="form-control" id="lastname"
-                                   placeholder="Nhập tên" value={account.lastname} name="firstname"
+                            <input type="text" className="form-control" id="firstname"
+                                   placeholder="Nhập tên" value={account.firstname} name="firstname"
                                    readOnly={true}/>
                         </div>
                     </div>

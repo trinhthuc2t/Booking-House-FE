@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import _ from 'lodash';
 import {storage} from "../../firebase/firebase";
@@ -73,8 +73,6 @@ const EditProfile = ({status}) => {
         let data = {...values, avatar: accountInfo.avatar};
         AccountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
-            console.log(response);
-            console.log("Account", account)
             account.firstname = response.firstname;
             account.lastname = response.lastname;
             account.address = response.address;
@@ -104,7 +102,6 @@ const EditProfile = ({status}) => {
         console.log(data);
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
-            console.log(response);
             navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
@@ -288,19 +285,19 @@ const EditProfile = ({status}) => {
                                 {handleTitle()}
                                 <div className="row">
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="firstname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
-                                        <Field type="text" className="form-control" id="firstname"
-                                               placeholder="Nhập họ" value={accountInfo.firstname} name="firstname"
+                                        <label className="form-label" htmlFor="lastname">Họ và tên đệm <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="lastname"
+                                               placeholder="Nhập họ" value={accountInfo.lastname} name="lastname"
                                                onInput={handleValueInput}/>
-                                        <ErrorMessage name={'firstname'} className="text-danger" component="small"/>
+                                        <ErrorMessage name={'lastname'} className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
-                                        <label className="form-label" htmlFor="lastname">Tên <span className={'text-danger'}>*</span></label>
-                                        <Field type="text" className="form-control" id="lastname"
-                                               placeholder="Nhập tên đệm và tên" value={accountInfo.lastname}
-                                               name="lastname"
+                                        <label className="form-label" htmlFor="firstname">Tên <span className={'text-danger'}>*</span></label>
+                                        <Field type="text" className="form-control" id="firstname"
+                                               placeholder="Nhập tên đệm và tên" value={accountInfo.firstname}
+                                               name="firstname"
                                                onInput={handleValueInput}/>
-                                        <ErrorMessage name='lastname' className="text-danger" component="small"/>
+                                        <ErrorMessage name='firstname' className="text-danger" component="small"/>
                                     </div>
                                     <div className="col-md-6 mb-3">
                                         <label className="form-label" htmlFor="email">Email <span className={'text-danger'}>*</span></label>
