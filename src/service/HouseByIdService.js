@@ -41,12 +41,24 @@ const HouseByIdService = {
                 });
         })
     },
-    findByOwnerId : (ownerId) => {
+    findByOwnerId : (ownerId , currentPage) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`http://localhost:8080/api/houses/owner/listHouse/${ownerId}?page=${currentPage}`)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(function (err) {
+                    console.log(err)
+                });
+        })
+    },
+    getRevenueByOwnerId : (ownerId ) => {
         return new Promise((resolve, reject) => {
             axios
                 .get(`http://localhost:8080/api/houses/owner/revenue/${ownerId}`)
                 .then(response => {
-                    resolve(response.data);
+                    resolve(response);
                 })
                 .catch(function (err) {
                     console.log(err)

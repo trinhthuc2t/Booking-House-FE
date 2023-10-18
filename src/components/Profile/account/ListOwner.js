@@ -8,6 +8,7 @@ import {Button, Modal} from "react-bootstrap";
 import {formatCurrency} from "../../../service/format";
 import HouseByIdService from "../../../service/HouseByIdService";
 import {Link} from "react-router-dom";
+import houseByIdService from "../../../service/HouseByIdService";
 
 
 const ListOwner = () => {
@@ -54,24 +55,13 @@ const ListOwner = () => {
     const accountDetail = (acc) => {
         setAccount(acc);
         getHousesByAccountId(acc.id);
+        calculateRevenue(acc.id);
     }
-    const findByAccountId = (ownerId, name, status, currentPageMd) => {
-        HouseByIdService.findByOwnerIdAndNameAndStatus(ownerId, name, status, currentPageMd)
-            .then((houses) => {
-                setHouses(houses.content)
-                setTotalPagesMd(houses.totalPages)
-                setRevenue(getRevenue(houses.content));
-                setLgShow(true);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
     const getHousesByAccountId = (ownerId) => {
-        HouseByIdService.findByOwnerId(ownerId)
+        HouseByIdService.findByOwnerId(ownerId , currentPageMd - 1)
             .then((houses) => {
-                setHouses(houses)
-                setRevenue(getRevenue(houses));
+                setHouses(houses.content);
+                setTotalPagesMd(houses.totalPages)
                 setLgShow(true);
             })
             .catch((err) => {
@@ -81,11 +71,19 @@ const ListOwner = () => {
 
     const getRevenue = (house) => {
         let revenue = 0;
-        for (let i = 0; i < houses.length; i++) {
+        for (let i = 0; i < house.length; i++) {
             revenue += house[i].revenue;
         }
         return revenue;
     };
+
+    const calculateRevenue = (id) => {
+        houseByIdService.getRevenueByOwnerId(id).then((response) => {
+            setRevenue(getRevenue(response.data));
+        }).catch(function (err) {
+            console.log(err);
+        })
+    }
 
     const handleBlockAccount = (id) => {
         Swal.fire({
@@ -145,7 +143,9 @@ const ListOwner = () => {
             behavior: "smooth"
         })
     }, [currentPage, currentPageMd, nameSearch, revenue, houses, status, isLoad])
-
+    useEffect(() => {
+            getHousesByAccountId(account.id , currentPageMd );
+    },[currentPageMd])
     const checkStatusAccount = (acc) => {
         if (acc.status === "Bị khóa") {
             return (
