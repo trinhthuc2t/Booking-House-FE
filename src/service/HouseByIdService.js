@@ -41,9 +41,18 @@ const HouseByIdService = {
                 });
         })
     },
-
-
-
+    findByOwnerId : (ownerId) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`http://localhost:8080/api/houses/owner/revenue/${ownerId}`)
+                .then(response => {
+                    resolve(response.data);
+                })
+                .catch(function (err) {
+                    console.log(err)
+                });
+        })
+    },
 
 };
 

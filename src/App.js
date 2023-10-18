@@ -23,6 +23,7 @@ import ConfirmOwner from "./components/Profile/ConfirmOwner";
 import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
 import UserList from "./components/Profile/UserList";
+import ListOwner from "./components/Profile/account/ListOwner";
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
                     <Route path={"houses-owner-booking"} element={<SearchBooking/>}/>
                     <Route path={"list-account"} element={<ListAccount/>}/>
                     <Route path={"list-user"} element={<UserList/>}/>
+                    <Route path={"list-owner"} element={<ListOwner/>}/>
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                     <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
