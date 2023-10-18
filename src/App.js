@@ -24,6 +24,7 @@ import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
 import UserList from "./components/Profile/UserList";
 import ListOwner from "./components/Profile/account/ListOwner";
+import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
 
 
 function App() {
@@ -53,6 +54,7 @@ function App() {
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                     <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
+                <Route path={'/top5'}  element={<Top5BookingHouse/>}></Route>
             </Routes>
             {show && <Footer/>}
             <ToastContainer/>
