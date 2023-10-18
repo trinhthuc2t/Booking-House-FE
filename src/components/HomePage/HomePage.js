@@ -4,6 +4,7 @@ import AdminTeam from "./AdminTeam";
 import HouseComponent from "./HouseComponent";
 import houseByIdService from "../../service/HouseByIdService";
 import SearchHouse from "./SearchHouse";
+import Top5BookingHouse from "./Top5BookingHouse";
 
 const HomePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -44,6 +45,10 @@ const HomePage = () => {
             {/*Search End*/}
 
             <div className="container py-5">
+                <h2>Top 5 ngôi nhà có nhiều lượt đặt thuê nhất</h2>
+                <Top5BookingHouse/>
+                <br/>
+                <br/>
                 <HouseComponent houses={houses} totalPages={totalPages} changePage={changePage}/>
 
                 <AdminTeam/>
