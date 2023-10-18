@@ -24,6 +24,7 @@ import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
 import UserList from "./components/Profile/UserList";
 import ListOwner from "./components/Profile/account/ListOwner";
+import ContactAdmin from "./components/Login-Register/ContactAdmin";
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow}/>}/>
                 <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
+                <Route path={"/contact-admin"} element={<ContactAdmin setShow={setShow}/>}/>
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>

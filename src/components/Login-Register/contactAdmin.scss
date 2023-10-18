@@ -1,0 +1,19 @@
+.container-contact-admin {
+  $color-primary: rgb(0, 185, 142);
+  .container-admin-team {
+    .team-item {
+      box-shadow: 0 0 30px rgba(0, 0, 0, .08);
+
+      .btn {
+        color: $color-primary;
+        background: #FFFFFF;
+        box-shadow: 0 0 30px rgba(0, 0, 0, .15);
+
+        &:hover {
+          background: $color-primary;
+          color: #FFFFFF;
+        }
+      }
+    }
+  }
+}
