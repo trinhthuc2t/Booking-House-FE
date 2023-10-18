@@ -38,6 +38,9 @@ const BookingService = {
     },
     createReview: (review) => {
         return instance.post("/api/bookings/reviews", review);
+    },
+    getSpending : async (idAccount) => {
+        return await instance.get("/api/bookings/getSpending/"  + idAccount);
     }
 };
 
