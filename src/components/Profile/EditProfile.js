@@ -30,6 +30,7 @@ const EditProfile = ({status}) => {
     const [fileBack, setFileBack] = useState(null);
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
+    const [avatarError , setAvatarError] = useState('');
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -99,10 +100,9 @@ const EditProfile = ({status}) => {
             status: "Chờ xác nhận",
             account: account
         };
-        console.log(data);
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
-            navigate('/profile/information');
+        //    navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })
@@ -138,7 +138,6 @@ const EditProfile = ({status}) => {
         if (event.target.files[0] == null) return;
         const imageRef = ref(storage, `images/${event.target.files[0].name + v4()}`);
         const {name} = event.target;
-        console.log(name);
         toast.info("Đang tải ảnh lên", {position: "top-center", autoClose: 500,});
         uploadBytes(imageRef, event.target.files[0]).then((snapshot) => {
             getDownloadURL(snapshot.ref).then((url) => {
@@ -254,18 +253,21 @@ const EditProfile = ({status}) => {
                             if (status) {
                                 handleProfile(values);
                             } else {
-                                if (fileFront && fileBack ) {
-                                    console.log(values.avatar);
-                                    handleRegisterOwner(values);
-                                } else if (!fileFront && !fileBack ) {
-                                    document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
-                                    document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
-                                } else if (!fileFront) {
-                                    document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
-                                } else if (!fileBack) {
-                                    document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                values.avatar  = accountInfo.avatar
+                                if (values.avatar) {
+                                    if (fileFront && fileBack ) {
+                                        handleRegisterOwner(values);
+                                    } else if (!fileFront && !fileBack ) {
+                                        document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
+                                        document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                    } else if (!fileFront) {
+                                        document.getElementById("frontside-errors").innerHTML = "Bạn chưa chọn mặt trước CCCD";
+                                    } else if (!fileBack) {
+                                        document.getElementById("backside-errors").innerHTML = "Bạn chưa chọn mặt sau CCCD";
+                                    }
+                                }else {
+                                    setAvatarError("Bạn chưa chọn ảnh");
                                 }
-
                             }
                         }}>
                     {() => (
@@ -280,6 +282,7 @@ const EditProfile = ({status}) => {
                                          onChange={handleValueInput}/>
                                     <input className="mt-2 form-control" type="file" onChange={selectImage}/>
                                 </div>
+                                <span className={'text-danger text-center'}>{avatarError}</span>
                             </div>
                             <div className="col-md-8">
                                 {handleTitle()}
