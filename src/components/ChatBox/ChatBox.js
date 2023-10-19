@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import _ from 'lodash';
 import {
     changeStatusMessage, countUnreadMessagesByReceiverId,
-    getAllMessagesBySenderIdAndReceiverId
+    getAllMessagesBySenderIdAndReceiverId, saveMessage
 } from "../../service/messageService";
 import {formatDateTimeMessage} from "../../service/format";
 import {WebSocketContext} from "./WebSocketProvider";
@@ -60,9 +60,18 @@ const ChatBox = () => {
         }, [messages])
 
         const handleSendMessage = async () => {
-            await sendMessage(selectedAccount, message);
+            const data = {
+                message,
+                sender: account,
+                receiver: {id: selectedAccount.id}
+            };
+            saveMessage(data).then(response=>{
+                sendMessage(response.data);
+                setRender(!render);
+            }).catch(error => {
+                console.log(error)
+            })
             setMessage("");
-            setRender(!render);
         }
 
         const pressEnterToSend = (event) => {
