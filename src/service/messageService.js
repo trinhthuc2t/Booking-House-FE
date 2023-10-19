@@ -12,8 +12,13 @@ const changeStatusMessage = (senderId, receiverId) => {
   return instance.put(`/api/messages/change-status/${senderId}/${receiverId}`)
 }
 
+const saveMessage = (message) => {
+  return instance.post('/api/messages', message)
+}
+
 export {
   getAllMessagesBySenderIdAndReceiverId,
   countUnreadMessagesByReceiverId,
-  changeStatusMessage
+  changeStatusMessage,
+  saveMessage
 };

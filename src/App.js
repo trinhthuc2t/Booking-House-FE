@@ -24,10 +24,10 @@ import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
 import UserList from "./components/Profile/UserList";
 import ListOwner from "./components/Profile/account/ListOwner";
-import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
 import ContactAdmin from "./components/Login-Register/ContactAdmin";
 import Component404 from "./errorClient/Component404";
 import ChatBox from "./components/ChatBox/ChatBox";
+import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
 
 
 function App() {

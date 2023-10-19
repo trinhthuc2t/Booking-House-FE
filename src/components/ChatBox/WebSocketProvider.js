@@ -22,14 +22,9 @@ const WebSocketProvider = ({children}) => {
         toast.success(`Bạn có 1 tin nhắn mới từ ${message?.sender?.username}`, {position: "bottom-right"});
     }, [message])
 
-    const sendMessage = (receiver, message) => {
+    const sendMessage = (message) => {
         if (!stompClient) return;
-        const data = {
-            message,
-            sender: account,
-            receiver: {id: receiver.id}
-        };
-        stompClient.send("/app/chat", {}, JSON.stringify(data));
+        stompClient.send("/app/chat", {}, JSON.stringify(message));
     }
 
     const blockAccountSocket = (receiverId) => {
