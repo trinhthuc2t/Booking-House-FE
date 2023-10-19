@@ -23,12 +23,18 @@ function Login({setShow}) {
     const login = (value) => {
         LoginRegisterService.login(value)
             .then(res => {
-                if (remember) {
-                    localStorage.setItem("account", JSON.stringify(res.data));
+                if (res.data.status === "Đang hoạt động") {
+                    if (remember) {
+                        localStorage.setItem("account", JSON.stringify(res.data));
+                    }
+                    dispatch(saveAccount(res.data));
+                    setShow(true);
+                    navigate("/");
+                }else {
+                    navigate("/contact-admin");
+                    console.log('account is blocked!');
                 }
-                dispatch(saveAccount(res.data));
-                setShow(true);
-                navigate("/");
+
             })
             .catch(err => {
                 setCheckPassword("Sai mật khẩu");
