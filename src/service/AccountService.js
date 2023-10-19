@@ -88,8 +88,12 @@ const AccountService = {
         return await instance.get("/api/accounts/refuseRegister/" + idOwner);
     },
 
-    findByRoleName: async (roleName, nameSearch, currentPage) => {
-        return await instance.get(`/api/accounts/by-role?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}`);
+    // findByRoleName: async (roleName, nameSearch, currentPage) => {
+    //     return await instance.get(`/api/accounts/by-role?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}`);
+    // },
+
+    findByRoleName: async (roleName, nameSearch,status, currentPage) => {
+        return await instance.get(`/api/accounts/getAccountByRole?roleName=${roleName}&nameSearch=${nameSearch}&status=${status}&page=${currentPage}`);
     },
     blockAccount: (accId) => {
         return instance.get("/api/accounts/block/" + accId);
@@ -97,11 +101,20 @@ const AccountService = {
     unblockAccount: (accId) => {
         return instance.get("/api/accounts/unBlock/" + accId);
     },
+    findUser : async  (roleName, nameSearch, currentPage) => {
+        return await  instance.get(`/api/accounts/getUser?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}`)
+    },
+    findOwner : async  ( nameSearch, currentPage) => {
+        return await  instance.get(`/api/owners/getOwnerDto?nameSearch=${nameSearch}&page=${currentPage}`)
+    },
     listUserAndUnreadMessage: (accountId) => {
         return instance.get(`/api/accounts/${accountId}/messages`);
     },
     searchUsersMessage: (accountId, username) => {
         return instance.get(`/api/accounts/${accountId}/messages/search?username=${username}`);
+    },
+    checkBlockAccount: (accountId) => {
+        return instance.get(`/api/accounts/check-block/${accountId}`);
     }
 }
 export default AccountService;

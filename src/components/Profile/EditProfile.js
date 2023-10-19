@@ -73,8 +73,6 @@ const EditProfile = ({status}) => {
         let data = {...values, avatar: accountInfo.avatar};
         AccountService.editAccount(account.id, data).then((response) => {
             toast.success("Sửa thông tin thành công", {position: "top-center", autoClose: 1000,});
-            console.log(response);
-            console.log("Account", account)
             account.firstname = response.firstname;
             account.lastname = response.lastname;
             account.address = response.address;
@@ -104,7 +102,6 @@ const EditProfile = ({status}) => {
         console.log(data);
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
-            console.log(response);
             navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);

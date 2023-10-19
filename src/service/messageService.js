@@ -9,7 +9,7 @@ const countUnreadMessagesByReceiverId = (receiverId) => {
 }
 
 const changeStatusMessage = (senderId, receiverId) => {
-  return instance.get(`/api/messages/change-status/${senderId}/${receiverId}`)
+  return instance.put(`/api/messages/change-status/${senderId}/${receiverId}`)
 }
 
 export {

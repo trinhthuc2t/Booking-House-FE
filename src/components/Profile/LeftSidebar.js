@@ -18,10 +18,17 @@ const LeftSidebar = () => {
                         </NavLink>
                     </li>
                     <li className="px-3 py-2">
-                        <NavLink to="/profile/list-account"
+                        <NavLink to="/profile/list-owner"
                                  className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
                             <i className="fa-solid fa-list me-3"></i>
                             Danh sách chủ nhà
+                        </NavLink>
+                    </li>
+                    <li className="px-3 py-2">
+                        <NavLink to="/profile/list-user"
+                                 className={({isActive}) => isActive ? "nav-link active" : "nav-link"}>
+                            <i className="fa-solid fa-list me-3"></i>
+                            Danh sách người dùng
                         </NavLink>
                     </li>
                 </>

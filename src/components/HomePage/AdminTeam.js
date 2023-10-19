@@ -19,7 +19,6 @@ const AdminTeam = () => {
     }, [])
     return (
 
-
         <div className="container py-5 container-admin-team">
             <div className="container">
                 <div className="row g-4">
@@ -44,9 +43,11 @@ const AdminTeam = () => {
                                             </div>
                                         </div>
 
-                                        <div className="text-center p-4 mt-3">
-                                            <h5 className="fw-bold mb-0">{acc.firstname} {acc.lastname}</h5>
-                                            <small>FA</small>
+                                        <div className="p-4 mt-3">
+                                            <h5 className="fw-bold mb-2 text-center">{acc.firstname} {acc.lastname}</h5>
+                                            <div className=""><i className="bi bi-person-vcard-fill me-3 text-house"></i>{acc.username}</div>
+                                            <div><i className="bi bi-telephone-fill me-3 text-house"></i>{acc.phone}</div>
+                                            <div><i className="bi bi-envelope-fill me-3 text-house"></i>{acc.email}</div>
                                         </div>
                                     </div>
                                 </div>

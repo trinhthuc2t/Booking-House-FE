@@ -24,6 +24,13 @@ const ChatBox = () => {
 
         const {sendMessage, render, setRender} = useContext(WebSocketContext);
 
+        useEffect(()=>{
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            })
+        },[])
+
         useEffect(() => {
             AccountService.searchUsersMessage(account.id, search).then(response => {
                 setUsersSearch(response.data);

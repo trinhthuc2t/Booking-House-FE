@@ -2,7 +2,7 @@ import './App.scss';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import React, {useState} from "react";
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
 import HouseByIdUser from "./components/Profile/houseByIdOwner/HouseByIdUser";
@@ -22,6 +22,11 @@ import RegisterOwner from "./components/Profile/RegisterOwner";
 import ConfirmOwner from "./components/Profile/ConfirmOwner";
 import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
+import UserList from "./components/Profile/UserList";
+import ListOwner from "./components/Profile/account/ListOwner";
+import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
+import ContactAdmin from "./components/Login-Register/ContactAdmin";
+import Component404 from "./errorClient/Component404";
 import ChatBox from "./components/ChatBox/ChatBox";
 
 
@@ -36,6 +41,7 @@ function App() {
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow}/>}/>
                 <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
+                <Route path={"/contact-admin"} element={<ContactAdmin/>}  />
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
                 <Route path="/chat" element={<ChatBox/>}/>
@@ -48,9 +54,14 @@ function App() {
                     <Route path={"houses-owner-revenue"} element={<Statistical/>}/>
                     <Route path={"houses-owner-booking"} element={<SearchBooking/>}/>
                     <Route path={"list-account"} element={<ListAccount/>}/>
+                    <Route path={"list-user"} element={<UserList/>}/>
+                    <Route path={"list-owner"} element={<ListOwner/>}/>
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                     <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
+                <Route path={'/top5'}  element={<Top5BookingHouse/>}></Route>
+                <Route path={'*'} element={<Navigate to="/404" replace />}/>
+                <Route path="/404" element={<Component404/>}></Route>
             </Routes>
             {show && <Footer/>}
             <ToastContainer/>

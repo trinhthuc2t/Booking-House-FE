@@ -58,9 +58,7 @@ const SearchBooking = () => {
         setValueDateEnd(selectedDate)
         const formattedDatetime = changeDate(selectedDate);
         setSelectedDateEnd(formattedDatetime)
-
-
-    };
+ };
 
     const handleNameSearch = (event) => {
         const nameSearch = event.target.value;
@@ -74,8 +72,8 @@ const SearchBooking = () => {
     const searchBookingsByOwnerId = (ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage) => {
         BookingService.searchBookingsByOwnerId(ownerId, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage)
             .then((bookings) => {
-                setBookings(bookings.content);
-                setTotalPages(bookings.totalPages);
+                setBookings(bookings.data.content);
+                setTotalPages(bookings.data.totalPages);
             })
             .catch((err) => {
                 console.log(err);

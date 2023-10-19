@@ -3,8 +3,9 @@ import Stomp from "stompjs";
 import {useDispatch, useSelector} from "react-redux";
 import {toast} from "react-toastify";
 import {countUnreadMessagesByReceiverId} from "../../service/messageService";
-import {countUnreadMessage} from "../../redux/actions";
+import {countUnreadMessage, deleteAccount} from "../../redux/actions";
 import _ from "lodash";
+import {useNavigate} from "react-router-dom";
 
 export const WebSocketContext = createContext(null)
 const WebSocketProvider = ({children}) => {
@@ -12,6 +13,7 @@ const WebSocketProvider = ({children}) => {
     const [message, setMessage] = useState({});
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     let socket;
     let stompClient;
     let ws;
@@ -30,8 +32,19 @@ const WebSocketProvider = ({children}) => {
         stompClient.send("/app/chat", {}, JSON.stringify(data));
     }
 
+    const blockAccountSocket = (receiverId) => {
+        if (!stompClient) return;
+        const data = {
+            message: "Tài khoản của bạn đã bị khóa",
+            sender: account,
+            receiver: {id: receiverId}
+        };
+        stompClient.send("/app/block", {}, JSON.stringify(data));
+    }
+
     const onConnected = () => {
         stompClient.subscribe(`/topic/${account.id}`, onMessageReceived);
+        stompClient.subscribe(`/block/${account.id}`, onBlockReceived);
     }
 
     const onMessageReceived = (payload) => {
@@ -45,9 +58,14 @@ const WebSocketProvider = ({children}) => {
         setRender(!render);
     }
 
+    const onBlockReceived = (payload) => {
+        localStorage.removeItem("account");
+        dispatch(deleteAccount());
+        navigate("/403");
+    }
+
     const onError = (err) => {
         console.log(err);
-
     }
 
     if (!socket) {
@@ -58,6 +76,7 @@ const WebSocketProvider = ({children}) => {
         ws = {
             socket: socket,
             sendMessage,
+            blockAccountSocket,
             render,
             setRender
         }

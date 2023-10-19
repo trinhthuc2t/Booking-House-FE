@@ -23,12 +23,17 @@ function Login({setShow}) {
     const login = (value) => {
         LoginRegisterService.login(value)
             .then(res => {
-                if (remember) {
-                    localStorage.setItem("account", JSON.stringify(res.data));
+                if (res.data.status === "Đang hoạt động") {
+                    if (remember) {
+                        localStorage.setItem("account", JSON.stringify(res.data));
+                    }
+                    dispatch(saveAccount(res.data));
+                    setShow(true);
+                    navigate("/");
+                }else {
+                    setShow(true);
+                    navigate("/contact-admin");
                 }
-                dispatch(saveAccount(res.data));
-                setShow(true);
-                navigate("/");
             })
             .catch(err => {
                 setCheckPassword("Sai mật khẩu");
