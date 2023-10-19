@@ -1,8 +1,8 @@
 import './App.scss';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import React, {useEffect, useState} from "react";
-import {Route, Routes} from "react-router-dom";
+import React, {useState} from "react";
+import {Navigate, Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
 import HouseByIdUser from "./components/Profile/houseByIdOwner/HouseByIdUser";
@@ -24,9 +24,11 @@ import RentalHistory from "./components/Profile/RentalHistory";
 import ListAccount from "./components/Profile/account/ListAccount";
 import UserList from "./components/Profile/UserList";
 import ListOwner from "./components/Profile/account/ListOwner";
+import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
 import ContactAdmin from "./components/Login-Register/ContactAdmin";
 import Component404 from "./errorClient/Component404";
 import Component403 from "./errorClient/Component403";
+import ChatBox from "./components/ChatBox/ChatBox";
 
 
 function App() {
@@ -40,9 +42,10 @@ function App() {
                 <Route path="/house-detail/:houseId" element={<HouseDetail/>}/>
                 <Route path={"/login"} element={<Login setShow={setShow}/>}/>
                 <Route path={"/forgot-password"} element={<ForgotPassword setShow={setShow}/>}/>
-                <Route path={"/contact-admin"} element={<ContactAdmin  setShow={setShow}/>}  />
+                <Route path={"/contact-admin"} element={<ContactAdmin/>}  />
                 <Route path="/add-house" element={<SaveHouse/>}/>
                 <Route path="/edit-house/:houseId" element={<SaveHouse/>}/>
+                <Route path="/chat" element={<ChatBox/>}/>
                 <Route path={"/profile/"} element={<Profile/>}>
                     <Route path={"edit-profile"} element={<EditProfile status={true}/>}/>
                     <Route path={"register-owner"} element={<RegisterOwner/>}/>
@@ -57,7 +60,9 @@ function App() {
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                     <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
-                <Route path={'*'} element={<Component404/>} setShow={setShow}></Route>
+                <Route path={'/top5'}  element={<Top5BookingHouse/>}></Route>
+                <Route path={'*'} element={<Navigate to="/404" replace />}/>
+                <Route path="/404" element={<Component404/>}></Route>
                 <Route path={'/403'} element={<Component403/>}></Route>
             </Routes>
             {show && <Footer/>}

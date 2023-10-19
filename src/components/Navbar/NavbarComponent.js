@@ -3,12 +3,21 @@ import icon_house from '../../image/icons8-house-60.png';
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import _ from 'lodash';
-import {deleteAccount} from "../../redux/actions";
+import {countUnreadMessage, deleteAccount} from "../../redux/actions";
 import icon_user from '../../image/icons8-user-50.png';
+import {useEffect} from "react";
+import {countUnreadMessagesByReceiverId} from "../../service/messageService";
 
 const Navbar = () => {
-    const account = useSelector((state) => state.account);
+    const {account, unreadMessage} = useSelector((state) => state);
     const dispatch = useDispatch();
+    useEffect(()=>{
+        countUnreadMessagesByReceiverId(account.id).then(response => {
+            dispatch(countUnreadMessage(response.data));
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [])
 
     const handleLogout = () => {
         localStorage.removeItem("account");
@@ -52,13 +61,17 @@ const Navbar = () => {
                                     </ul>
                                 </div>
 
-                                <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                <div className="nav-item">
+                                    <Link to="/chat" className="nav-link position-relative">
                                         <i className="bi bi-messenger"></i>
-                                    </a>
-                                    <div className="dropdown-menu rounded-0 m-0 custom-dropdown">
-                                        <a className="dropdown-item">Người gửi+ đã gửi tin nhắn cho b</a>
-                                    </div>
+                                        {unreadMessage ?
+                                        <sup className="badge text-white bg-danger position-absolute top-0 start-50" style={{fontSize: '10px'}}>
+                                            {unreadMessage > 5 ? '5+' : unreadMessage}
+                                        </sup>
+                                            :
+                                            null
+                                        }
+                                    </Link>
                                 </div>
 
 

@@ -44,11 +44,12 @@ const HomePage = () => {
                          setMaxPrice={setMaxPrice} setProvince={setProvince} setCurrentPage={setCurrentPage}/>
             {/*Search End*/}
 
-            <div className="container py-5">
-                <h2>Top 5 ngôi nhà có nhiều lượt đặt thuê nhất</h2>
+            <div className="container py-3">
+                <h2 className="text-center mb-5">Top 5 ngôi nhà có nhiều lượt đặt thuê nhất</h2>
                 <Top5BookingHouse/>
                 <br/>
                 <br/>
+                <h2 className="text-center m-5">Danh sách các nhà cho thuê</h2>
                 <HouseComponent houses={houses} totalPages={totalPages} changePage={changePage}/>
 
                 <AdminTeam/>

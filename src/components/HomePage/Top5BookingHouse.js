@@ -4,13 +4,6 @@ import _ from "lodash";
 import {Link} from "react-router-dom";
 import {formatCurrency} from "../../service/format";
 import { Carousel } from 'antd';
-const contentStyle = {
-    height: '500px',
-    color: '#fff',
-    lineHeight: '160px',
-    textAlign: 'center',
-    background: '#364d79',
-};
 function Top5BookingHouse() {
     const [houses, setHouses] = useState([])
     useEffect(() => {
@@ -28,12 +21,11 @@ function Top5BookingHouse() {
             <div className="row g-4" style={{width : '700px'}}>
 
                 <Carousel autoplay>
-
                     {
                         !_.isEmpty(houses) && houses.map(house => {
                             return (
                                 <div className="col-lg-4 col-md-6" key={house.id}>
-                                    <div className="house-item border rounded overflow-hidden" style={contentStyle}>
+                                    <div className="house-item border rounded overflow-hidden" style={{height: '500px', textAlign: 'center', background: '#eaeaea'}}>
                                         <Link to={`/house-detail/${house.id}`} className="nav-link">
                                             <div className="position-relative overflow-hidden">
                                                 <div>
@@ -41,8 +33,8 @@ function Top5BookingHouse() {
                                                 </div>
                                             </div>
                                             <div className="p-3 pb-0">
-                                                <h5 className=" text-center text-truncate">{house.name}</h5>
-                                                <h5 className="  color-primary text-center">
+                                                <h4 className="text-center text-truncate">{house.name}</h4>
+                                                <h5 className="color-primary text-center">
                                                     {formatCurrency(house.price - house.price * house.sale / 100)} / ngày
                                                     {house.sale ?
                                                         <del className="text-secondary ms-3 fs-6">
@@ -52,12 +44,12 @@ function Top5BookingHouse() {
                                                         null
                                                     }
                                                 </h5>
-                                                <p className="text-truncate">
+                                                <p className="text-truncate mt-3">
                                                     <i className="fa fa-map-marker-alt me-2 color-primary"></i>
                                                     {house.address}
                                                 </p>
                                             </div>
-                                            <div className="d-flex border-top p-2">
+                                            <div className="d-flex border-top p-2 mt-3">
                                                 <small className="flex-fill text-center border-end py-2">
                                                     <i className="fa fa-ruler-combined me-2 color-primary"></i>
                                                     {house.area} m²
@@ -67,7 +59,7 @@ function Top5BookingHouse() {
                                                     {house.bedroom} Ngủ
                                                 </small>
                                                 <small className="flex-fill text-center py-2">
-                                                    <i className="fa fa-bath  me-2 color-primary"></i>
+                                                    <i className="fa fa-bath me-2 color-primary"></i>
                                                     {house.bathroom} Tắm
                                                 </small>
                                             </div>
@@ -78,11 +70,8 @@ function Top5BookingHouse() {
                         })
                     }
                 </Carousel>
-
-
             </div>
         </div>
-
     )
 }
 export default Top5BookingHouse

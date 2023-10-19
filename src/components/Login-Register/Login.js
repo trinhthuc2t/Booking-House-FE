@@ -31,10 +31,9 @@ function Login({setShow}) {
                     setShow(true);
                     navigate("/");
                 }else {
+                    setShow(true);
                     navigate("/contact-admin");
-                    console.log('account is blocked!');
                 }
-
             })
             .catch(err => {
                 setCheckPassword("Sai mật khẩu");

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AccountService from "../../../service/AccountService";
 import {Table} from "reactstrap";
 import _ from "lodash";
@@ -9,6 +9,7 @@ import {formatCurrency} from "../../../service/format";
 import HouseByIdService from "../../../service/HouseByIdService";
 import {Link} from "react-router-dom";
 import houseByIdService from "../../../service/HouseByIdService";
+import {WebSocketContext} from "../../ChatBox/WebSocketProvider";
 
 
 const ListOwner = () => {
@@ -25,6 +26,8 @@ const ListOwner = () => {
     const [isLoad, setIsLoad] = useState(false);
     const [lgShow, setLgShow] = useState(false);
     const roleName = "ROLE_OWNER";
+
+    const {blockAccountSocket} = useContext(WebSocketContext);
     const changePage = (e, value) => {
         setCurrentPage(value)
     }
@@ -102,7 +105,8 @@ const ListOwner = () => {
                             title: 'Khóa thành công !',
                             showConfirmButton: false,
                             timer: 1000
-                        })
+                        }).then();
+                        blockAccountSocket(id);
                     })
                     .catch(err => {
                         console.log(err)
@@ -281,7 +285,7 @@ const ListOwner = () => {
                             </Table>
                         </div>
                         <div className="row">
-                            <h2 className="text-md-center">Danh sach nhà</h2>
+                            <h2 className="text-md-center">Danh sách nhà</h2>
                             <Table hover>
                                 <thead>
                                 <tr align="center" style={{fontSize: '20px'}}>
@@ -306,8 +310,8 @@ const ListOwner = () => {
                                                     </Link>
                                                 </td>
                                                 <td>{h.province}</td>
-                                                <td>{h.price}</td>
-                                                <td>{h.revenue}</td>
+                                                <td>{formatCurrency(h.price)}</td>
+                                                <td>{formatCurrency(h.revenue)}</td>
                                             </tr>
                                         )
                                     }) :

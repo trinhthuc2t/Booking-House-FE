@@ -102,7 +102,7 @@ const EditProfile = ({status}) => {
         };
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
-        //    navigate('/profile/information');
+            navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })

@@ -106,6 +106,15 @@ const AccountService = {
     },
     findOwner : async  ( nameSearch, currentPage) => {
         return await  instance.get(`/api/owners/getOwnerDto?nameSearch=${nameSearch}&page=${currentPage}`)
+    },
+    listUserAndUnreadMessage: (accountId) => {
+        return instance.get(`/api/accounts/${accountId}/messages`);
+    },
+    searchUsersMessage: (accountId, username) => {
+        return instance.get(`/api/accounts/${accountId}/messages/search?username=${username}`);
+    },
+    checkBlockAccount: (accountId) => {
+        return instance.get(`/api/accounts/check-block/${accountId}`);
     }
 }
 export default AccountService;

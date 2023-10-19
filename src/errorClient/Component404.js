@@ -4,12 +4,11 @@ import {Link} from "react-router-dom";
 const Component404 = () => {
     return (
         <div className={'container-contact'}>
-            <title>Page Not Found</title>
             <img src="https://i.ibb.co/W6tgcKQ/softcodeon.gif"  alt={'img'}/>
-                <h1 className="error-text">Không tim thấy trang</h1>
+                <h1 className="error-text">Không tìm thấy trang</h1>
 
-                <div className="btn1">
-                    <Link className="error" to={'/'}>Go to Homepage</Link>
+                <div className="text-center">
+                    <Link className="error" to={'/'}>Đi đến trang chủ</Link>
                 </div>
         </div>
     );

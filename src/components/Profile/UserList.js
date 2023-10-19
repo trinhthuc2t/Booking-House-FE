@@ -233,7 +233,7 @@ const UserList = () => {
                                     </tr>
                                     <tr>
                                         <th>Địa chỉ:</th>
-                                        <td>{user.address} {user.ward} {user.district} {user.province}</td>
+                                        <td>{user.address}, {user.ward}, {user.district}, {user.province}</td>
                                     </tr>
                                     <tr>
                                         <th>Số điện thoại:</th>
@@ -277,8 +277,8 @@ const UserList = () => {
                                                     </td>
                                                     <td>{h.house?.province}</td>
                                                     <td>{h.status}</td>
-                                                    <td>{h.house?.price}</td>
-                                                    <td>{h.total}</td>
+                                                    <td>{formatCurrency(h.house?.price)}</td>
+                                                    <td>{formatCurrency(h.total)}</td>
                                                 </tr>
                                             )
                                         }) :
