@@ -60,6 +60,14 @@ const HouseDetail = () => {
                 showConfirmButton: true,
             }).then();
             return;
+        } else if (house.owner.id === account.id){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Bạn đang là chủ của ngôi nhà này !',
+                text: 'Vui lòng chọn nhà khác để đặt lịch',
+                showConfirmButton: true,
+            }).then();
+            return;
         }
         setShowModal(true);
     }

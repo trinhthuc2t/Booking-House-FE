@@ -97,5 +97,11 @@ const AccountService = {
     unblockAccount: (accId) => {
         return instance.get("/api/accounts/unBlock/" + accId);
     },
+    listUserAndUnreadMessage: (accountId) => {
+        return instance.get(`/api/accounts/${accountId}/messages`);
+    },
+    searchUsersMessage: (accountId, username) => {
+        return instance.get(`/api/accounts/${accountId}/messages/search?username=${username}`);
+    }
 }
 export default AccountService;
