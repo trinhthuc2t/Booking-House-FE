@@ -5,6 +5,7 @@
 .nav-bar {
   $color-primary: rgb(0, 185, 142);
   background-color: #f1f1f1;
+
   .navbar-custom {
     font-size: 18px;
 
@@ -13,11 +14,53 @@
         color: blue;
       }
     }
-      .nav-link {
-        &:hover {
-          color: $color-primary;
-          background-color: transparent;
-        }
+
+    .nav-link {
+      &:hover {
+        color: $color-primary;
+        background-color: transparent;
       }
     }
   }
+
+  .dropdown-notify {
+    left: -300px !important;
+    width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+
+    .dropdown-notify-item {
+      cursor: pointer;
+      text-decoration: none;
+      color: unset;
+      &:hover {
+        background-color: #eaeaea;
+      }
+
+      .message-title{
+        text-align: justify;
+      }
+    }
+  }
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 20px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}

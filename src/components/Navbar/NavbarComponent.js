@@ -3,25 +3,58 @@ import icon_house from '../../image/icons8-house-60.png';
 import {Link} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import _ from 'lodash';
-import {countUnreadMessage, deleteAccount} from "../../redux/actions";
+import {countUnreadMessage, countUnreadNotify, deleteAccount, getAllNotify} from "../../redux/actions";
 import icon_user from '../../image/icons8-user-50.png';
 import {useEffect} from "react";
 import {countUnreadMessagesByReceiverId} from "../../service/messageService";
+import {
+    changeStatusNotify,
+    countUnreadNotifyByAccountLogin,
+    getAllNotifyByAccountLogin
+} from "../../service/notifyService";
+import image_default from '../../image/user-image.png';
+import {format} from "date-fns";
 
 const Navbar = () => {
-    const {account, unreadMessage} = useSelector((state) => state);
+    const {account, unreadMessage, unreadNotify, notifyList} = useSelector((state) => state);
     const dispatch = useDispatch();
-    useEffect(()=>{
-        countUnreadMessagesByReceiverId(account.id).then(response => {
-            dispatch(countUnreadMessage(response.data));
-        }).catch(error => {
-            console.log(error);
-        })
+    useEffect(() => {
+        if (!_.isEmpty(account)) {
+            countUnreadMessagesByReceiverId(account.id).then(response => {
+                dispatch(countUnreadMessage(response.data));
+            }).catch(error => {
+                console.log(error);
+            })
+
+            countUnreadNotifyByAccountLogin(account.id).then(response => {
+                dispatch(countUnreadNotify(response.data));
+            }).catch(error => {
+                console.log(error);
+            })
+        }
     }, [])
+
+    useEffect(() => {
+        if (!_.isEmpty(account)) {
+            getAllNotifyByAccountLogin(account.id).then(response => {
+                dispatch(getAllNotify(response.data));
+            }).catch(error => {
+                console.log(error);
+            })
+        }
+    }, [unreadNotify])
 
     const handleLogout = () => {
         localStorage.removeItem("account");
         dispatch(deleteAccount());
+    }
+    
+    const handleChangeStatusNotify = () => {
+        changeStatusNotify(account.id).then(response => {
+            dispatch(countUnreadNotify(0));
+        }).catch(error => {
+            console.log(error)
+        })
     }
     return (
         <div className="container-fluid nav-bar py-2 mb-5 sticky-top">
@@ -41,8 +74,10 @@ const Navbar = () => {
                             :
                             <div className="d-flex align-items-center">
                                 <div className="nav-item dropdown">
-                                    <button className="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <img className="img-thumbnail rounded-circle me-2" src={account.avatar ? account.avatar : icon_user} alt=""
+                                    <button className="dropdown-toggle nav-link" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                        <img className="img-thumbnail rounded-circle me-2"
+                                             src={account.avatar ? account.avatar : icon_user} alt=""
                                              width={40} style={{height: '40px'}}/>
                                         {account.username}
                                     </button>
@@ -65,9 +100,10 @@ const Navbar = () => {
                                     <Link to="/chat" className="nav-link position-relative">
                                         <i className="bi bi-messenger"></i>
                                         {unreadMessage ?
-                                        <sup className="badge text-white bg-danger position-absolute top-0 start-50" style={{fontSize: '10px'}}>
-                                            {unreadMessage > 5 ? '5+' : unreadMessage}
-                                        </sup>
+                                            <sup className="badge text-white bg-danger position-absolute top-0 start-50"
+                                                 style={{fontSize: '10px'}}>
+                                                {unreadMessage > 5 ? '5+' : unreadMessage}
+                                            </sup>
                                             :
                                             null
                                         }
@@ -76,11 +112,36 @@ const Navbar = () => {
 
 
                                 <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    <button className="nav-link dropdown-toggle" data-bs-toggle="dropdown"
+                                            onClick={handleChangeStatusNotify}>
                                         <i className="bi bi-bell-fill"></i>
-                                    </a>
-                                    <div className="dropdown-menu rounded-0 m-0 custom-dropdown">
-                                        <p className="dropdown-item">.......</p>
+                                        {unreadNotify ?
+                                            <sup className="badge text-white bg-danger position-absolute top-0 start-50"
+                                                 style={{fontSize: '10px'}}>
+                                                {unreadNotify > 5 ? '5+' : unreadNotify}
+                                            </sup>
+                                            :
+                                            null
+                                        }
+                                    </button>
+                                    <div className="dropdown-menu dropdown-notify">
+                                        {!_.isEmpty(notifyList) && notifyList.map(item => (
+                                            <Link to={`/${item.navigate}`} className="d-flex align-items-center py-2 px-3 dropdown-notify-item"
+                                                 key={item.id}>
+                                                <img className="img-thumbnail rounded-circle"
+                                                     src={item.sender.avatar ? item.sender.avatar : image_default}
+                                                     alt="" width={50}
+                                                     style={{height: '50px'}}/>
+                                                <div className="d-flex flex-column ms-3">
+                                                    <p className="mb-2 message-title">
+                                                        {item.message}
+                                                    </p>
+                                                    <small className="fst-italic" style={{fontSize: '12px'}}>
+                                                        <i className="bi bi-clock me-1"></i>{format(new Date(item.createAt), "dd/MM/yyyy")}
+                                                    </small>
+                                                </div>
+                                            </Link>
+                                        ))}
                                     </div>
                                 </div>
                             </div>
