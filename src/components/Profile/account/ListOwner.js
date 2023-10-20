@@ -63,6 +63,7 @@ const ListOwner = () => {
     const getHousesByAccountId = (ownerId) => {
         HouseByIdService.findByOwnerId(ownerId , currentPageMd - 1)
             .then((houses) => {
+                console.log(houses.content);
                 setHouses(houses.content);
                 setTotalPagesMd(houses.totalPages)
                 setLgShow(true);
