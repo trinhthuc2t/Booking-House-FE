@@ -94,15 +94,14 @@ const WebSocketProvider = ({children}) => {
         socket = new WebSocket('ws://localhost:8080/ws/websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, onConnected, onError);
+    }
 
-        ws = {
-            socket: socket,
-            sendMessage,
-            sendNotify,
-            blockAccountSocket,
-            render,
-            setRender
-        }
+    ws = {
+        sendMessage,
+        sendNotify,
+        blockAccountSocket,
+        render,
+        setRender
     }
 
     return (
