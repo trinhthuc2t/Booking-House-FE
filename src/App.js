@@ -26,6 +26,7 @@ import UserList from "./components/Profile/UserList";
 import ListOwner from "./components/Profile/account/ListOwner";
 import ContactAdmin from "./components/Login-Register/ContactAdmin";
 import Component404 from "./errorClient/Component404";
+import Component403 from "./errorClient/Component403";
 import ChatBox from "./components/ChatBox/ChatBox";
 import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
 
@@ -62,6 +63,7 @@ function App() {
                 <Route path={'/top5'}  element={<Top5BookingHouse/>}></Route>
                 <Route path={'*'} element={<Navigate to="/404" replace />}/>
                 <Route path="/404" element={<Component404/>}></Route>
+                <Route path={'/403'} element={<Component403/>}></Route>
             </Routes>
             {show && <Footer/>}
             <ToastContainer/>

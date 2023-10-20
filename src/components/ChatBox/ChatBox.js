@@ -10,7 +10,7 @@ import {
 import {formatDateTimeMessage} from "../../service/format";
 import {WebSocketContext} from "./WebSocketProvider";
 import {countUnreadMessage} from "../../redux/actions";
-
+import  image_default from '../../image/user-image.png';
 const ChatBox = () => {
         const [usersAndUnreadMessage, setUsersAndUnreadMessage] = useState([]);
         const [messages, setMessages] = useState([]);
@@ -124,7 +124,7 @@ const ChatBox = () => {
                                                 <li className="d-flex align-items-center dropdown-item py-2" key={item.id}
                                                     style={{cursor: 'pointer'}}
                                                     onClick={() => setSelectedAccount(item)}>
-                                                    <img src={item.avatar} alt="avatar" width={30}/>
+                                                    <img src={item.avatar ? item.avatar  : image_default} alt="avatar" width={30}/>
                                                     <div className="ms-2">{item.username}</div>
                                                 </li>
                                             ))
@@ -138,7 +138,7 @@ const ChatBox = () => {
                                         <li className={`clearfix ${user.account.id === selectedAccount.id ? 'active' : ''}`}
                                             key={user.account.id}
                                             onClick={() => handleSelectedAccount(user.account)}>
-                                            <img src={user.account.avatar} alt="avatar"/>
+                                            <img src={user.account.avatar ? user.account.avatar : image_default} alt="avatar"/>
                                             <div className="about">
                                                 <div className="name">{user.account.username}</div>
                                                 {/*<div className="status"><i className="fa fa-circle offline"></i> left 7 mins
@@ -163,7 +163,7 @@ const ChatBox = () => {
                                             <div className="row">
                                                 <div className="col-lg-6">
                                                     <span>
-                                                        <img src={selectedAccount.avatar} alt="avatar"/>
+                                                        <img src={selectedAccount.avatar ? selectedAccount.avatar : image_default} alt="avatar"/>
                                                     </span>
                                                     <div className="chat-about">
                                                         <h6 className="m-b-0">{selectedAccount.username}</h6>
@@ -191,7 +191,7 @@ const ChatBox = () => {
                                                         <span className="message-data-time">
                                                             {formatDateTimeMessage(item.createAt)}
                                                         </span>
-                                                                    <img src={item.sender.avatar}
+                                                                    <img src={item.sender.avatar ? item.sender.avatar : image_default}
                                                                          alt="avatar"/>
                                                                 </div>
                                                                 <div className="message other-message float-right">

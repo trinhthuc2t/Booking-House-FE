@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import _ from "lodash";
 import {Table} from "reactstrap";
 import AccountService from "../../service/AccountService";
@@ -8,6 +8,7 @@ import bookingService from "../../service/BookingService";
 import {Button, Modal} from "react-bootstrap";
 import {formatCurrency} from "../../service/format";
 import {Link} from "react-router-dom";
+import {WebSocketContext} from "../ChatBox/WebSocketProvider";
 
 const UserList = () => {
     const [userList, setUserList] = useState([]);
@@ -22,7 +23,7 @@ const UserList = () => {
     const [totalPagesMd, setTotalPagesMd] = useState(0);
     const [currentPageMd, setCurrentPageMd] = useState(1);
     const [spending , setSpending] = useState(0);
-
+    const {blockAccountSocket} = useContext(WebSocketContext);
     const findByRoleName = (roleName, nameSearch, currentPage) => {
         AccountService.findUser(roleName, nameSearch, currentPage)
             .then((accounts) => {
@@ -67,6 +68,7 @@ const UserList = () => {
                             showConfirmButton: false,
                             timer: 1000
                         })
+                        blockAccountSocket(id);
                     })
                     .catch(err => {
                         console.log(err)
