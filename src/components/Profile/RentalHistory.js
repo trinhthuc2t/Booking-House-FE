@@ -27,6 +27,13 @@ const RentalHistory = () => {
         const {sendNotify} = useContext(WebSocketContext);
         const {unreadNotify, toggleStatus} = useSelector(state => state);
 
+    const [houseName , setHouseName] = useState('');
+    const [status , setStatus] = useState('');
+    const [startTime , setStartTime] = useState(null);
+    const [endTime , setEndTime] = useState(null);
+    const [localStartTime , setLocalStartTime] = useState(null);
+    const [localEndTime , setLocalEndTime] = useState(null);
+
         useEffect(() => {
             getRentalList(account.id, currentPage - 1);
         }, [currentPage])
@@ -38,10 +45,50 @@ const RentalHistory = () => {
             }).catch(error => {
                 console.log(error);
             })
-        }, [load, unreadNotify, toggleStatus])
+        }, [load, unreadNotify, toggleStatus , houseName , status , localStartTime , localEndTime])
 
+
+    const handleHouseName = (e) => {
+        let {value} = e.target;
+        console.log(value);
+        setHouseName(value);
+    }
+
+    const changeDate = (dayValue) => {
+        const date = dayValue.split("-");
+        const year = parseInt(date[0]);
+        const month = parseInt(date[1]);
+        const day = parseInt(date[2]);
+
+        if (!isNaN(year) && !isNaN(month) && !isNaN(day)) {
+            const localDateTime = new Date(year, month - 1, day);
+            localDateTime.setMinutes(0);
+            localDateTime.setSeconds(0);
+
+            return localDateTime.toISOString().slice(0, 16);
+        } else {
+            return "";
+        }
+    }
+    const handleStartTime = (e) => {
+        console.log();
+        setStartTime(e.target.value);
+        setLocalStartTime(changeDate(e.target.value));
+    }
+
+    const handleEndTime = (e) => {
+        console.log(e.target.value);
+        setEndTime(e.target.value);
+        setLocalEndTime(changeDate(e.target.value))
+    }
         const getRentalList = (id, currentPage) => {
-            BookingService.getHistoryByAccount(id, currentPage).then((response) => {
+            let booking = {
+                houseName : houseName,
+                status : status,
+                startTime : localStartTime ,
+                endTime : localEndTime
+            };
+            BookingService.getHistoryByAccount(id, currentPage , booking).then((response) => {
                 const result = response.data.content;
                 setRentalList(result);
                 setTotalPages(response.data.totalPages);
@@ -193,6 +240,39 @@ const RentalHistory = () => {
             <div className='col-9'>
                 <div>
                     <h3 className="text-uppercase text-center mb-4">Lịch sử thuê nhà</h3>
+                    <div className="mb-3 py-4 px-3"
+                         style={{backgroundColor: "rgb(0,185,142)"}}>
+                        <div className="row g-2">
+                            <div className="col-md-3">
+                                <select className="form-select py-2 border-0" value={status} onChange={(e)=>{
+                                    setStatus(e.target.value)
+                                }}
+                                        style={{minWidth: '200px'}}>
+                                    <option value="">Tất cả</option>
+                                    <option value="Chờ nhận phòng">Chờ nhận phòng</option>
+                                    <option value="Đã trả phòng">Đã trả phòng</option>
+                                    <option value="Đã hủy">Đã hủy</option>
+                                    <option value="Đang ở">Đang ở</option>
+                                    <option value="Chờ xác nhận">Chờ xác nhận</option>
+                                </select>
+                            </div>
+
+                            <div className="col-md-5">
+                                <input type="text" className="form-control border-0 py-2" placeholder="Nhập từ khóa tìm kiếm"
+                                       onInput={handleHouseName} name="houseName" value={houseName}/>
+                            </div>
+                            <div className="col-2">
+                                <div className="input-group">
+                                    <input type="date" className="form-control" name="startTime" onChange={handleStartTime}   value={startTime} />
+                                </div>
+                            </div>
+                            <div className="col-2">
+                                <div className="input-group">
+                                    <input type="date" className="form-control" name="endTime" onChange={handleEndTime} min={startTime} value={endTime}  />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <table className="table">
                         <thead>
                         <tr align="center">
