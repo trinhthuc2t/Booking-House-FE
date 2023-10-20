@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
 import _ from "lodash";
 import {convertDateFormat, formatCurrency, getTotalDays} from "../../../service/format";
@@ -8,6 +8,9 @@ import BookingService from "../../../service/BookingService";
 import Swal from "sweetalert2";
 import {Button, Modal} from "react-bootstrap";
 import {cancelBookingOwner} from "../../../service/ownerService";
+import {saveNotify} from "../../../service/notifyService";
+import {WebSocketContext} from "../../ChatBox/WebSocketProvider";
+import {format} from "date-fns";
 
 const SearchBooking = () => {
     const [selectedDateStart, setSelectedDateStart] = useState(null);
@@ -24,6 +27,16 @@ const SearchBooking = () => {
     const [showModal, setShowModal] = useState(false);
     const [bookingDetail, setBookingDetail] = useState({});
     const [isProgressing, setIsProgressing] = useState(false);
+    const {sendNotify} = useContext(WebSocketContext);
+    const unreadNotify = useSelector(state => state.unreadNotify);
+
+    useEffect(() => {
+        searchBookingsByOwnerId(account.id, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage - 1)
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [currentPage, nameSearch, nameSearch, selectedDateStart, selectedDateEnd, status, isLoad, unreadNotify])
 
     const changePage = (e, value) => {
         setCurrentPage(value)
@@ -50,7 +63,6 @@ const SearchBooking = () => {
         setValueDateStart(selectedDate)
         const formattedDatetime = changeDate(selectedDate);
         setSelectedDateStart(formattedDatetime);
-
     };
 
     const handleDateChangeEnd = (event) => {
@@ -58,7 +70,7 @@ const SearchBooking = () => {
         setValueDateEnd(selectedDate)
         const formattedDatetime = changeDate(selectedDate);
         setSelectedDateEnd(formattedDatetime)
- };
+    };
 
     const handleNameSearch = (event) => {
         const nameSearch = event.target.value;
@@ -80,15 +92,8 @@ const SearchBooking = () => {
             });
     };
 
-    useEffect(() => {
-        searchBookingsByOwnerId(account.id, nameSearch, status, selectedDateStart, selectedDateEnd, currentPage - 1)
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
-    }, [currentPage, nameSearch, nameSearch, selectedDateStart, selectedDateEnd, status, isLoad])
-
-    const handleCancelBooking = (id) => {
+    const handleCancelBooking = (booking) => {
+        console.log(booking)
         Swal.fire({
             title: 'Bạn chắc chắn muốn hủy thuê nhà của khách?',
             icon: 'warning',
@@ -114,7 +119,7 @@ const SearchBooking = () => {
                 }).then((result) => {
                     if (result.isConfirmed) {
                         setIsProgressing(true);
-                        cancelBookingOwner(id, {message: result.value})
+                        cancelBookingOwner(booking.id, {message: result.value})
                             .then((res) => {
                                 Swal.fire({
                                     icon: 'success',
@@ -124,6 +129,9 @@ const SearchBooking = () => {
                                 }).then();
                                 setIsLoad(!isLoad);
                                 setIsProgressing(false);
+                                const from = format(new Date(booking.startTime), "dd/MM/yyyy");
+                                const to = format(new Date(booking.endTime), "dd/MM/yyyy");
+                                handleSendNotify(account, booking.account.id, `Chủ nhà đã hủy lịch thuê ngôi nhà ${booking.house.name}. Lịch đặt: ${from} - ${to}`, 'profile/rental-history');
                             })
                             .catch(err => {
                                 console.log(err);
@@ -141,7 +149,7 @@ const SearchBooking = () => {
         })
     }
 
-    const handleCheckOutBooking = (id) => {
+    const handleCheckOutBooking = (booking) => {
         Swal.fire({
             title: 'Bạn chắc chắn muốn thay đổi?',
             icon: 'question',
@@ -150,7 +158,7 @@ const SearchBooking = () => {
             cancelButtonText: 'Đóng',
         }).then((result) => {
             if (result.isConfirmed) {
-                BookingService.checkoutBookingAdmin(id)
+                BookingService.checkoutBookingAdmin(booking.id)
                     .then((res) => {
                         setIsLoad(!isLoad);
                         Swal.fire({
@@ -159,6 +167,7 @@ const SearchBooking = () => {
                             showConfirmButton: false,
                             timer: 1000
                         }).then();
+                        sendNotify({receiver: {id: booking.account.id}, message: 'Thay đổi trạng thái'});
                     })
                     .catch(err => {
                         console.log(err)
@@ -167,7 +176,7 @@ const SearchBooking = () => {
         })
     }
 
-    const handleCheckInBooking = (id) => {
+    const handleCheckInBooking = (booking) => {
         Swal.fire({
             title: 'Bạn chắc chắn muốn thay đổi?',
             icon: 'question',
@@ -176,7 +185,7 @@ const SearchBooking = () => {
             cancelButtonText: 'Đóng',
         }).then((result) => {
             if (result.isConfirmed) {
-                BookingService.checkinBookingAdmin(id)
+                BookingService.checkinBookingAdmin(booking.id)
                     .then((res) => {
                         setIsLoad(!isLoad);
                         Swal.fire({
@@ -184,7 +193,8 @@ const SearchBooking = () => {
                             title: 'Trạng thái đã được cập nhật thành công !',
                             showConfirmButton: false,
                             timer: 1000
-                        })
+                        }).then();
+                        sendNotify({receiver: {id: booking.account.id}, message: 'Thay đổi trạng thái'});
                     })
                     .catch(err => {
                         console.log(err)
@@ -192,7 +202,7 @@ const SearchBooking = () => {
             }
         })
     }
-    const waitOwnerConfirmBooking = (id) => {
+    const waitOwnerConfirmBooking = (booking) => {
         Swal.fire({
             title: 'Bạn chắc chắn muốn thay đổi?',
             icon: 'question',
@@ -202,7 +212,7 @@ const SearchBooking = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 setIsProgressing(true);
-                BookingService.waitOwnerConfirmBooking(id)
+                BookingService.waitOwnerConfirmBooking(booking.id)
                     .then((res) => {
                         setIsLoad(!isLoad);
                         Swal.fire({
@@ -212,6 +222,9 @@ const SearchBooking = () => {
                             timer: 1500
                         }).then();
                         setIsProgressing(false);
+                        const from = format(new Date(booking.startTime), "dd/MM/yyyy");
+                        const to = format(new Date(booking.endTime), "dd/MM/yyyy");
+                        handleSendNotify(account, booking.account.id, `Chủ nhà đã xác nhận lịch thuê ngôi nhà ${booking.house.name}. Lịch đặt: ${from} - ${to}`, 'profile/rental-history');
                     })
                     .catch(err => {
                         console.log(err)
@@ -219,18 +232,32 @@ const SearchBooking = () => {
             }
         })
     }
+
+    const handleSendNotify = (accountLogin, receiverId, message, navigate) => {
+        const data = {
+            sender: accountLogin,
+            receiver: {id: receiverId},
+            message,
+            navigate
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
     const checkStatusBooking = (bookingCheck) => {
         if (bookingCheck.status === "Chờ nhận phòng") {
             return (
                 <div className={'d-flex'}>
-                    <button onClick={() => handleCheckInBooking(bookingCheck.id)}
+                    <button onClick={() => handleCheckInBooking(bookingCheck)}
                             className="btn border border-primary text-primary"
                             style={{width: 100}}>
                         Check in
                     </button>
                     <button
                         className="btn border border-danger text-danger ms-2"
-                        onClick={() => handleCancelBooking(bookingCheck.id)}
+                        onClick={() => handleCancelBooking(bookingCheck)}
                         style={{width: 100}}>
                         Hủy
                     </button>
@@ -245,7 +272,7 @@ const SearchBooking = () => {
         } else if (bookingCheck.status === "Đang ở") {
             return (
                 <button className="btn border border-primary text-primary"
-                        onClick={() => handleCheckOutBooking(bookingCheck.id)}
+                        onClick={() => handleCheckOutBooking(bookingCheck)}
                         style={{width: 200}}>
                     Check out
                 </button>
@@ -259,14 +286,14 @@ const SearchBooking = () => {
         } else {
             return (
                 <div className={'d-flex'}>
-                    <button onClick={() => waitOwnerConfirmBooking(bookingCheck.id)}
+                    <button onClick={() => waitOwnerConfirmBooking(bookingCheck)}
                             className="btn border border-primary text-primary"
                             style={{width: 110}}>
                         Chấp nhận
                     </button>
                     <button
                         className="btn border border-danger text-danger ms-2"
-                        onClick={() => handleCancelBooking(bookingCheck.id)}
+                        onClick={() => handleCancelBooking(bookingCheck)}
                         style={{width: 80}}>
                         Hủy
                     </button>

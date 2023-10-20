@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {useSelector} from "react-redux";
 import _ from 'lodash';
 import BookingService from "../../service/BookingService";
@@ -9,6 +9,9 @@ import {Button, Modal} from "react-bootstrap";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import {reviewSchema} from "../../validate/validate";
 import {getAllReviewsByAccountId} from "../../service/reviewService";
+import {format} from "date-fns";
+import {saveNotify} from "../../service/notifyService";
+import {WebSocketContext} from "../ChatBox/WebSocketProvider";
 
 const RentalHistory = () => {
         const account = useSelector(state => state.account);
@@ -21,6 +24,8 @@ const RentalHistory = () => {
         const [booking, setBooking] = useState({});
         const [reviews, setReviews] = useState([]);
         const [isProgressing, setIsProgressing] = useState(false);
+        const {sendNotify} = useContext(WebSocketContext);
+        const {unreadNotify, toggleStatus} = useSelector(state => state);
 
         useEffect(() => {
             getRentalList(account.id, currentPage - 1);
@@ -33,7 +38,7 @@ const RentalHistory = () => {
             }).catch(error => {
                 console.log(error);
             })
-        }, [load])
+        }, [load, unreadNotify, toggleStatus])
 
         const getRentalList = (id, currentPage) => {
             BookingService.getHistoryByAccount(id, currentPage).then((response) => {
@@ -75,6 +80,9 @@ const RentalHistory = () => {
                         }).then();
                         setIsProgressing(false);
                         setLoad(!load);
+                        const from = format(new Date(item.startTime), "dd/MM/yyyy");
+                        const to = format(new Date(item.endTime), "dd/MM/yyyy");
+                        handleSendNotify(account, item.house.owner.id, `${account.username} đã hủy lịch thuê ngôi nhà ${item.house.name}. Lịch đặt: ${from} - ${to}`, 'profile/houses-owner-booking')
                     }).catch(function (err) {
                         console.log(err);
                         setIsProgressing(false);
@@ -132,6 +140,8 @@ const RentalHistory = () => {
                 }).then();
                 setShowReviewModal(false);
                 setLoad(!load);
+                const house = response.data.booking.house;
+                handleSendNotify(account, house.owner.id, `${account.username} đã bình luận về ngôi nhà ${house.name}.`, `house-detail/${house.id}`)
             }).catch(function (err) {
                 console.log(err);
                 Swal.fire({
@@ -164,8 +174,23 @@ const RentalHistory = () => {
                     )
             }
         }
+
+        const handleSendNotify = (accountLogin, receiverId, message, navigate) => {
+            const data = {
+                sender: accountLogin,
+                receiver: {id: receiverId},
+                message,
+                navigate
+            }
+            saveNotify(data).then(response => {
+                sendNotify(response.data);
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+
         return (
-            <div className={'col-9'}>
+            <div className='col-9'>
                 <div>
                     <h3 className="text-uppercase text-center mb-4">Lịch sử thuê nhà</h3>
                     <table className="table">

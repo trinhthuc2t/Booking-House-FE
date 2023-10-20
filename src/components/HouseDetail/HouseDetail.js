@@ -1,4 +1,4 @@
-import React, {createContext, useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {formatCurrency, getTotalDays} from "../../service/format";
 import StarsReview from "./StarsReview";
 import Description from "./Description";
@@ -20,6 +20,8 @@ import {useSelector} from "react-redux";
 import Swal from "sweetalert2";
 import BookingService from "../../service/BookingService";
 import {CircularProgress} from "@mui/material";
+import {WebSocketContext} from "../ChatBox/WebSocketProvider";
+import {saveNotify} from "../../service/notifyService";
 
 export const HouseDetailContext = createContext();
 
@@ -41,7 +43,8 @@ const HouseDetail = () => {
     const [isRender, setIsRender] = useState(false);
     const [isProgressing, setIsProgressing] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const account = useSelector(state => state.account);
+    const {account, unreadNotify} = useSelector(state => state);
+    const {sendNotify} = useContext(WebSocketContext);
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -97,7 +100,7 @@ const HouseDetail = () => {
             top: 0,
             behavior: "smooth"
         })
-    }, [])
+    }, [unreadNotify])
 
     useEffect(() => {
         getAllReviewsByHouseId(houseId, currentPage - 1).then(response => {
@@ -105,7 +108,7 @@ const HouseDetail = () => {
         }).catch(error => {
             console.log(error);
         })
-    }, [currentPage])
+    }, [currentPage, unreadNotify])
 
     const changePage = (e, value) => {
         setCurrentPage(value);
@@ -117,7 +120,7 @@ const HouseDetail = () => {
         }).catch(error => {
             console.log(error);
         })
-    }, [isRender])
+    }, [isRender, unreadNotify])
 
     const excludeBookingRange = (bookings) => {
         return bookings.map(booking => {
@@ -180,6 +183,7 @@ const HouseDetail = () => {
             setIsProgressing(false);
             setIsRender(!isRender);
             handleCloseModal();
+            handleSendNotify();
         }).catch(error => {
             console.log(error);
             Swal.fire({
@@ -188,6 +192,22 @@ const HouseDetail = () => {
                 showConfirmButton: false,
                 timer: 1500
             }).then();
+        })
+    }
+
+    const handleSendNotify = () => {
+        const from = format(new Date(startDate), "dd/MM/yyyy");
+        const to = format(new Date(endDate), "dd/MM/yyyy");
+        const data = {
+            sender: account,
+            receiver: {id: house.owner.id},
+            message: `${account.username} đã đặt lịch thuê ngôi nhà ${house.name}. Lịch đặt: ${from} - ${to}`,
+            navigate: 'profile/houses-owner-booking'
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+        }).catch(error => {
+            console.log(error)
         })
     }
 

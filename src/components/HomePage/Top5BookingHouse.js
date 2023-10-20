@@ -10,7 +10,6 @@ function Top5BookingHouse() {
         axios.get("http://localhost:8080/api/houses/top5")
             .then(res => {
                 setHouses(res.data)
-                console.log(res.data)
             })
             .catch(err => {
                 console.log(err)
