@@ -60,7 +60,6 @@ function App() {
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                     <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
-                <Route path={'/top5'}  element={<Top5BookingHouse/>}></Route>
                 <Route path={'*'} element={<Navigate to="/404" replace />}/>
                 <Route path="/404" element={<Component404/>}></Route>
                 <Route path={'/403'} element={<Component403/>}></Route>

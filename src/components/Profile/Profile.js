@@ -16,14 +16,14 @@ const Profile = () => {
             top: 0,
             behavior: "smooth"
         })
-    }, [])
+    }, [account])
 
     return (
         <div className="container-fluid">
             <div className=" rounded bg-white mb-5">
                 {!_.isEmpty(account) &&
                     <div className="row">
-                        <LeftSidebar id={account.id}/>
+                        <LeftSidebar/>
                         <Outlet/>
                     </div>
                 }

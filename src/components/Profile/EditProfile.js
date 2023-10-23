@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import _ from 'lodash';
@@ -14,6 +14,8 @@ import {profileSchema} from "../../validate/validate";
 import {editAccount} from "../../redux/actions";
 import AccountService from "../../service/AccountService";
 import image_default from "../../image/user-image.png";
+import {WebSocketContext} from "../ChatBox/WebSocketProvider";
+import {saveNotify} from "../../service/notifyService";
 
 const EditProfile = ({status}) => {
 
@@ -31,6 +33,7 @@ const EditProfile = ({status}) => {
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
     const [avatarError , setAvatarError] = useState('');
+    const {sendAdmin} = useContext(WebSocketContext);
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -102,11 +105,27 @@ const EditProfile = ({status}) => {
         };
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
+            handleSendNotify(account, 0, `${account.username} đã đăng ký làm chủ nhà`, 'profile/confirm-owner');
             navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);
         })
     }
+
+    const handleSendNotify = (accountLogin, receiverId, message, navigate) => {
+        const data = {
+            sender: accountLogin,
+            receiver: {id: receiverId},
+            message,
+            navigate
+        }
+        saveNotify(data).then(response => {
+            sendAdmin(response.data);
+        }).catch(error => {
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
         getAccountById();
     }, []);

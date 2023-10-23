@@ -53,7 +53,6 @@ const ListAccount = () => {
             .then((bookings) => {
                 setBookings(bookings.data.content)
                 setTotalBooking(totalBookingByAcc(bookings.data.content));
-                console.log(bookings.data)
                 setLgShow(true);
             })
             .catch((err) => {

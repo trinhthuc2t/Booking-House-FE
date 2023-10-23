@@ -1,18 +1,21 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AccountService from "../../service/AccountService";
-import {toast} from "react-toastify";
 import _ from 'lodash';
 import Swal from "sweetalert2";
-import BookingService from "../../service/BookingService";
+import {WebSocketContext} from "../ChatBox/WebSocketProvider";
+import {saveNotify} from "../../service/notifyService";
+import {useSelector} from "react-redux";
 
 const ConfirmOwner = () => {
     const [listRegister, setListRegister] = useState([]);
     const [owner, setOwner] = useState({});
     const [load, setLoad] = useState(false);
+    const {sendNotify, sendAdmin} = useContext(WebSocketContext);
+    const {account, toggleStatus} = useSelector(state => state);
 
     useEffect(() => {
         getListRegister();
-    }, [load])
+    }, [load, toggleStatus])
     const getListRegister = () => {
         AccountService.getListRegisterOwner().then((response) => {
             setListRegister(response.data);
@@ -32,8 +35,14 @@ const ConfirmOwner = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 AccountService.agreeRegister(data).then((response) => {
-                    toast.success(response, {position: "top-center", autoClose: 1000,});
+                    Swal.fire({
+                        title: 'Xác nhận thành công !',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then();
                     setLoad(!load);
+                    handleSendNotify(account, value.account.id, 'Admin đã đồng ý cho bạn làm chủ nhà', 'profile/houses-owner');
                 }).catch(function (err) {
                     console.log(err);
                 })
@@ -51,12 +60,33 @@ const ConfirmOwner = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 AccountService.refuseRegister(data.id).then((response) => {
-                    toast.success(response, {position: "top-center", autoClose: 1000,});
+                    Swal.fire({
+                        title: 'Xác nhận thất bại !',
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then();
                     setLoad(!load);
+                    handleSendNotify(account, data.account.id, 'Admin đã từ chối cho bạn làm chủ nhà', 'profile/houses-owner');
                 }).catch(function (err) {
                     console.log(err);
                 })
             }
+        })
+    }
+
+    const handleSendNotify = (accountLogin, receiverId, message, navigate) => {
+        const data = {
+            sender: accountLogin,
+            receiver: {id: receiverId},
+            message,
+            navigate
+        }
+        saveNotify(data).then(response => {
+            sendNotify(response.data);
+            sendAdmin(response.data);
+        }).catch(error => {
+            console.log(error)
         })
     }
 
