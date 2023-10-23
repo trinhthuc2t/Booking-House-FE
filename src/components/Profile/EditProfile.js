@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import {ErrorMessage, Field, Form, Formik} from "formik";
 import _ from 'lodash';
@@ -14,6 +14,7 @@ import {profileSchema} from "../../validate/validate";
 import {editAccount} from "../../redux/actions";
 import AccountService from "../../service/AccountService";
 import image_default from "../../image/user-image.png";
+import {WebSocketContext} from "../ChatBox/WebSocketProvider";
 
 const EditProfile = ({status}) => {
 
@@ -31,6 +32,7 @@ const EditProfile = ({status}) => {
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
     const [avatarError , setAvatarError] = useState('');
+    const {sendNotify} = useContext(WebSocketContext);
 
     useEffect(() => {
         getAllProvinces().then(response => {
@@ -91,7 +93,6 @@ const EditProfile = ({status}) => {
         })
     }
     const handleRegisterOwner = (values) => {
-
         let data = {
             ...values,
             id: account.id,

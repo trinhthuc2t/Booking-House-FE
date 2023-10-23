@@ -312,8 +312,7 @@ const RentalHistory = () => {
                         }
                         </tbody>
                     </table>
-                    <span
-                        className={'text-danger'}>* Lưu ý : Bạn chỉ có thể hủy thuê nhà trước ngày thuê nhà ít nhất 2 ngày. </span>
+                    <span className={'text-danger'}>* Lưu ý :Nếu hủy thuê nhà trước ngày thuê nhà 1 ngày , bạn sẽ phải chịu một khoản phí bằng 10% tiền thuê nhà</span>
                     {!_.isEmpty(rentalList) ?
                         <div className="col-12 mt-5 d-flex justify-content-center">
                             <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
