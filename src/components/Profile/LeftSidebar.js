@@ -74,7 +74,9 @@ const LeftSidebar = () => {
     }
 
     return (
-        <div className="col-3 bg-light border-end py-3">
+        <div
+            className={`col-3 border-end py-3 ${account.role.name === "ROLE_ADMIN" ? 'bg-admin' :
+                account.role.name === "ROLE_OWNER" ?  'bg-owner' : 'bg-light' }`}>
             <aside className="left-sidebar" style={{height: '80vh'}}>
                 <div>
                     <nav className="list-group row">

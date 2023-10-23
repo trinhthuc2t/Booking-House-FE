@@ -24,6 +24,7 @@ const UserList = () => {
     const [currentPageMd, setCurrentPageMd] = useState(1);
     const [spending , setSpending] = useState(0);
     const {blockAccountSocket} = useContext(WebSocketContext);
+
     const findByRoleName = (roleName, nameSearch, currentPage) => {
         AccountService.findUser(roleName, nameSearch, currentPage)
             .then((accounts) => {
@@ -111,14 +112,19 @@ const UserList = () => {
         getListBooking(user.id);
     },[currentPageMd])
     const getListBooking = (id) => {
-        bookingService.getHistoryByAccount(id , currentPageMd - 1).then((response) => {
+        let booking = {
+            houseName : '',
+            status : '',
+            startTime : '' ,
+            endTime : ''
+        };
+        bookingService.getHistoryByAccount(id , currentPageMd - 1 , booking).then((response) => {
             setBookingList(response.data.content);
             setTotalPagesMd(response.data.totalPages);
             setLgShow(true);
         }).catch(function (err) {
             console.log(err)
         })
-
     }
 
     const getSpending = (id) => {
