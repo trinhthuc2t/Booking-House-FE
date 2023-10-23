@@ -27,7 +27,6 @@ const RegisterOwner = () => {
             </div>
         }else if (owner.status === "Đã xác nhận"){
             return <div className={"col-9 "}>
-
                 <h3>Bạn đã trở thành chủ nhà</h3>
             </div>
         } else {

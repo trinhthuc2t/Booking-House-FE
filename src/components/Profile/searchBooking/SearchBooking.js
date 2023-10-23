@@ -249,69 +249,97 @@ const SearchBooking = () => {
     const checkStatusBooking = (bookingCheck) => {
         if (bookingCheck.status === "Chờ nhận phòng") {
             return (
-                <div className={'d-flex'}>
+                <div className={'d-flex justify-content-evenly'}>
                     <button onClick={() => handleCheckInBooking(bookingCheck)}
-                            className="btn border border-primary text-primary"
-                            style={{width: 100}}>
+                            className="btn border border-primary text-primary" style={{width : '105px'}}>
                         Check in
                     </button>
-                    <button
-                        className="btn border border-danger text-danger ms-2"
-                        onClick={() => handleCancelBooking(bookingCheck)}
-                        style={{width: 100}}>
+                    <button className="btn border border-danger text-danger ms-2"
+                            onClick={() => handleCancelBooking(bookingCheck)}>
                         Hủy
                     </button>
-                </div>
-            )
-        } else if (bookingCheck.status === "Đã hủy") {
-            return (
-                <div style={{color: "red"}}>
-                    <b className="text-danger" style={{width: 200}}>{bookingCheck.status}</b>
+                    <button className="btn border-primary text-primary ms-2"
+                            onClick={() => handleBookingDetail(bookingCheck)}>
+                        Chi tiết
+                    </button>
                 </div>
             )
         } else if (bookingCheck.status === "Đang ở") {
             return (
-                <button className="btn border border-primary text-primary"
-                        onClick={() => handleCheckOutBooking(bookingCheck)}
-                        style={{width: 200}}>
-                    Check out
-                </button>
-            )
-        } else if (bookingCheck.status === "Đã trả phòng") {
-            return (
-                <div style={{color: "blue"}}>
-                    <b className="text-success" style={{width: 200}}>{bookingCheck.status}</b>
+                <div className={'d-flex justify-content-evenly'}>
+                    <button className="btn border border-primary text-primary"
+                            onClick={() => handleCheckOutBooking(bookingCheck)} style={{width : '105px'}}
+                    >
+                        Check out
+                    </button>
+                    <button className="btn border-primary text-primary ms-2"
+                            onClick={() => handleBookingDetail(bookingCheck)}>
+                        Chi tiết
+                    </button>
                 </div>
+
+
             )
-        } else {
+        } else if (bookingCheck.status === "Chờ xác nhận") {
             return (
-                <div className={'d-flex'}>
+                <div className={'d-flex justify-content-evenly'}>
                     <button onClick={() => waitOwnerConfirmBooking(bookingCheck)}
-                            className="btn border border-primary text-primary"
-                            style={{width: 110}}>
+                            className="btn border border-primary text-primary" style={{width : '105px'}}>
                         Chấp nhận
                     </button>
                     <button
                         className="btn border border-danger text-danger ms-2"
                         onClick={() => handleCancelBooking(bookingCheck)}
-                        style={{width: 80}}>
+                    >
                         Hủy
+                    </button>
+                    <button className="btn border-primary text-primary ms-2"
+                            onClick={() => handleBookingDetail(bookingCheck)}>
+                        Chi tiết
                     </button>
                 </div>
             )
-
+        }else {
+            return (
+                   <button className="btn border-primary text-primary ms-2"
+                           onClick={() => handleBookingDetail(bookingCheck)}>
+                       Chi tiết
+                   </button>
+            )
         }
 
     }
-
     const handleBookingDetail = (booking) => {
         setBookingDetail(booking);
         setShowModal(true);
     }
-
+    const showBookingStatus = (booking) => {
+        switch (booking.status) {
+            case 'Chờ xác nhận':
+                return (
+                    <b style={{color : 'blue'}}>Chờ xác nhận</b>
+                );
+            case 'Đã hủy' :
+                return (
+                    <b style={{color : 'red'}}>Đã hủy</b>
+                );
+            case 'Đã trả phòng' :
+                return (
+                    <b style={{color : 'green'}}>Đã trả phòng</b>
+                );
+            case 'Chờ nhận phòng' :
+                return (
+                    <b >Chờ nhận phòng</b>
+                );
+            case 'Đang ở' :
+                return (
+                    <b style={{color : 'darkorange'}}>Đang ở</b>
+                )
+        }
+    }
     return (
         <div className="col-9">
-            <div className="container">
+            <div className="container-fluid">
                 <h3 className="text-uppercase text-center mb-5">Lịch sử cho thuê nhà</h3>
                 <div className="mb-3 py-4 px-3"
                      style={{backgroundColor: "rgb(0,185,142)"}}>
@@ -356,8 +384,8 @@ const SearchBooking = () => {
                         <th>Nhà</th>
                         <th>Ngày thuê</th>
                         <th>Ngày trả nhà</th>
-                        <th style={{width: '150px'}}>Trạng thái</th>
-                        <th>Hành động</th>
+                        <th >Trạng thái</th>
+                        <th style={{width: '25%'}}>Hành động</th>
                     </tr>
                     </thead>
                     <tbody style={{verticalAlign: 'middle'}}>
@@ -396,13 +424,12 @@ const SearchBooking = () => {
                                     </td>
 
                                     <td style={{width: '180px'}}>
-                                        {checkStatusBooking(b)}
+                                        {showBookingStatus(b)}
                                     </td>
                                     <td>
-                                        <button className="btn border-primary text-primary"
-                                                onClick={() => handleBookingDetail(b)}>
-                                            Chi tiết
-                                        </button>
+                                        <div className={'d-flex '}>
+                                            {checkStatusBooking(b)}
+                                        </div>
                                     </td>
                                 </tr>
                             )
