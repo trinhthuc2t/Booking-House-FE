@@ -1,11 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './403.scss'
+
 const Component403 = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        })
+    }, [])
     return (
         <div className={'body-403'}>
             <div className="forbidden">
                 <div className="text">
-                 {/*   FORBIDEN*/}
+                    {/*   FORBIDEN*/}
                 </div>
             </div>
             <div className="text-403">4003</div>
@@ -42,7 +49,6 @@ const Component403 = () => {
                     <div className="foot"></div>
                 </div>
             </div>
-            {/*<div></div>*/}
         </div>
     );
 };
