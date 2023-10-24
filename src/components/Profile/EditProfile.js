@@ -196,7 +196,7 @@ const EditProfile = ({status}) => {
                                 <input type="file" id="frontsideFile" name="frontside" onChange={(event) => {
                                     event.target.files[0] && setFileFront(event.target.files[0].name);
                                     uploadIdentify(event)
-                                }} hidden/>
+                                }} hidden accept={"image/jpeg ,image/png"}/>
                                 {identifyFront ?
                                     <img src={identifyFront} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
                                     :
@@ -214,7 +214,7 @@ const EditProfile = ({status}) => {
                                     event.target.files[0] && setFileBack(event.target.files[0].name)
 
                                     uploadIdentify(event)
-                                }} hidden/>
+                                }} hidden accept={"image/jpeg ,image/png"}/>
                                 {identifyBack ?
                                     <img src={identifyBack} id="frontside" width={'100%'} height={'100%'} alt={'img'}/>
                                     :
@@ -299,7 +299,7 @@ const EditProfile = ({status}) => {
                                     <img className="rounded-circle" width="300px" height="300px"
                                          src={accountInfo.avatar ? accountInfo.avatar : image_default} alt="avatar" id="image" name="avatar"
                                          onChange={handleValueInput}/>
-                                    <input className="mt-2 form-control" type="file" onChange={selectImage}/>
+                                    <input className="mt-2 form-control" type="file" onChange={selectImage} accept={"image/jpeg ,image/png"}/>
                                 </div>
                                 <span className={'text-danger text-center'}>{avatarError}</span>
                             </div>

@@ -368,7 +368,7 @@ const SaveHouse = () => {
                                     <label htmlFor="thumbnail" className="form-label">Ảnh đại diện</label>
                                     <input type="file" className="form-control" id="thumbnail" name="thumbnail"
                                            ref={thumbnailRef}
-                                           onChange={(event) => handleThumbnailFile(event, values)}/>
+                                           onChange={(event) => handleThumbnailFile(event, values)} accept={"image/jpeg ,image/png"}/>
                                     <ErrorMessage name="thumbnail" className="text-danger" component="small"/>
                                 </div>
 
@@ -376,8 +376,8 @@ const SaveHouse = () => {
                                     <label htmlFor="images" className="form-label">Ảnh giới thiệu chi tiết</label>
                                     <input type="file" className="form-control" id="images" name="images"
                                            multiple={true}
-                                           onChange={(event) => handleImagesFile(event, values)} ref={imagesRef}/>
-                                    <ErrorMessage name="images" className="text-danger" component="small"/>
+                                           onChange={(event) => handleImagesFile(event, values)} ref={imagesRef} accept={"image/jpeg ,image/png"}/>
+                                    <ErrorMessage name="images" className="text-danger" component="small" />
                                 </div>
 
                                 <div className="col-md-6 form-group mb-3">

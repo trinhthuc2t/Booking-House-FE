@@ -4,7 +4,6 @@ import LoginRegisterService from "../service/login-registerService";
 const saveHouseSchema = Yup.object().shape({
     name: Yup.string()
         .min(2, 'Tên tối thiểu phải 2 kí tự')
-        .max(20, 'Tên quá dài')
         .required('Vui lòng không được để trống'),
     bedroom: Yup.string()
         .required('Vui lòng không được để trống'),
