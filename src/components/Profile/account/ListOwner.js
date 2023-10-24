@@ -185,7 +185,6 @@ const ListOwner = () => {
                             <option value="ALL">Tất cả</option>
                             <option value="Bị khóa">Bị khóa</option>
                             <option value="Đang hoạt động">Đang hoạt động</option>
-                            <option value="Chờ xác nhận">Chờ xác nhận</option>
                         </select>
                     </div>
 
@@ -202,7 +201,8 @@ const ListOwner = () => {
                 <thead>
                 <tr align="center">
                     <th>STT</th>
-                    <th>Tài khoản</th>
+                    <th>Họ và tên</th>
+                    <th>Số điện thoại</th>
                     <th>Email</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
@@ -214,7 +214,8 @@ const ListOwner = () => {
                         return (
                             <tr key={index} align="center">
                                 <td>{index + 1}</td>
-                                <td>{acc.username}</td>
+                                <td>{acc.lastname} {acc.firstname}</td>
+                                <td>{acc.phone}</td>
                                 <td>{acc.email}</td>
                                 <td>{acc.status}</td>
                                 <td className="d-flex justify-content-center">

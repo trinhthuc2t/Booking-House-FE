@@ -101,8 +101,8 @@ const AccountService = {
     unblockAccount: (accId) => {
         return instance.get("/api/accounts/unBlock/" + accId);
     },
-    findUser : async  (roleName, nameSearch, currentPage) => {
-        return await  instance.get(`/api/accounts/getUser?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}`)
+    findUser : async  (roleName, nameSearch, status, currentPage) => {
+        return await  instance.get(`/api/accounts/getUser?roleName=${roleName}&nameSearch=${nameSearch}&page=${currentPage}&status=${status}`)
     },
     findOwner : async  ( nameSearch, currentPage) => {
         return await  instance.get(`/api/owners/getOwnerDto?nameSearch=${nameSearch}&page=${currentPage}`)

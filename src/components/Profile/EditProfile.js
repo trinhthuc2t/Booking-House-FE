@@ -105,7 +105,7 @@ const EditProfile = ({status}) => {
         };
         AccountService.registerOwner(data).then((response) => {
             toast.success("Đăng ký thành công", {position: "top-center", autoClose: 1000,});
-            handleSendNotify(account, 0, `${account.username} đã đăng ký làm chủ nhà`, 'profile/confirm-owner');
+            handleSendNotify(account, 1, `${account.username} đã đăng ký làm chủ nhà`, 'profile/confirm-owner');
             navigate('/profile/information');
         }).catch(function (err) {
             console.log(err);

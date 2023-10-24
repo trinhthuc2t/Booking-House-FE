@@ -24,9 +24,9 @@ const UserList = () => {
     const [currentPageMd, setCurrentPageMd] = useState(1);
     const [spending , setSpending] = useState(0);
     const {blockAccountSocket} = useContext(WebSocketContext);
-
-    const findByRoleName = (roleName, nameSearch, currentPage) => {
-        AccountService.findUser(roleName, nameSearch, currentPage)
+    const [status, setStatus] = useState("");
+    const findByRoleName = (roleName, nameSearch , status, currentPage) => {
+        AccountService.findUser(roleName, nameSearch , status, currentPage)
             .then((accounts) => {
                 setUserList(accounts.data.content);
                 setTotalPages(accounts.data.totalPages);
@@ -37,12 +37,12 @@ const UserList = () => {
     };
 
     useEffect(() => {
-        findByRoleName(roleName, nameSearch, currentPage - 1);
+        findByRoleName(roleName, nameSearch , status, currentPage - 1);
         window.scrollTo({
             top: 0,
             behavior: "smooth"
         })
-    }, [currentPage, nameSearch , isLoad])
+    }, [currentPage, nameSearch , isLoad , status])
 
     const changePage = (e, value) => {
         setCurrentPage(value)
@@ -144,6 +144,9 @@ const UserList = () => {
     const changePageMd = (e, value) => {
         setCurrentPageMd(value);
     }
+    const handleOptionChange = (e) => {
+        setStatus(e.target.value);
+    }
 
 
     return (
@@ -151,12 +154,22 @@ const UserList = () => {
             <h3 className="text-uppercase text-center mb-5">Danh sách người dùng</h3>
             <div className="mb-3 py-4 px-3"
                  style={{backgroundColor: "rgb(0,185,142)"}}>
-                    <div className="col-md-12">
-                        <input type="text" className="form-control border-0 py-2"
-                               placeholder="Nhập từ khóa tìm kiếm"
-                               name=""
-                               id="" onChange={handleNameSearch}/>
-                    < /div>
+               <div className={'row g-2'}>
+                   <div  className="col-md-4">
+                       <select className="form-select py-2 border-0"
+                               onChange={handleOptionChange}>
+                           <option value="">Tất cả</option>
+                           <option value="Bị khóa">Bị khóa</option>
+                           <option value="Đang hoạt động">Đang hoạt động</option>
+                       </select>
+                   </div>
+                   <div className="col-md-8">
+                       <input type="text" className="form-control border-0 py-2"
+                              placeholder="Nhập từ khóa tìm kiếm"
+                              name=""
+                              id="" onChange={handleNameSearch}/>
+                   < /div>
+               </div>
             </div>
             <Table hover>
                 <thead>
@@ -164,6 +177,7 @@ const UserList = () => {
                     <th>STT</th>
                     <th>Họ và tên</th>
                     <th>Số điện thoại</th>
+                    <th>Email</th>
                     <th>Trạng thái</th>
                     <th>Hành động</th>
                 </tr>
@@ -174,8 +188,9 @@ const UserList = () => {
                         return (
                             <tr key={index} align="center">
                                 <td>{index + 1}</td>
-                                <td>{`${user.firstname} ${user.lastname}`}</td>
+                                <td>{`${user.lastname} ${user.firstname}`}</td>
                                 <td>{user.phone}</td>
+                                <td>{user.email}</td>
                                 <td>{user.status}</td>
                                 <td className="d-flex justify-content-center">
                                     <button

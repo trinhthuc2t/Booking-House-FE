@@ -61,13 +61,13 @@ const ConfirmOwner = () => {
             if (result.isConfirmed) {
                 AccountService.refuseRegister(data.id).then((response) => {
                     Swal.fire({
-                        title: 'Xác nhận thất bại !',
-                        icon: 'error',
+                        title: 'Từ chối thành công !',
+                        icon: 'success',
                         showConfirmButton: false,
                         timer: 1500
                     }).then();
                     setLoad(!load);
-                    handleSendNotify(account, data.account.id, 'Admin đã từ chối cho bạn làm chủ nhà', 'profile/houses-owner');
+                    handleSendNotify(account, data.account.id, 'Admin đã từ chối cho bạn làm chủ nhà', 'profile/register-owner');
                 }).catch(function (err) {
                     console.log(err);
                 })
@@ -106,7 +106,7 @@ const ConfirmOwner = () => {
                 {!_.isEmpty(listRegister) ? listRegister.map((item, index) => {
                         return <tr key={item.id} className={'text-center'}>
                             <th scope="row">{index + 1}</th>
-                            <td style={{minWidth: '300px'}}>{`${item.firstname} ${item.lastname}`}</td>
+                            <td style={{minWidth: '300px'}}>{`${item.lastname} ${item.firstname}`}</td>
                             <td>{item.email}</td>
                             <td className={"d-flex justify-content-center"}>
                                 <button className={'btn btn-info text-white'} data-bs-toggle="modal"
