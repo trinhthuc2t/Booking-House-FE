@@ -129,7 +129,7 @@ const ChatBox = () => {
                                                     style={{cursor: 'pointer'}}
                                                     onClick={() => setSelectedAccount(item)}>
                                                     <img src={item.avatar ? item.avatar : image_default} alt="avatar"
-                                                         width={30}/>
+                                                         width={30} style={{height : '30px'}}/>
                                                     <div className="ms-2">{item.username}</div>
                                                 </li>
                                             ))
@@ -144,12 +144,9 @@ const ChatBox = () => {
                                             key={user.account.id}
                                             onClick={() => handleSelectedAccount(user.account)}>
                                             <img src={user.account.avatar ? user.account.avatar : image_default}
-                                                 alt="avatar"/>
+                                                 alt="avatar" style={{height : '40px' , width : '40px'}}/>
                                             <div className="about">
                                                 <div className="name">{user.account.username}</div>
-                                                {/*<div className="status"><i className="fa fa-circle offline"></i> left 7 mins
-                                                ago
-                                            </div>*/}
                                             </div>
                                             {user.countUnreadMessage ?
                                                 <span className="float-end badge text-white bg-danger">
@@ -171,7 +168,7 @@ const ChatBox = () => {
                                                     <span>
                                                         <img
                                                             src={selectedAccount.avatar ? selectedAccount.avatar : image_default}
-                                                            alt="avatar"/>
+                                                            alt="avatar" style={{width : '50px' , height : '50px'}}/>
                                                     </span>
                                                     <div className="chat-about">
                                                         <h6 className="m-b-0">{selectedAccount.username}</h6>
@@ -201,7 +198,7 @@ const ChatBox = () => {
                                                         </span>
                                                                     <img
                                                                         src={item.sender.avatar ? item.sender.avatar : image_default}
-                                                                        alt="avatar"/>
+                                                                        alt="avatar" style={{width : '40px' , height : '40px'}}/>
                                                                 </div>
                                                                 <div className="message other-message float-right">
                                                                     {item.message}
