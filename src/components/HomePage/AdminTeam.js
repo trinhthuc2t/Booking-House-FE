@@ -44,7 +44,7 @@ const AdminTeam = () => {
                                         </div>
 
                                         <div className="p-4 mt-3">
-                                            <h5 className="fw-bold mb-2 text-center">{acc.firstname} {acc.lastname}</h5>
+                                            <h5 className="fw-bold mb-2 text-center">{acc.lastname} {acc.firstname} </h5>
                                             <div className=""><i className="bi bi-person-vcard-fill me-3 text-house"></i>{acc.username}</div>
                                             <div><i className="bi bi-telephone-fill me-3 text-house"></i>{acc.phone}</div>
                                             <div><i className="bi bi-envelope-fill me-3 text-house"></i>{acc.email}</div>
