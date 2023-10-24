@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Line} from "react-chartjs-2";
 import {CategoryScale, Chart, registerables} from 'chart.js';
 import BookingService from "../../../service/BookingService";
+import {useSelector} from "react-redux";
 Chart.register(CategoryScale);
 Chart.register(...registerables);
 
@@ -12,7 +13,7 @@ function MonthlyChart() {
     const [year, setYear] = useState(0);
     const [startDay, setStartDay] = useState(0);
     const [endDay, setEndDay] = useState(0);
-
+    const account = useSelector(state => state.account);
 
     const handleDateChange = (event) => {
         const selectedDate = event.target.value;
@@ -61,7 +62,7 @@ function MonthlyChart() {
         setMonth(parseInt(dateParts[1]))
         setStartDay(parseInt(dateParts[2]))
         setEndDay(startDay+6)
-        getBookingsByOwnerWeek(1, month, year, startDay, endDay);
+        getBookingsByOwnerWeek(account.id, month, year, startDay, endDay);
     }, [month, year,currentDate,startDay,endDay,selectedDate]);
 
 

@@ -396,7 +396,7 @@ const SearchBooking = () => {
                                         <h5>{index + 1}</h5>
                                     </td>
                                     <td>
-                                        <Link to={`/house-detail/${b.id}`} className="nav-link d-flex align-items-center">
+                                        <Link to={`/house-detail/${b.house?.id}`} className="nav-link d-flex align-items-center">
                                             <img className="flex-shrink-0 img-fluid border rounded"
                                                  src={b.house.thumbnail} alt=""
                                                  style={{width: 80, height: 80}}/>
