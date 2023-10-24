@@ -94,7 +94,8 @@ const profileSchema = Yup.object().shape({
     phone: Yup.string()
         .length(10, "Số điện phải gồm 10 số!")
         .typeError("Số điện thoại phải nhập số")
-        .required("Số điện thoại không được để trống"),
+        .required("Số điện thoại không được để trống")
+        .matches(/^0[0-9]{9}$/, "Số điện thoại phải bắt đầu bằng số 0 và gồm 10 chữ số!"),
     province: Yup.string()
         .required('Vui lòng không được để trống'),
     district: Yup.string()

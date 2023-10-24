@@ -153,7 +153,7 @@ const RentalHistory = () => {
                 })
             } else if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
                 Swal.fire({
-                    title: 'Thời gian hủy nhỏ hơn 2 ngày tính tới ngày thuê nhà, bạn sẽ chịu khoản phí 10% tiền thuê nhà',
+                    title: 'Thời gian hủy nhỏ hơn 1 ngày tính tới ngày thuê nhà, bạn sẽ chịu khoản phí 10% tiền thuê nhà',
                     icon: 'error',
                     showCancelButton: true,
                     confirmButtonText: 'Xác nhận',
