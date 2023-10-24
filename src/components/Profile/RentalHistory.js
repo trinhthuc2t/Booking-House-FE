@@ -139,7 +139,7 @@ const RentalHistory = () => {
         }
 
         const showCancelBookingConfirm = (booking) => {
-            if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 48)) {
+            if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
                 Swal.fire({
                     title: 'Bạn chắc chắn muốn hủy thuê nhà?',
                     icon: 'warning',
@@ -151,7 +151,7 @@ const RentalHistory = () => {
                         cancelBooking(booking);
                     }
                 })
-            } else if (new Date(booking.startTime) - new Date() > (1000 * 60 * 60 * 24)) {
+            } else if (new Date(booking.startTime) - new Date() < (1000 * 60 * 60 * 24)) {
                 Swal.fire({
                     title: 'Thời gian hủy nhỏ hơn 1 ngày tính tới ngày thuê nhà, bạn sẽ chịu khoản phí 10% tiền thuê nhà',
                     icon: 'error',
@@ -219,6 +219,15 @@ const RentalHistory = () => {
                             Đánh giá
                         </button>
                     )
+            }
+            else if ((new Date(item.startTime) - new Date() < (1000 * 60 * 60 * 24))
+                && item.status === 'Chờ xác nhận') {
+                return (
+                    <button className='btn btn-danger'
+                            onClick={() => showCancelBookingConfirm(item)}>
+                        Hủy thuê
+                    </button>
+                )
             }
         }
 
@@ -312,7 +321,7 @@ const RentalHistory = () => {
                         }
                         </tbody>
                     </table>
-                    <span className={'text-danger'}>* Lưu ý :Nếu hủy thuê nhà trước ngày thuê nhà 1 ngày , bạn sẽ phải chịu một khoản phí bằng 10% tiền thuê nhà</span>
+                    <span className={'text-danger'}>* Lưu ý :Nếu hủy thuê nhà trước ngày thuê nhà 1 ngày , bạn sẽ phải chịu một khoản phí bằng 50% tiền thuê nhà</span>
                     {!_.isEmpty(rentalList) ?
                         <div className="col-12 mt-5 d-flex justify-content-center">
                             <Pagination count={totalPages} size="large" variant="outlined" shape="rounded"
