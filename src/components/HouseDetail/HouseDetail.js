@@ -9,7 +9,7 @@ import {getHouseById} from "../../service/houseService";
 import {avgRatingByHouseId, getAllReviewsByHouseId} from "../../service/reviewService";
 import {getAllImagesByHouseId} from "../../service/imageService";
 import _ from 'lodash';
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import Images from "./Images";
 import {Button, Modal} from "react-bootstrap";
 import DatePicker, {registerLocale} from "react-datepicker";
@@ -45,6 +45,7 @@ const HouseDetail = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const {account, unreadNotify} = useSelector(state => state);
     const {sendNotify} = useContext(WebSocketContext);
+    const navigate = useNavigate();
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -70,6 +71,29 @@ const HouseDetail = () => {
                 text: 'Vui lòng chọn nhà khác để đặt lịch',
                 showConfirmButton: true,
             }).then();
+            return;
+        } else if (_.isEmpty(account)){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Bạn cần đăng nhập để thuê nhà !',
+                showConfirmButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/login");
+                }
+            })
+            return;
+        } else if (!account.firstname || !account.lastname || !account.phone){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Bạn chưa đầy đủ thông tin cá nhân !',
+                text: 'Vui lòng cập nhật đầy đủ thông tin',
+                showConfirmButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate("/profile/edit-profile");
+                }
+            })
             return;
         }
         setShowModal(true);

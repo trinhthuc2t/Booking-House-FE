@@ -204,7 +204,7 @@ const SearchBooking = () => {
     }
     const waitOwnerConfirmBooking = (booking) => {
         Swal.fire({
-            title: 'Bạn chắc chắn muốn thay đổi?',
+            title: 'Bạn chắc chắn muốn xác nhận lịch thuê ?',
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',

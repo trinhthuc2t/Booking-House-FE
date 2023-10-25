@@ -11,11 +11,11 @@ const ConfirmOwner = () => {
     const [owner, setOwner] = useState({});
     const [load, setLoad] = useState(false);
     const {sendNotify, sendAdmin} = useContext(WebSocketContext);
-    const {account, toggleStatus} = useSelector(state => state);
+    const {account, toggleStatus, unreadNotify} = useSelector(state => state);
 
     useEffect(() => {
         getListRegister();
-    }, [load, toggleStatus])
+    }, [load, toggleStatus, unreadNotify])
     const getListRegister = () => {
         AccountService.getListRegisterOwner().then((response) => {
             setListRegister(response.data);
@@ -27,7 +27,7 @@ const ConfirmOwner = () => {
     const handleAgree = (value) => {
         let data = {...value, status: "Đã xác nhận"};
         Swal.fire({
-            title: 'Xác nhận thay đổi?',
+            title: `Bạn đồng để ${value.username} làm chủ nhà chứ?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
@@ -52,7 +52,7 @@ const ConfirmOwner = () => {
 
     const handleRefuse = (data) => {
         Swal.fire({
-            title: 'Xác nhận thay đổi?',
+            title: `Bạn từ chối để ${data.username} làm chủ nhà?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',

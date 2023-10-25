@@ -28,7 +28,6 @@ import ContactAdmin from "./components/Login-Register/ContactAdmin";
 import Component404 from "./errorClient/Component404";
 import Component403 from "./errorClient/Component403";
 import ChatBox from "./components/ChatBox/ChatBox";
-import Top5BookingHouse from "./components/HomePage/Top5BookingHouse";
 
 
 function App() {
