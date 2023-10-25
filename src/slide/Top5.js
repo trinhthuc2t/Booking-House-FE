@@ -14,7 +14,7 @@ import axios from "axios";
 const Top5 = () => {
     const [houses, setHouses] = useState([])
     useEffect(() => {
-        axios.get("http://localhost:8080/api/houses/top5")
+        axios.get("http://45.117.179.204:8080/api/houses/top5")
             .then(res => {
                 setHouses(res.data)
                 console.log(res.data)

@@ -121,7 +121,7 @@ const WebSocketProvider = ({children}) => {
     }
 
     if (!socket && !_.isEmpty(account)) {
-        socket = new WebSocket('ws://localhost:8080/ws/websocket');
+        socket = new WebSocket('ws://45.117.179.204:8080/ws/websocket');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, onConnected, onError);
     }
