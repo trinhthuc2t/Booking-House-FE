@@ -27,7 +27,7 @@ const ConfirmOwner = () => {
     const handleAgree = (value) => {
         let data = {...value, status: "Đã xác nhận"};
         Swal.fire({
-            title: `Bạn đồng để ${value.username} làm chủ nhà chứ?`,
+            title: `Bạn đồng để ${value.lastname} ${value.firstname} làm chủ nhà chứ?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
@@ -52,7 +52,7 @@ const ConfirmOwner = () => {
 
     const handleRefuse = (data) => {
         Swal.fire({
-            title: `Bạn từ chối để ${data.username} làm chủ nhà?`,
+            title: `Bạn từ chối để ${data.lastname} ${data.firstname} làm chủ nhà?`,
             icon: 'question',
             showCancelButton: true,
             confirmButtonText: 'Xác nhận',
@@ -153,7 +153,7 @@ const ConfirmOwner = () => {
                                             <label htmlFor="recipient-name" className="col-form-label">Ảnh </label>
                                         </div>
                                         <div className={'d-flex justify-content-center'}>
-                                            <img src={owner.account?.avatar} className="form-control"
+                                            <img src={owner.avatar} className="form-control"
                                                  id="recipient-name" alt={'avatar'}
                                                  style={{width: '200px', height: '200px'}}/>
                                         </div>

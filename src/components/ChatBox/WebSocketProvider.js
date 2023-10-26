@@ -23,6 +23,7 @@ const WebSocketProvider = ({children}) => {
     useEffect(() => {
         if (!_.isEmpty(messageReceiver))
             toast.success(`Bạn có 1 tin nhắn mới từ ${messageReceiver?.sender?.username}`, {position: "bottom-right"});
+        // return () => setMessageReceiver({});
     }, [messageReceiver])
 
     useEffect(() => {
