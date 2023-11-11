@@ -5,26 +5,26 @@ import React, {useState} from "react";
 import {Navigate, Route, Routes} from "react-router-dom";
 import NavbarComponent from "./components/Navbar/NavbarComponent";
 import HouseDetail from "./components/HouseDetail/HouseDetail";
-import HouseByIdUser from "./components/Profile/houseByIdOwner/HouseByIdUser";
+import HouseByIdUser from "./components/Profile/HouseByIdOwner/HouseByIdUser";
 import Profile from "./components/Profile/Profile";
-import EditProfile from "./components/Profile/EditProfile";
-import ChangePassword from "./components/Profile/ChangePassword";
+import EditProfile from "./components/Profile/EditProfile/EditProfile";
+import ChangePassword from "./components/Profile/ChangePassword/ChangePassword";
 import Footer from "./components/Footer/Footer";
 import HomePage from "./components/HomePage/HomePage";
 import SaveHouse from "./components/CreateAndEditHouse/SaveHouse";
-import Information from "./components/Profile/Information";
-import Login from "./components/Login-Register/Login";
-import ForgotPassword from "./components/Login-Register/ForgotPassword";
-import Register from "./components/Login-Register/Register";
-import Statistical from "./components/Profile/statistical/Statistical";
-import SearchBooking from "./components/Profile/searchBooking/SearchBooking";
-import RegisterOwner from "./components/Profile/RegisterOwner";
-import ConfirmOwner from "./components/Profile/ConfirmOwner";
-import RentalHistory from "./components/Profile/RentalHistory";
-import ListAccount from "./components/Profile/account/ListAccount";
-import UserList from "./components/Profile/UserList";
-import ListOwner from "./components/Profile/account/ListOwner";
-import ContactAdmin from "./components/Login-Register/ContactAdmin";
+import Information from "./components/Profile/Information/Information";
+import Login from "./components/Login-Register/Login/Login";
+import ForgotPassword from "./components/Login-Register/ForgotPassword/ForgotPassword";
+import Register from "./components/Login-Register/Register/Register";
+import Statistical from "./components/Profile/Statistical/Statistical";
+import SearchBooking from "./components/Profile/SearchBooking/SearchBooking";
+import RegisterOwner from "./components/Profile/RegisterOwner/RegisterOwner";
+import ConfirmOwner from "./components/Profile/ConfirmOwner/ConfirmOwner";
+import RentalHistory from "./components/Profile/RentalHistory/RentalHistory";
+import ListAccount from "./components/Profile/Account/ListAccount";
+import UserList from "./components/Profile/Account/UserList";
+import ListOwner from "./components/Profile/Account/ListOwner";
+import ContactAdmin from "./components/Login-Register/ContactAdmin/ContactAdmin";
 import Component404 from "./errorClient/Component404";
 import Component403 from "./errorClient/Component403";
 import ChatBox from "./components/ChatBox/ChatBox";
@@ -53,13 +53,14 @@ function App() {
                     <Route path={"houses-owner"} element={<HouseByIdUser/>}/>
                     <Route path={"houses-owner-revenue"} element={<Statistical/>}/>
                     <Route path={"houses-owner-booking"} element={<SearchBooking/>}/>
-                    <Route path={"list-account"} element={<ListAccount/>}/>
+                    <Route path={"list-Account"} element={<ListAccount/>}/>
                     <Route path={"list-user"} element={<UserList/>}/>
                     <Route path={"list-owner"} element={<ListOwner/>}/>
                     <Route path={"confirm-owner"} element={<ConfirmOwner/>}/>
                     <Route path={"rental-history"} element={<RentalHistory/>}/>
                 </Route>
                 <Route path={'*'} element={<Navigate to="/404" replace />}/>
+                <Route path={'/index.html'} element={<Navigate to="/" replace />}/>
                 <Route path="/404" element={<Component404/>}></Route>
                 <Route path={'/403'} element={<Component403/>}></Route>
             </Routes>

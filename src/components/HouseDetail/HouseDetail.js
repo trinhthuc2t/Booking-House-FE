@@ -1,16 +1,16 @@
 import React, {createContext, useContext, useEffect, useState} from 'react';
 import {formatCurrency, getTotalDays} from "../../service/format";
-import StarsReview from "./StarsReview";
-import Description from "./Description";
-import Review from "./Review";
+import StarsReview from "./StarsReview/StarsReview";
+import Description from "./Description/Description";
+import Review from "./Review/Review";
 import './houseDetail.scss';
-import Facility from "./Facility";
+import Facility from "./Facility/Facility";
 import {getHouseById} from "../../service/houseService";
 import {avgRatingByHouseId, getAllReviewsByHouseId} from "../../service/reviewService";
 import {getAllImagesByHouseId} from "../../service/imageService";
 import _ from 'lodash';
 import {useNavigate, useParams} from "react-router-dom";
-import Images from "./Images";
+import Images from "./Images/Images";
 import {Button, Modal} from "react-bootstrap";
 import DatePicker, {registerLocale} from "react-datepicker";
 import {addDays, subDays, format} from 'date-fns';
@@ -46,6 +46,53 @@ const HouseDetail = () => {
     const {account, unreadNotify} = useSelector(state => state);
     const {sendNotify} = useContext(WebSocketContext);
     const navigate = useNavigate();
+
+    const {houseId} = useParams();
+
+    useEffect(() => {
+        getHouseById(houseId).then(response => {
+            setHouse(response.data);
+            getAllImagesByHouseId(houseId).then(res => {
+                const avatarImage = {id: res.data.length + 1, url: response.data.thumbnail}
+                setImages([avatarImage, ...res.data]);
+            }).catch(error => {
+                console.log(error);
+            })
+        }).catch(error => {
+            console.log(error);
+        })
+
+        avgRatingByHouseId(houseId).then(response => {
+            setAvgRating(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [unreadNotify])
+
+    useEffect(() => {
+        getAllReviewsByHouseId(houseId, currentPage - 1).then(response => {
+            setReviews(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [currentPage, unreadNotify])
+
+    const changePage = (e, value) => {
+        setCurrentPage(value);
+    }
+
+    useEffect(() => {
+        BookingService.getBookingsByHouseId(houseId).then(response => {
+            setBookings(response.data);
+        }).catch(error => {
+            console.log(error);
+        })
+    }, [isRender, unreadNotify])
 
     const handleCloseModal = () => {
         setShowModal(false);
@@ -99,52 +146,6 @@ const HouseDetail = () => {
         setShowModal(true);
     }
 
-    const {houseId} = useParams();
-
-    useEffect(() => {
-        getHouseById(houseId).then(response => {
-            setHouse(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-
-        getAllImagesByHouseId(houseId).then(response => {
-            setImages(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-
-        avgRatingByHouseId(houseId).then(response => {
-            setAvgRating(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        })
-    }, [unreadNotify])
-
-    useEffect(() => {
-        getAllReviewsByHouseId(houseId, currentPage - 1).then(response => {
-            setReviews(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-    }, [currentPage, unreadNotify])
-
-    const changePage = (e, value) => {
-        setCurrentPage(value);
-    }
-
-    useEffect(() => {
-        BookingService.getBookingsByHouseId(houseId).then(response => {
-            setBookings(response.data);
-        }).catch(error => {
-            console.log(error);
-        })
-    }, [isRender, unreadNotify])
 
     const excludeBookingRange = (bookings) => {
         return bookings.map(booking => {
@@ -293,7 +294,7 @@ const HouseDetail = () => {
                         </h3>
                         <div className="d-flex">
                             <p className="me-4"><i className="fa-solid fa-bed me-2"></i>{house.bedroom} phòng ngủ</p>
-                            <p><i className="fa-solid fa-bath me-3"></i>{house.bathroom} phòng tắm</p>
+                            <p><i className="fa-solid fa-bath me-2"></i>{house.bathroom} phòng tắm</p>
                         </div>
 
                         <p className="mb-2">Địa chỉ: {house.address}</p>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://45.117.179.204:8080/api/reviews'
+const API_URL = `http://54.254.46.3:8080/api/reviews`;
 
 const getAllReviewsByHouseId = (houseId, page = 0, size = 5) => {
     return axios.get(`${API_URL}/house/${houseId}?page=${page}&size=${size}`);

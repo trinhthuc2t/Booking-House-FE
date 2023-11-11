@@ -55,7 +55,6 @@ const ChatBox = () => {
                     console.log(error);
                 })
             }
-            console.log(render)
         }, [selectedAccount, render, messageReceiver])
 
         useEffect(() => {

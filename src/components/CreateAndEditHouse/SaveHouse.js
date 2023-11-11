@@ -7,13 +7,13 @@ import {Modal} from "react-bootstrap";
 import './saveHouse.scss';
 import {createHouse, editHouse} from "../../service/ownerService";
 import Swal from 'sweetalert2'
-import ThumbnailItem from "./ThumbnailItem";
-import ImageItem from "./ImageItem";
-import TinyMCE from "./TinyMCE";
+import ThumbnailItem from "./ThumbnailItem/ThumbnailItem";
+import ImageItem from "./ImageItem/ImageItem";
+import TinyMCE from "./TinyMCE/TinyMCE";
 import {Link, useNavigate, useParams} from "react-router-dom";
 import {getHouseByIdAndOwnerId} from "../../service/houseService";
 import {getAllImagesByHouseId} from "../../service/imageService";
-import ImageItemEdit from "./ImageItemEdit";
+import ImageItemEdit from "./ImageItemEdit/ImageItemEdit";
 import {useSelector} from "react-redux";
 
 const SaveHouse = () => {

@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Outlet, useNavigate} from "react-router-dom";
 import _ from 'lodash';
-import LeftSidebar from "./LeftSidebar";
+import LeftSidebar from "./LeftSideBar/LeftSidebar";
 import {useSelector} from "react-redux";
 import './profile.scss';
 

@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import Banner from "./Banner";
-import AdminTeam from "./AdminTeam";
-import HouseComponent from "./HouseComponent";
 import houseByIdService from "../../service/HouseByIdService";
-import SearchHouse from "./SearchHouse";
-import Top5BookingHouse from "./Top5BookingHouse";
+import Banner from "./Banner/Banner";
+import SearchHouse from "./SearchHouse/SearchHouse";
+import Top5BookingHouse from "./Top5/Top5BookingHouse";
+import HouseComponent from "./House/HouseComponent";
+import AdminTeam from "./AdminTeam/AdminTeam";
 
 const HomePage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -39,16 +39,15 @@ const HomePage = () => {
         <div className="container-home">
             <Banner/>
 
-            {/*Search begin*/}
-            <SearchHouse setNameSearch={setNameSearch} setMinPrice={setMinPrice}
-                         setMaxPrice={setMaxPrice} setProvince={setProvince} setCurrentPage={setCurrentPage}/>
-            {/*Search End*/}
-
             <div className="container py-3">
                 <h2 className="text-center mb-5">Top 5 ngôi nhà có nhiều lượt đặt thuê nhất</h2>
                 <Top5BookingHouse/>
                 <br/>
                 <br/>
+                {/*Search begin*/}
+                <SearchHouse setNameSearch={setNameSearch} setMinPrice={setMinPrice}
+                             setMaxPrice={setMaxPrice} setProvince={setProvince} setCurrentPage={setCurrentPage}/>
+                {/*Search End*/}
                 <h2 className="text-center m-5">Danh sách các nhà cho thuê</h2>
                 <HouseComponent houses={houses} totalPages={totalPages} changePage={changePage}/>
 

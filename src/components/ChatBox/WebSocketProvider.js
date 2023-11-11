@@ -13,7 +13,6 @@ export const WebSocketContext = createContext(null)
 const WebSocketProvider = ({children}) => {
     const [messageReceiver, setMessageReceiver] = useState({});
     const [notify, setNotify] = useState({});
-    // const [render, setRender] = useState(true);
     const account = useSelector(state => state.account);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -23,7 +22,6 @@ const WebSocketProvider = ({children}) => {
     useEffect(() => {
         if (!_.isEmpty(messageReceiver))
             toast.success(`Bạn có 1 tin nhắn mới từ ${messageReceiver?.sender?.username}`, {position: "bottom-right"});
-        // return () => setMessageReceiver({});
     }, [messageReceiver])
 
     useEffect(() => {
@@ -124,6 +122,7 @@ const WebSocketProvider = ({children}) => {
     if (!socket && !_.isEmpty(account)) {
         socket = new WebSocket('ws://45.117.179.204:8080/ws/websocket');
         stompClient = Stomp.over(socket);
+        stompClient.debug = null;
         stompClient.connect({}, onConnected, onError);
     }
 
